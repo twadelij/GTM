@@ -41,16 +41,18 @@ const GameState = {
 function getChoicesForRound(round) {
     // Vast aantal keuzes per ronde:
     // Ronde 1: 6 keuzes
-    // Ronde 2: 5 keuzes voor alle foute films
-    // Ronde 3: 4 keuzes voor alle foute films
-    // etc.
+    // Ronde 2: 5 keuzes
+    // Ronde 3: 4 keuzes
+    // Ronde 4: 3 keuzes
+    // Ronde 5: 2 keuzes
+    // Ronde 6: 1 keuze
     const choicesPerRound = {
-        1: 6, // Eerste ronde: 6 keuzes
-        2: 5, // Tweede ronde: 5 keuzes
-        3: 4, // Derde ronde: 4 keuzes
-        4: 3, // Vierde ronde: 3 keuzes
-        5: 2, // Vijfde ronde: 2 keuzes
-        6: 1  // Zesde ronde: 1 keuze
+        1: 6,
+        2: 5,
+        3: 4,
+        4: 3,
+        5: 2,
+        6: 1
     };
     return choicesPerRound[round] || 1; // Fallback naar 1 keuze als de ronde niet bestaat
 }
