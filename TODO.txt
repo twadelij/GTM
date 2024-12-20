@@ -1,0 +1,52 @@
+TODO List voor Guess The Movie Game
+
+HOGE PRIORITEIT
+--------------
+1. Performance Optimalisatie
+   [ ] Laadtijd van filmafbeeldingen verbeteren
+   [ ] Preloading van volgende filmafbeeldingen implementeren
+   [ ] Caching mechanisme voor veel gebruikte afbeeldingen
+
+2. UI/UX Verbeteringen
+   [ ] Laad-indicator toevoegen tijdens het laden van filmafbeeldingen
+   [ ] Game Over scherm styling verbeteren
+   [ ] Toevoegen van visuele feedback tijdens laden
+
+3. Bug Fixes
+   [ ] Verificatie van tijdbonus berekening
+   [ ] Edge cases testen met grote aantallen foute antwoorden
+   [ ] Testen van alle mogelijke game-over scenarios
+
+MEDIUM PRIORITEIT
+---------------
+4. Gebruikerservaring
+   [ ] Toevoegen van een tutorial/uitleg scherm
+   [ ] Betere visuele feedback bij correcte/incorrecte antwoorden
+   [ ] Toevoegen van een pauze functie
+   [ ] Mogelijkheid om spel te hervatten na sluiten browser
+
+5. Statistieken
+   [ ] Bijhouden van speelstatistieken
+   [ ] Weergave van prestaties per ronde
+   [ ] Analyse van meest gemaakte fouten
+
+LAGE PRIORITEIT
+-------------
+6. Nieuwe Features
+   [ ] Implementeren van highscore systeem
+   [ ] Toevoegen van verschillende moeilijkheidsgraden
+   [ ] Categorieën/genres selectie toevoegen
+   [ ] Multiplayer modus
+   [ ] Social sharing functionaliteit
+
+7. Administratie
+   [ ] Documentatie bijwerken
+   [ ] Code cleanup en optimalisatie
+   [ ] Unit tests schrijven
+   [ ] Performance metrics implementeren
+
+NOTITIES
+-------
+- Overweeg het gebruik van een CDN voor snellere afbeeldingslevering
+- Onderzoek mogelijkheden voor progressive image loading
+- Plan nodig voor schaalbaarheid bij groei gebruikersbase 
