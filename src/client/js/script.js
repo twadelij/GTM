@@ -39,7 +39,7 @@ const GameState = {
 
 // Basis functies
 function getChoicesForRound(round) {
-    return 7 - round; // 6, 5, 4, 3, 2, 1 keuzes voor rondes 1-6
+    return Math.max(1, 7 - round); // Minimaal 1 keuze, start met 6 en tel af per ronde
 }
 
 function getPointsForRound(round) {
@@ -289,17 +289,36 @@ async function startNewRound() {
     // Update UI
     const movieImage = document.querySelector('.movie-image img');
     const loadingDiv = document.querySelector('.loading');
+    const optionsContainer = document.querySelector('.options-container');
     
     updateProgressCounter();
+    
+    // Verberg opties tijdens het laden
+    if (optionsContainer) {
+        optionsContainer.style.display = 'none';
+    }
     
     if (movieImage && loadingDiv && currentMovie) {
         const stillPath = movieDb.getRandomStillForMovie(currentMovie);
         if (stillPath) {
             try {
-                movieImage.src = stillPath;
-                movieImage.alt = `Scene from ${currentMovie.title}`;
+                // Wacht tot de afbeelding is geladen
+                await new Promise((resolve, reject) => {
+                    movieImage.onload = resolve;
+                    movieImage.onerror = reject;
+                    movieImage.src = stillPath;
+                    movieImage.alt = `Scene from ${currentMovie.title}`;
+                });
+                
                 loadingDiv.style.display = 'none';
                 movieImage.style.display = 'block';
+                
+                // Toon opties en start timer alleen na laden van afbeelding
+                if (optionsContainer) {
+                    optionsContainer.style.display = 'block';
+                    updateButtons(movies);
+                    startTimer();
+                }
             } catch (error) {
                 console.error('Failed to load movie image:', error);
                 loadingDiv.textContent = 'Failed to load movie image';
@@ -308,10 +327,6 @@ async function startNewRound() {
             loadingDiv.textContent = 'No movie still available';
         }
     }
-
-    // Update buttons
-    updateButtons(movies);
-    startTimer();
 }
 
 async function startNextRound() {
@@ -333,8 +348,8 @@ async function startNextRound() {
     // Genereer opties voor deze ronde
     const options = [currentMovie];
     
-    // Voeg willekeurige andere films toe als opties
-    const otherMovies = movieDb.getRandomMovies(choices - 1);
+    // Voeg het juiste aantal andere films toe als opties voor deze ronde
+    const otherMovies = movieDb.getRandomMovies(choices - 1); // Gebruik choices-1 omdat we al 1 film hebben
     options.push(...otherMovies);
     
     // Shuffle de opties
@@ -348,15 +363,34 @@ async function startNextRound() {
     // Update UI
     const movieImage = document.querySelector('.movie-image img');
     const loadingDiv = document.querySelector('.loading');
+    const optionsContainer = document.querySelector('.options-container');
+    
+    // Verberg opties tijdens het laden
+    if (optionsContainer) {
+        optionsContainer.style.display = 'none';
+    }
     
     if (movieImage && loadingDiv && currentMovie) {
         const stillPath = movieDb.getRandomStillForMovie(currentMovie);
         if (stillPath) {
             try {
-                movieImage.src = stillPath;
-                movieImage.alt = `Scene from ${currentMovie.title}`;
+                // Wacht tot de afbeelding is geladen
+                await new Promise((resolve, reject) => {
+                    movieImage.onload = resolve;
+                    movieImage.onerror = reject;
+                    movieImage.src = stillPath;
+                    movieImage.alt = `Scene from ${currentMovie.title}`;
+                });
+                
                 loadingDiv.style.display = 'none';
                 movieImage.style.display = 'block';
+                
+                // Toon opties en start timer alleen na laden van afbeelding
+                if (optionsContainer) {
+                    optionsContainer.style.display = 'block';
+                    updateButtons(options);
+                    startTimer();
+                }
             } catch (error) {
                 console.error('Failed to load movie image:', error);
                 loadingDiv.textContent = 'Failed to load movie image';
@@ -365,8 +399,4 @@ async function startNextRound() {
             loadingDiv.textContent = 'No movie still available';
         }
     }
-    
-    // Update buttons
-    updateButtons(options);
-    startTimer();
 }
