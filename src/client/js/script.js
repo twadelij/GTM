@@ -6,6 +6,7 @@ const GameState = {
     correctAnswers: 0,
     currentScore: 0,
     incorrectMovies: [],
+    wrongMovies: [],
     playedMovies: new Set(),
     currentRound: 1,
     remainingTime: 0,
@@ -21,6 +22,7 @@ const GameState = {
         this.correctAnswers = 0;
         this.currentScore = 0;
         this.incorrectMovies = [];
+        this.wrongMovies = [];
         this.playedMovies.clear();
         this.currentRound = 1;
         this.remainingTime = this.TIMER_DURATION;
@@ -246,8 +248,8 @@ async function handleGuess(guessedMovie) {
         GameState.correctAnswers++;
         GameState.playedMovies.add(currentMovie.id);
         
-        updateScoreDisplay(); // Update score display after changing score
-        updateProgressCounter(); // Update counter after correct guess
+        updateScoreDisplay();
+        updateProgressCounter();
         
         await showSplashScreen('Correct!', [
             `+${points} punten (Ronde ${GameState.currentRound})`,
@@ -255,10 +257,20 @@ async function handleGuess(guessedMovie) {
             `Totale score: ${GameState.currentScore}`
         ], timeBonus > 0 ? `Bonus: +${timeBonus}` : '');
         
-        if (GameState.correctAnswers + GameState.incorrectMovies.length >= GameState.totalMovies) {
-            if (GameState.incorrectMovies.length === 0) {
+        if (GameState.currentRound === 1 && GameState.correctAnswers + GameState.incorrectMovies.length >= GameState.totalMovies) {
+            // Als ronde 1 klaar is, ga naar ronde 2
+            GameState.currentRound++;
+            await startNextRound();
+        } else if (GameState.currentRound > 1 && GameState.incorrectMovies.length === 0) {
+            // Als alle foute films uit de huidige ronde zijn behandeld
+            if (GameState.wrongAnswers === 0) {
+                // Als er geen nieuwe foute antwoorden zijn, game over
                 showGameOver();
             } else {
+                // Anders, ga naar de volgende ronde met de nieuwe foute films
+                GameState.incorrectMovies = [...GameState.wrongMovies];
+                GameState.wrongMovies = [];
+                GameState.wrongAnswers = 0;
                 GameState.currentRound++;
                 await startNextRound();
             }
@@ -266,18 +278,31 @@ async function handleGuess(guessedMovie) {
             await startNewRound();
         }
     } else {
-        GameState.incorrectMovies.push(currentMovie);
+        GameState.wrongAnswers++;
+        if (GameState.currentRound === 1) {
+            GameState.incorrectMovies.push(currentMovie);
+        } else {
+            // In latere rondes, sla foute films op voor de volgende ronde
+            if (!GameState.wrongMovies) {
+                GameState.wrongMovies = [];
+            }
+            GameState.wrongMovies.push(currentMovie);
+        }
         GameState.playedMovies.add(currentMovie.id);
         
-        updateProgressCounter(); // Update counter after incorrect guess
+        updateProgressCounter();
         
         await showSplashScreen('Incorrect!', [
             'Probeer het opnieuw in de volgende ronde',
             `Score blijft: ${GameState.currentScore}`
         ]);
         
-        if (GameState.correctAnswers + GameState.incorrectMovies.length >= GameState.totalMovies) {
+        if (GameState.currentRound === 1 && GameState.correctAnswers + GameState.incorrectMovies.length >= GameState.totalMovies) {
+            // Als ronde 1 klaar is, ga naar ronde 2
             GameState.currentRound++;
+            await startNextRound();
+        } else if (GameState.incorrectMovies.length > 0) {
+            // Er zijn nog foute films om te raden in deze ronde
             await startNextRound();
         } else {
             await startNewRound();
