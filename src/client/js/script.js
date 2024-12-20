@@ -41,20 +41,12 @@ const GameState = {
 function getChoicesForRound(round) {
     // Vast aantal keuzes per ronde:
     // Ronde 1: 6 keuzes
-    // Ronde 2: 5 keuzes
-    // Ronde 3: 4 keuzes
-    // Ronde 4: 3 keuzes
-    // Ronde 5: 2 keuzes
-    // Ronde 6: 1 keuze
-    const choicesPerRound = {
-        1: 6,
-        2: 5,
-        3: 4,
-        4: 3,
-        5: 2,
-        6: 1
-    };
-    return choicesPerRound[round] || 1; // Fallback naar 1 keuze als de ronde niet bestaat
+    // Ronde 2: 5 keuzes voor ALLE foute films uit ronde 1
+    // Ronde 3: 4 keuzes voor ALLE foute films uit ronde 2
+    // Ronde 4: 3 keuzes voor ALLE foute films uit ronde 3
+    // Ronde 5: 2 keuzes voor ALLE foute films uit ronde 4
+    // Ronde 6: 1 keuze voor ALLE foute films uit ronde 5
+    return Math.max(1, 7 - round); // Start met 6 keuzes, verminder met 1 per ronde
 }
 
 function getPointsForRound(round) {
@@ -295,7 +287,10 @@ async function handleGuess(guessedMovie) {
 
 async function startNewRound() {
     const choices = getChoicesForRound(GameState.currentRound);
-    const movies = movieDb.getRandomMovies(choices);
+    // Haal unieke films op voor de eerste ronde
+    const movies = movieDb.getRandomMovies(choices).filter((movie, index, self) => 
+        index === self.findIndex((m) => m.id === movie.id)
+    );
     
     if (!movies || movies.length < choices) {
         console.error('Not enough movies available');
@@ -370,8 +365,26 @@ async function startNextRound() {
     // Genereer opties voor deze ronde
     const options = [currentMovie];
     
-    // Voeg het juiste aantal andere films toe als opties voor deze ronde
-    const otherMovies = movieDb.getRandomMovies(choices - 1); // Gebruik choices-1 omdat we al 1 film hebben
+    // Haal unieke films op voor de opties
+    const otherMovies = movieDb.getRandomMovies(choices - 1)
+        .filter(movie => movie.id !== currentMovie.id)
+        .filter((movie, index, self) => 
+            index === self.findIndex((m) => m.id === movie.id)
+        );
+    
+    // Als we niet genoeg unieke films hebben, probeer het nog een keer
+    if (otherMovies.length < choices - 1) {
+        const remainingCount = choices - 1 - otherMovies.length;
+        const moreMovies = movieDb.getRandomMovies(remainingCount * 2)
+            .filter(movie => movie.id !== currentMovie.id)
+            .filter(movie => !otherMovies.some(m => m.id === movie.id))
+            .filter((movie, index, self) => 
+                index === self.findIndex((m) => m.id === movie.id)
+            )
+            .slice(0, remainingCount);
+        otherMovies.push(...moreMovies);
+    }
+    
     options.push(...otherMovies);
     
     // Shuffle de opties
