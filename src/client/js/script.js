@@ -141,9 +141,12 @@ function updateButtons(movies) {
 function updateProgressCounter() {
     const progressCounter = document.querySelector('.progress-counter');
     if (progressCounter) {
-        const remaining = GameState.currentRound === 1 
-            ? GameState.totalMovies 
-            : GameState.incorrectMovies.length;
+        let remaining;
+        if (GameState.currentRound === 1) {
+            remaining = GameState.totalMovies - (GameState.correctAnswers + GameState.incorrectMovies.length);
+        } else {
+            remaining = GameState.incorrectMovies.length;
+        }
         progressCounter.textContent = `Ronde ${GameState.currentRound}: nog ${remaining} films te gaan`;
     }
 }
@@ -199,6 +202,8 @@ async function handleTimeOut() {
     GameState.incorrectMovies.push(currentMovie);
     GameState.playedMovies.add(currentMovie.id);
     
+    updateProgressCounter();
+    
     await showSplashScreen('Tijd Op!', [
         'Je was te langzaam!',
         'Volgende keer wat sneller...',
@@ -230,6 +235,7 @@ async function handleGuess(guessedMovie) {
         GameState.playedMovies.add(currentMovie.id);
         
         updateScoreDisplay(); // Update score display after changing score
+        updateProgressCounter(); // Update counter after correct guess
         
         await showSplashScreen('Correct!', [
             `+${points} punten (Ronde ${GameState.currentRound})`,
@@ -250,6 +256,8 @@ async function handleGuess(guessedMovie) {
     } else {
         GameState.incorrectMovies.push(currentMovie);
         GameState.playedMovies.add(currentMovie.id);
+        
+        updateProgressCounter(); // Update counter after incorrect guess
         
         await showSplashScreen('Incorrect!', [
             'Probeer het opnieuw in de volgende ronde',
