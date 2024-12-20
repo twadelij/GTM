@@ -213,7 +213,12 @@ function stopTimer() {
 
 async function handleTimeOut() {
     const currentMovie = movieDb.getCurrentMovie();
-    GameState.incorrectMovies.push(currentMovie);
+    
+    if (GameState.currentRound === 1) {
+        GameState.incorrectMovies.push(currentMovie);
+    } else {
+        GameState.nextRoundMovies.push(currentMovie);
+    }
     GameState.playedMovies.add(currentMovie.id);
     
     updateProgressCounter();
@@ -224,11 +229,25 @@ async function handleTimeOut() {
         `Score blijft: ${GameState.currentScore}`
     ]);
     
-    if (GameState.correctAnswers + GameState.incorrectMovies.length >= GameState.totalMovies) {
-        GameState.currentRound++;
+    if (GameState.currentRound === 1) {
+        if (GameState.correctAnswers + GameState.incorrectMovies.length >= GameState.totalMovies) {
+            // Ronde 1 is klaar, ga naar ronde 2 met alle foute films
+            GameState.nextRoundMovies = [...GameState.incorrectMovies];
+            GameState.incorrectMovies = [];
+            GameState.currentRound++;
+            await startNextRound();
+        } else {
+            await startNewRound();
+        }
+    } else if (GameState.incorrectMovies.length > 0) {
+        // Er zijn nog films te raden in deze ronde
         await startNextRound();
     } else {
-        await startNewRound();
+        // Start nieuwe ronde met de verzamelde foute films
+        GameState.incorrectMovies = [...GameState.nextRoundMovies];
+        GameState.nextRoundMovies = [];
+        GameState.currentRound++;
+        await startNextRound();
     }
 }
 
