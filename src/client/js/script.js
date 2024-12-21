@@ -129,6 +129,35 @@ async function runGameTest(forcedWrongAnswers = 5) {
         });
     };
     
+    // Override updateButtons om automatisch te klikken
+    const originalUpdateButtons = updateButtons;
+    updateButtons = (movies) => {
+        originalUpdateButtons(movies);
+        // Wacht kort en klik dan automatisch
+        setTimeout(() => {
+            const currentMovie = movieDb.getCurrentMovie();
+            // In ronde 1, kies soms bewust het verkeerde antwoord
+            if (GameState.currentRound === 1 && wrongCount < forcedWrongAnswers) {
+                // Kies een willekeurige knop die NIET het juiste antwoord is
+                const buttons = Array.from(document.querySelectorAll('.option-btn'));
+                const wrongButtons = buttons.filter(btn => 
+                    btn.textContent !== currentMovie.title
+                );
+                if (wrongButtons.length > 0) {
+                    const randomWrong = wrongButtons[Math.floor(Math.random() * wrongButtons.length)];
+                    randomWrong.click();
+                }
+            } else {
+                // Kies het juiste antwoord
+                const correctButton = Array.from(document.querySelectorAll('.option-btn'))
+                    .find(btn => btn.textContent === currentMovie.title);
+                if (correctButton) {
+                    correctButton.click();
+                }
+            }
+        }, 100);
+    };
+    
     try {
         // Start het spel
         await startNewRound();
@@ -142,6 +171,7 @@ async function runGameTest(forcedWrongAnswers = 5) {
         
         // Herstel de originele functies en waarden
         handleGuess = originalHandleGuess;
+        updateButtons = originalUpdateButtons;
         GameState.TIMER_DURATION = originalTimerDuration;
         GameState.SPLASH_DURATION = originalSplashDuration;
         
@@ -157,6 +187,7 @@ async function runGameTest(forcedWrongAnswers = 5) {
         console.error('Test failed:', error);
         // Herstel de originele functies en waarden
         handleGuess = originalHandleGuess;
+        updateButtons = originalUpdateButtons;
         GameState.TIMER_DURATION = originalTimerDuration;
         GameState.SPLASH_DURATION = originalSplashDuration;
     }
