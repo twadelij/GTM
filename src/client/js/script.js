@@ -79,12 +79,103 @@ async function initializeGame() {
     }
 }
 
+// Test mode functies
+async function runGameTest(forcedWrongAnswers = 5) {
+    console.log('Starting game test...');
+    console.log(`Forcing ${forcedWrongAnswers} wrong answers in round 1`);
+    
+    // Reset game state
+    GameState.reset();
+    await window.movieDb.initialize();
+    
+    // Override timer voor sneller testen
+    const originalTimerDuration = GameState.TIMER_DURATION;
+    const originalSplashDuration = GameState.SPLASH_DURATION;
+    GameState.TIMER_DURATION = 100;
+    GameState.SPLASH_DURATION = 100;
+    
+    let wrongCount = 0;
+    let totalProcessed = 0;
+    
+    // Override de normale game loop voor testing
+    const originalHandleGuess = handleGuess;
+    handleGuess = async (guessedMovie) => {
+        const currentMovie = movieDb.getCurrentMovie();
+        console.log(`Round ${GameState.currentRound}: Processing movie ${totalProcessed + 1}`);
+        
+        // In ronde 1, forceer een aantal foute antwoorden
+        if (GameState.currentRound === 1 && wrongCount < forcedWrongAnswers) {
+            // Kies bewust het verkeerde antwoord
+            const wrongMovie = guessedMovie.id === currentMovie.id ? 
+                { id: currentMovie.id + 1, title: 'Wrong Answer' } : 
+                guessedMovie;
+            wrongCount++;
+            console.log(`Forcing wrong answer ${wrongCount}/${forcedWrongAnswers}`);
+            await originalHandleGuess(wrongMovie);
+        } else {
+            // Geef het juiste antwoord
+            await originalHandleGuess(currentMovie);
+        }
+        
+        totalProcessed++;
+        
+        // Log de game state
+        console.log('Game State:', {
+            round: GameState.currentRound,
+            correctAnswers: GameState.correctAnswers,
+            incorrectMovies: GameState.incorrectMovies.length,
+            nextRoundMovies: GameState.nextRoundMovies.length,
+            totalProcessed
+        });
+    };
+    
+    try {
+        // Start het spel
+        await startNewRound();
+        
+        // Wacht tot het spel klaar is
+        while (totalProcessed < GameState.totalMovies || 
+               GameState.incorrectMovies.length > 0 || 
+               GameState.nextRoundMovies.length > 0) {
+            await new Promise(resolve => setTimeout(resolve, 200));
+        }
+        
+        // Herstel de originele functies en waarden
+        handleGuess = originalHandleGuess;
+        GameState.TIMER_DURATION = originalTimerDuration;
+        GameState.SPLASH_DURATION = originalSplashDuration;
+        
+        console.log('Test completed!');
+        console.log('Final Game State:', {
+            round: GameState.currentRound,
+            correctAnswers: GameState.correctAnswers,
+            incorrectMovies: GameState.incorrectMovies.length,
+            nextRoundMovies: GameState.nextRoundMovies.length,
+            totalProcessed
+        });
+    } catch (error) {
+        console.error('Test failed:', error);
+        // Herstel de originele functies en waarden
+        handleGuess = originalHandleGuess;
+        GameState.TIMER_DURATION = originalTimerDuration;
+        GameState.SPLASH_DURATION = originalSplashDuration;
+    }
+}
+
 // Start wanneer alles geladen is
 document.addEventListener('DOMContentLoaded', () => {
     console.log('DOMContentLoaded event fired');
     console.log('window.CONFIG:', window.CONFIG);
     console.log('window.movieDb:', window.movieDb);
-    initializeGame();
+    
+    // Test mode activeren met URL parameter ?test=true
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get('test') === 'true') {
+        console.log('Test mode activated');
+        runGameTest(5); // Test met 5 geforceerde foute antwoorden
+    } else {
+        initializeGame();
+    }
 });
 
 // UI functies
