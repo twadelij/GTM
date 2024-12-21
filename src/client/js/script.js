@@ -276,14 +276,15 @@ async function handleGuess(guessedMovie) {
             `Totale score: ${GameState.currentScore}`
         ], timeBonus > 0 ? `Bonus: +${timeBonus}` : '');
 
-        // Check of we klaar zijn met deze ronde
         if (GameState.currentRound === 1) {
             if (GameState.correctAnswers + GameState.incorrectMovies.length >= GameState.totalMovies) {
                 // Ronde 1 is klaar, ga naar ronde 2 met alle foute films
-                GameState.nextRoundMovies = [...GameState.incorrectMovies];
-                GameState.incorrectMovies = [];
-                GameState.currentRound++;
-                await startNextRound();
+                if (GameState.incorrectMovies.length > 0) {
+                    GameState.currentRound++;
+                    await startNextRound();
+                } else {
+                    showGameOver();
+                }
             } else {
                 await startNewRound();
             }
@@ -325,10 +326,12 @@ async function handleGuess(guessedMovie) {
         if (GameState.currentRound === 1) {
             if (GameState.correctAnswers + GameState.incorrectMovies.length >= GameState.totalMovies) {
                 // Ronde 1 is klaar, ga naar ronde 2 met alle foute films
-                GameState.nextRoundMovies = [...GameState.incorrectMovies];
-                GameState.incorrectMovies = [];
-                GameState.currentRound++;
-                await startNextRound();
+                if (GameState.incorrectMovies.length > 0) {
+                    GameState.currentRound++;
+                    await startNextRound();
+                } else {
+                    showGameOver();
+                }
             } else {
                 await startNewRound();
             }
@@ -407,7 +410,13 @@ async function startNewRound() {
 }
 
 async function startNextRound() {
-    if (GameState.currentRound > 6 || GameState.incorrectMovies.length === 0) {
+    if (GameState.currentRound > 6) {
+        showGameOver();
+        return;
+    }
+    
+    // Als er geen foute films zijn om te behandelen
+    if (GameState.incorrectMovies.length === 0 && GameState.nextRoundMovies.length === 0) {
         showGameOver();
         return;
     }
