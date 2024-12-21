@@ -46,7 +46,44 @@ GTM/
 - Basis punten per ronde nemen af (5 -> 4 -> 3 -> 2 -> 1 -> 0)
 - 15 seconden per vraag
 
-## Huidige Status (20 December 2024)
+## Installatie & Opstarten
+
+1. Clone de repository
+2. Installeer de vereiste dependencies
+3. Start de server op een van de volgende manieren:
+
+   A. Ontwikkelmodus (stopt als terminal sluit):
+   ```bash
+   cd src/server
+   python3 server.py
+   ```
+
+   B. Productie modus (blijft draaien na afsluiten terminal):
+   ```bash
+   cd src/server
+   nohup python3 server.py > nohup.out 2>&1 &
+   ```
+
+4. Open de game in je browser:
+   - Lokaal: `http://localhost:8888`
+   - Extern: `http://[server-ip]:8888`
+
+5. Server stoppen:
+   ```bash
+   # Vind het process ID
+   ps aux | grep python3 | grep server.py
+   # Stop de server
+   kill [process-id]
+   ```
+
+6. Server logs bekijken:
+   ```bash
+   # In de src/server directory
+   tail -f nohup.out    # Voor productie modus
+   tail -f server.log   # Voor algemene server logs
+   ```
+
+## Huidige Status (21 December 2024)
 
 ### Wat Werkt
 - Basis gameplay mechanica
@@ -58,6 +95,7 @@ GTM/
 - Voorkomen van dubbele films in keuzes
 - Database cleanup script
 - Git versie beheer geïmplementeerd
+- Server blijft draaien na afsluiten terminal (productie modus)
 
 ### Recent Opgeloste Issues
 1. **Gameplay Fixes**:
@@ -66,6 +104,7 @@ GTM/
    - ✅ Consistent aantal keuzes per ronde
    - ✅ Voorkom dubbele films in keuzes
    - ✅ Spel gaat correct door na 20 films als er foute antwoorden zijn
+   - ✅ Server blijft draaien in productie modus
 
 2. **UI Verbeteringen**:
    - ✅ Verticale layout voor filmkeuzes
@@ -85,16 +124,10 @@ GTM/
    - Verschillende moeilijkheidsgraden
    - Categorieën/genres selectie
 
-## Installatie
-
-1. Clone de repository
-2. Installeer de vereiste dependencies
-3. Start de server met `python3 src/server/server.py`
-4. Open de game in je browser op `http://localhost:8888`
-
 ## Development Notes
 
 - Server draait op poort 8888
 - Films worden opgeslagen in `data/movies.json`
 - Gebruik `tools/clean_movies.py` voor database onderhoud
 - Git repository geïnitialiseerd voor versiebeheer
+- Server logs beschikbaar in `src/server/server.log` en `src/server/nohup.out`
