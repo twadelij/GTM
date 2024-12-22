@@ -52,16 +52,24 @@ function getChoicesForRound(round) {
 }
 
 function getPointsForRound(round) {
+    // Ronde 6 geeft geen punten
+    if (round >= 6) return 0;
+    // Anders normale puntentelling
     return Math.max(0, 6 - round); // 5, 4, 3, 2, 1, 0 punten voor rondes 1-6
 }
 
 function getTimeBonus() {
+    // Geen tijdbonus in ronde 6
+    if (GameState.currentRound >= 6) return 0;
+    // Anders normale tijdbonus
     return Math.floor(GameState.remainingTime / 1000); // 1 punt per seconde over
 }
 
 // Initialisatie
 async function initializeGame() {
     console.log('Initializing game...');
+    const loadingDiv = document.querySelector('.loading');
+    
     try {
         if (!window.movieDb) {
             throw new Error('MovieDb not loaded');
@@ -72,9 +80,9 @@ async function initializeGame() {
         await startNewRound();
     } catch (error) {
         console.error('Failed to initialize game:', error);
-        const loadingDiv = document.querySelector('.loading');
         if (loadingDiv) {
-            loadingDiv.textContent = 'Failed to load game. Please refresh.';
+            loadingDiv.textContent = 'Failed to load game: ' + error.message + '. Please refresh the page.';
+            loadingDiv.style.color = 'red';
         }
     }
 }
@@ -397,11 +405,19 @@ async function handleGuess(guessedMovie) {
         updateScoreDisplay();
         updateProgressCounter();
         
-        await showSplashScreen('Correct!', [
-            `+${points} punten (Ronde ${GameState.currentRound})`,
-            `+${timeBonus} punten tijdsbonus`,
-            `Totale score: ${GameState.currentScore}`
-        ], timeBonus > 0 ? `Bonus: +${timeBonus}` : '');
+        // Aangepaste melding voor ronde 6
+        if (GameState.currentRound >= 6) {
+            await showSplashScreen('Correct!', [
+                'Laatste kans goed benut!',
+                `Totale score blijft: ${GameState.currentScore}`
+            ]);
+        } else {
+            await showSplashScreen('Correct!', [
+                `+${points} punten (Ronde ${GameState.currentRound})`,
+                `+${timeBonus} punten tijdsbonus`,
+                `Totale score: ${GameState.currentScore}`
+            ], timeBonus > 0 ? `Bonus: +${timeBonus}` : '');
+        }
 
         if (GameState.currentRound === 1) {
             if (GameState.correctAnswers + GameState.incorrectMovies.length >= GameState.totalMovies) {
@@ -476,21 +492,22 @@ async function handleGuess(guessedMovie) {
 }
 
 async function startNewRound() {
-    const choices = getChoicesForRound(GameState.currentRound);
-    // Haal unieke films op voor de eerste ronde
-    const movies = movieDb.getRandomMovies(choices).filter((movie, index, self) => 
-        index === self.findIndex((m) => m.id === movie.id)
-    );
+    console.log('Starting new round...');
+    const movies = movieDb.getRandomMovies(6);
     
-    if (!movies || movies.length < choices) {
+    if (!movies || movies.length < 6) {
         console.error('Not enough movies available');
-        showGameOver();
+        const loadingDiv = document.querySelector('.loading');
+        if (loadingDiv) {
+            loadingDiv.textContent = 'Error: Not enough movies available. Please refresh the page.';
+            loadingDiv.style.color = 'red';
+        }
         return;
     }
 
-    const currentMovie = movies[Math.floor(Math.random() * movies.length)];
-    movieDb.setCurrentMovie(currentMovie);
-
+    const correctMovie = movies[0];
+    movieDb.setCurrentMovie(correctMovie);
+    
     // Update UI
     const movieImage = document.querySelector('.movie-image img');
     const loadingDiv = document.querySelector('.loading');
@@ -498,27 +515,29 @@ async function startNewRound() {
     
     updateProgressCounter();
     
-    // Verberg opties tijdens het laden
+    // Hide options while loading
     if (optionsContainer) {
         optionsContainer.style.display = 'none';
     }
     
-    if (movieImage && loadingDiv && currentMovie) {
-        const stillPath = movieDb.getRandomStillForMovie(currentMovie);
+    if (movieImage && loadingDiv && correctMovie) {
+        const stillPath = movieDb.getRandomStillForMovie(correctMovie);
         if (stillPath) {
             try {
-                // Wacht tot de afbeelding is geladen
+                // Wait for image to load
                 await new Promise((resolve, reject) => {
                     movieImage.onload = resolve;
-                    movieImage.onerror = reject;
-                    movieImage.src = stillPath;
-                    movieImage.alt = `Scene from ${currentMovie.title}`;
+                    movieImage.onerror = () => reject(new Error('Failed to load image: ' + stillPath));
+                    const fullPath = CONFIG.MOVIES_DIR + stillPath;
+                    console.log('Loading image:', fullPath);
+                    movieImage.src = fullPath;
+                    movieImage.alt = `Scene from ${correctMovie.title}`;
                 });
                 
                 loadingDiv.style.display = 'none';
                 movieImage.style.display = 'block';
                 
-                // Toon opties en start timer alleen na laden van afbeelding
+                // Show options and start timer only after image loads
                 if (optionsContainer) {
                     optionsContainer.style.display = 'flex';
                     optionsContainer.style.flexDirection = 'column';
@@ -528,10 +547,12 @@ async function startNewRound() {
                 }
             } catch (error) {
                 console.error('Failed to load movie image:', error);
-                loadingDiv.textContent = 'Failed to load movie image';
+                loadingDiv.textContent = 'Failed to load movie image: ' + error.message;
+                loadingDiv.style.color = 'red';
             }
         } else {
-            loadingDiv.textContent = 'No movie still available';
+            loadingDiv.textContent = 'No movie still available for: ' + correctMovie.title;
+            loadingDiv.style.color = 'red';
         }
     }
 }
@@ -630,6 +651,25 @@ async function startNextRound() {
             }
         } else {
             loadingDiv.textContent = 'No movie still available';
+        }
+    }
+}
+
+function updateTimer() {
+    const percentage = (GameState.remainingTime / GameState.TIMER_DURATION) * 100;
+    const timerBar = document.querySelector('.timer-bar');
+    if (timerBar) {
+        timerBar.style.width = `${percentage}%`;
+        
+        if (GameState.currentRound >= 6) {
+            // Grijze timer in ronde 6 (geen tijdbonus)
+            timerBar.style.backgroundColor = '#6c757d';
+        } else if (percentage > 60) {
+            timerBar.style.backgroundColor = '#28a745';
+        } else if (percentage > 30) {
+            timerBar.style.backgroundColor = '#ffc107';
+        } else {
+            timerBar.style.backgroundColor = '#dc3545';
         }
     }
 }
