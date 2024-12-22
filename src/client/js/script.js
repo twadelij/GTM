@@ -198,15 +198,7 @@ document.addEventListener('DOMContentLoaded', () => {
     console.log('DOMContentLoaded event fired');
     console.log('window.CONFIG:', window.CONFIG);
     console.log('window.movieDb:', window.movieDb);
-    
-    // Test mode activeren met URL parameter ?test=true
-    const urlParams = new URLSearchParams(window.location.search);
-    if (urlParams.get('test') === 'true') {
-        console.log('Test mode activated');
-        runGameTest(5); // Test met 5 geforceerde foute antwoorden
-    } else {
-        initializeGame();
-    }
+    initializeGame();
 });
 
 // UI functies
@@ -280,10 +272,23 @@ function updateProgressCounter() {
         let remaining;
         if (GameState.currentRound === 1) {
             remaining = GameState.totalMovies - (GameState.correctAnswers + GameState.incorrectMovies.length);
+            const wrongCount = GameState.incorrectMovies.length;
+            progressCounter.innerHTML = `
+                <div class="progress-text">Ronde ${GameState.currentRound}: nog ${remaining} films te gaan</div>
+                <div class="wrong-count ${wrongCount > 0 ? 'has-errors' : ''}">
+                    ${wrongCount} fout${wrongCount !== 1 ? 'en' : ''}
+                </div>
+            `;
         } else {
             remaining = GameState.incorrectMovies.length;
+            const nextRoundCount = GameState.nextRoundMovies.length;
+            progressCounter.innerHTML = `
+                <div class="progress-text">Ronde ${GameState.currentRound}: nog ${remaining} films te gaan</div>
+                <div class="wrong-count ${nextRoundCount > 0 ? 'has-errors' : ''}">
+                    ${nextRoundCount} fout${nextRoundCount !== 1 ? 'en' : ''} in deze ronde
+                </div>
+            `;
         }
-        progressCounter.textContent = `Ronde ${GameState.currentRound}: nog ${remaining} films te gaan`;
     }
 }
 
