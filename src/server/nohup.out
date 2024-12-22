@@ -1,0 +1,16 @@
+nohup: ignoring input
+2024-12-22 20:44:23,978 - DEBUG - Starting server on port 8888
+2024-12-22 20:44:23,979 - DEBUG - Current working directory: /root/Projects/GTM/src/server
+2024-12-22 20:44:23,979 - DEBUG - Client directory: /root/Projects/GTM/src/client
+2024-12-22 20:44:23,979 - DEBUG - Data directory: /root/Projects/GTM/data
+2024-12-22 20:44:23,979 - ERROR - Server error: [Errno 98] Address already in use
+Traceback (most recent call last):
+  File "/root/Projects/GTM/src/server/server.py", line 97, in <module>
+    run_server()
+  File "/root/Projects/GTM/src/server/server.py", line 85, in run_server
+    with socketserver.TCPServer(("0.0.0.0", port), MovieGameHandler) as httpd:
+  File "/usr/lib64/python3.9/socketserver.py", line 452, in __init__
+    self.server_bind()
+  File "/usr/lib64/python3.9/socketserver.py", line 466, in server_bind
+    self.socket.bind(self.server_address)
+OSError: [Errno 98] Address already in use

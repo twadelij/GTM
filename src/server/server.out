@@ -1,0 +1,14 @@
+2024-12-22 23:51:55,674 - DEBUG - Starting server on port 8888
+2024-12-22 23:51:55,675 - DEBUG - Current working directory: /root/Projects/GTM/src/server
+2024-12-22 23:51:55,675 - DEBUG - Client directory: /root/Projects/GTM/src/client
+2024-12-22 23:51:55,675 - DEBUG - Data directory: /root/Projects/GTM/data
+2024-12-22 23:51:55,675 - INFO - Server running on 0.0.0.0:8888
+2024-12-22 23:51:55,676 - INFO - Try accessing via:
+2024-12-22 23:51:55,676 - INFO - - http://localhost:8888
+2024-12-22 23:51:55,676 - INFO - - http://127.0.0.1:8888
+2024-12-22 23:51:55,676 - INFO - - http://[your-ip]:8888
+2024-12-22 23:52:04,559 - INFO - GET request: /
+127.0.0.1 - - [22/Dec/2024 23:52:04] "GET / HTTP/1.1" 304 -
+2024-12-22 23:52:04,689 - INFO - GET request: /js/moviedb.js
+127.0.0.1 - - [22/Dec/2024 23:52:04] code 404, message File not found
+127.0.0.1 - - [22/Dec/2024 23:52:04] "GET /js/moviedb.js HTTP/1.1" 404 -

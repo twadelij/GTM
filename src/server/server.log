@@ -1,0 +1,1069 @@
+2024-12-08 21:16:16,985 - ERROR - Server error: [Errno 98] Address already in use
+2024-12-08 21:16:33,367 - ERROR - Server error: [Errno 98] Address already in use
+2024-12-08 21:16:55,226 - INFO - Server running on port 8888
+2024-12-08 21:16:55,226 - INFO - Client directory: /root/CascadeProjects/GTM/src/client
+2024-12-08 21:16:55,227 - INFO - Data directory: /root/CascadeProjects/GTM/data
+2024-12-08 21:17:17,554 - INFO - GET request: /
+2024-12-08 21:17:30,517 - INFO - GET request: /data/movies/gm31d34b38.jpg
+2024-12-08 21:17:56,301 - INFO - GET request: /
+2024-12-08 21:18:16,145 - INFO - GET request: /
+2024-12-08 21:19:14,722 - INFO - GET request: /
+2024-12-08 21:21:07,101 - INFO - GET request: /
+2024-12-08 21:23:56,878 - INFO - GET request: /
+2024-12-08 21:24:50,508 - INFO - GET request: /data/movies/gm3727eb4b.jpg
+2024-12-08 21:29:00,980 - INFO - GET request: /
+2024-12-08 21:30:08,365 - INFO - GET request: /
+2024-12-08 21:30:08,367 - INFO - GET request: /test.html
+2024-12-08 21:30:08,369 - INFO - GET request: /
+2024-12-08 21:30:08,837 - INFO - GET request: /js/movieDb.js
+2024-12-08 21:30:08,845 - INFO - GET request: /css/styles.css
+2024-12-08 21:30:08,847 - INFO - GET request: /js/script.js
+2024-12-08 21:30:08,855 - INFO - GET request: /js/config.js
+2024-12-08 21:30:09,085 - INFO - GET request: /data/movies.json
+2024-12-08 21:30:09,529 - INFO - GET request: /data/movies.json
+2024-12-08 21:30:09,548 - INFO - GET request: /favicon.ico
+2024-12-08 23:12:23,104 - INFO - GET request: /
+2024-12-08 23:12:23,106 - INFO - GET request: /data/movies/gma6e95d41.jpg
+2024-12-08 23:27:49,972 - ERROR - Error serving data file: [Errno 113] No route to host
+2024-12-08 23:27:49,973 - ERROR - Error handling GET request: [Errno 32] Broken pipe
+2024-12-20 10:30:15,521 - ERROR - Server error: [Errno 98] Address already in use
+2024-12-20 10:31:12,773 - ERROR - Server error: [Errno 98] Address already in use
+2024-12-20 10:39:42,195 - DEBUG - Starting server on port 8888
+2024-12-20 10:39:42,195 - DEBUG - Current working directory: /root/Projects/GTM/src/server
+2024-12-20 10:39:42,196 - DEBUG - Client directory: /root/Projects/GTM/src/client
+2024-12-20 10:39:42,196 - DEBUG - Data directory: /root/Projects/GTM/data
+2024-12-20 10:39:42,197 - INFO - Server running on 0.0.0.0:8888
+2024-12-20 10:39:42,197 - INFO - Try accessing via:
+2024-12-20 10:39:42,198 - INFO - - http://localhost:8888
+2024-12-20 10:39:42,198 - INFO - - http://127.0.0.1:8888
+2024-12-20 10:39:42,199 - INFO - - http://[your-ip]:8888
+2024-12-20 10:40:13,400 - INFO - GET request: /
+2024-12-20 10:40:13,486 - INFO - GET request: /css/styles.css
+2024-12-20 10:40:13,659 - INFO - GET request: /js/config.js
+2024-12-20 10:40:13,668 - INFO - GET request: /js/movieDb.js
+2024-12-20 10:40:13,672 - INFO - GET request: /js/script.js
+2024-12-20 10:40:14,360 - INFO - GET request: /data/movies.json
+2024-12-20 10:40:14,883 - INFO - GET request: /data/movies/gm545b5b63.jpg
+2024-12-20 10:40:23,739 - INFO - GET request: /data/movies/gm681273e2.jpg
+2024-12-20 10:40:33,846 - INFO - GET request: /data/movies/gm63dc7250.jpg
+2024-12-20 10:40:42,354 - INFO - GET request: /data/movies/gmdb83e623.jpg
+2024-12-20 10:40:52,354 - INFO - GET request: /data/movies/gmc5971592.jpg
+2024-12-20 10:41:00,284 - INFO - GET request: /data/movies/gmf0796303.jpg
+2024-12-20 10:41:17,305 - INFO - GET request: /data/movies/gmf57964a4.jpg
+2024-12-20 10:41:26,904 - INFO - GET request: /data/movies/gme459562c.jpg
+2024-12-20 10:41:35,077 - INFO - GET request: /data/movies/gm8cbacc28.jpg
+2024-12-20 10:41:45,265 - INFO - GET request: /data/movies/gm8591e2ed.jpg
+2024-12-20 10:41:54,112 - INFO - GET request: /data/movies/gm7eaae010.jpg
+2024-12-20 10:42:07,014 - INFO - GET request: /data/movies/gm56c63be4.jpg
+2024-12-20 10:42:14,685 - INFO - GET request: /data/movies/gmc0b43473.jpg
+2024-12-20 10:42:22,339 - INFO - GET request: /data/movies/gm19a0cb23.jpg
+2024-12-20 10:42:31,206 - INFO - GET request: /data/movies/gm0729e5a3.jpg
+2024-12-20 10:42:41,395 - INFO - GET request: /data/movies/gmaac3c7bd.jpg
+2024-12-20 10:42:51,440 - INFO - GET request: /data/movies/gm5204bd42.jpg
+2024-12-20 10:43:00,198 - INFO - GET request: /data/movies/gma566c498.jpg
+2024-12-20 10:43:11,097 - INFO - GET request: /data/movies/gm8ba7faa2.jpg
+2024-12-20 10:43:20,629 - INFO - GET request: /data/movies/gm8591e2ed.jpg
+2024-12-20 10:43:33,221 - INFO - GET request: /data/movies/gm0729e5a3.jpg
+2024-12-20 10:43:48,262 - INFO - GET request: /data/movies/gm56c63be4.jpg
+2024-12-20 10:43:56,711 - INFO - GET request: /data/movies/gm545b5b63.jpg
+2024-12-20 10:44:08,539 - INFO - GET request: /data/movies/gmc0b43473.jpg
+2024-12-20 10:54:01,268 - INFO - GET request: /
+2024-12-20 10:54:01,322 - INFO - GET request: /js/script.js
+2024-12-20 10:54:01,778 - INFO - GET request: /data/movies.json
+2024-12-20 10:54:02,212 - INFO - GET request: /data/movies/gm49fad91c.jpg
+2024-12-20 10:54:09,997 - INFO - GET request: /data/movies/gm69cc21fe.jpg
+2024-12-20 10:54:18,004 - INFO - GET request: /data/movies/gm0a71c5f4.jpg
+2024-12-20 10:54:29,168 - INFO - GET request: /data/movies/gmde3d25c3.jpg
+2024-12-20 10:54:38,800 - INFO - GET request: /data/movies/gmc546bcc7.jpg
+2024-12-20 10:54:46,949 - INFO - GET request: /data/movies/gmd1978177.jpg
+2024-12-20 10:55:05,947 - INFO - GET request: /data/movies/gm08eb1940.jpg
+2024-12-20 10:55:24,944 - INFO - GET request: /data/movies/gmba072f06.jpg
+2024-12-20 10:55:43,950 - INFO - GET request: /data/movies/gmcffc7e1d.jpg
+2024-12-20 10:56:02,962 - INFO - GET request: /data/movies/gm8af9fd57.jpg
+2024-12-20 10:56:21,946 - INFO - GET request: /data/movies/gm1783998b.jpg
+2024-12-20 10:56:40,966 - INFO - GET request: /data/movies/gm0f838310.jpg
+2024-12-20 10:56:59,972 - INFO - GET request: /data/movies/gm6f16d362.jpg
+2024-12-20 10:57:18,964 - INFO - GET request: /data/movies/gm46a37624.jpg
+2024-12-20 10:57:37,953 - INFO - GET request: /data/movies/gm79781109.jpg
+2024-12-20 10:57:56,963 - INFO - GET request: /data/movies/gm7b2c904e.jpg
+2024-12-20 10:58:15,968 - INFO - GET request: /data/movies/gm8bd0d959.jpg
+2024-12-20 10:58:34,965 - INFO - GET request: /data/movies/gmfeea8489.jpg
+2024-12-20 10:58:53,972 - INFO - GET request: /data/movies/gm5204bd42.jpg
+2024-12-20 10:59:12,974 - INFO - GET request: /data/movies/gm08eb1940.jpg
+2024-12-20 10:59:50,976 - INFO - GET request: /data/movies/gm1783998b.jpg
+2024-12-20 11:00:09,976 - INFO - GET request: /data/movies/gm8af9fd57.jpg
+2024-12-20 11:00:28,985 - INFO - GET request: /data/movies/gm79781109.jpg
+2024-12-20 11:00:47,986 - INFO - GET request: /data/movies/gm0f838310.jpg
+2024-12-20 11:20:36,135 - INFO - GET request: /
+2024-12-20 11:20:36,172 - INFO - GET request: /js/script.js
+2024-12-20 11:20:36,476 - INFO - GET request: /data/movies.json
+2024-12-20 11:20:36,659 - INFO - GET request: /data/movies/gm82215394.jpg
+2024-12-20 11:20:43,466 - INFO - GET request: /data/movies/gm1bb2bfe1.jpg
+2024-12-20 11:20:58,999 - INFO - GET request: /data/movies/gm8591e2ed.jpg
+2024-12-20 11:21:07,486 - INFO - GET request: /data/movies/gm70188fd3.jpg
+2024-12-20 11:21:15,462 - INFO - GET request: /data/movies/gm848b7a27.jpg
+2024-12-20 11:21:28,747 - INFO - GET request: /data/movies/gm0def23d0.jpg
+2024-12-20 11:21:38,852 - INFO - GET request: /data/movies/gmf5b8920e.jpg
+2024-12-20 11:21:46,556 - INFO - GET request: /data/movies/gmc482f52f.jpg
+2024-12-20 11:21:51,211 - INFO - GET request: /data/movies/gm78866ea7.jpg
+2024-12-20 11:21:55,896 - INFO - GET request: /data/movies/gmc630fb51.jpg
+2024-12-20 11:22:00,521 - INFO - GET request: /data/movies/gm4501cdb5.jpg
+2024-12-20 11:22:05,559 - INFO - GET request: /data/movies/gm96d783d2.jpg
+2024-12-20 11:22:10,879 - INFO - GET request: /data/movies/gm63dc7250.jpg
+2024-12-20 11:22:15,710 - INFO - GET request: /data/movies/gm6276188b.jpg
+2024-12-20 11:22:20,447 - INFO - GET request: /data/movies/gmaafef949.jpg
+2024-12-20 11:22:25,260 - INFO - GET request: /data/movies/gma939e3ee.jpg
+2024-12-20 11:22:31,040 - INFO - GET request: /data/movies/gmd0351d5a.jpg
+2024-12-20 11:22:36,174 - INFO - GET request: /data/movies/gm069d1df1.jpg
+2024-12-20 11:22:41,422 - INFO - GET request: /data/movies/gmd0a9542e.jpg
+2024-12-20 11:22:47,709 - INFO - GET request: /data/movies/gmfadd09d6.jpg
+2024-12-20 11:22:54,495 - INFO - GET request: /data/movies/gmc630fb51.jpg
+2024-12-20 11:23:06,154 - INFO - GET request: /data/movies/gm78866ea7.jpg
+2024-12-20 11:23:13,760 - INFO - GET request: /data/movies/gmd0a9542e.jpg
+2024-12-20 11:23:21,922 - INFO - GET request: /data/movies/gmc482f52f.jpg
+2024-12-20 11:23:28,719 - INFO - GET request: /data/movies/gm82215394.jpg
+2024-12-20 11:34:16,952 - INFO - GET request: /
+2024-12-20 11:34:16,954 - INFO - GET request: /
+2024-12-20 11:34:17,026 - INFO - GET request: /js/script.js
+2024-12-20 11:34:17,445 - INFO - GET request: /data/movies.json
+2024-12-20 11:34:17,878 - INFO - GET request: /data/movies/gm068aa981.jpg
+2024-12-20 11:34:23,356 - INFO - GET request: /data/movies/gma3a38109.jpg
+2024-12-20 11:34:28,081 - INFO - GET request: /data/movies/gm25a5a151.jpg
+2024-12-20 11:34:32,801 - INFO - GET request: /data/movies/gm46ac8f6b.jpg
+2024-12-20 11:34:38,324 - INFO - GET request: /data/movies/gme2179dbb.jpg
+2024-12-20 11:34:43,593 - INFO - GET request: /data/movies/gm3eae72cc.jpg
+2024-12-20 11:34:49,333 - INFO - GET request: /data/movies/gmb868f954.jpg
+2024-12-20 11:34:54,628 - INFO - GET request: /data/movies/gmc5cc4304.jpg
+2024-12-20 11:34:59,718 - INFO - GET request: /data/movies/gm38f3fe84.jpg
+2024-12-20 11:35:04,594 - INFO - GET request: /data/movies/gm0509b83f.jpg
+2024-12-20 11:35:09,510 - INFO - GET request: /data/movies/gm79ee9a06.jpg
+2024-12-20 11:35:14,737 - INFO - GET request: /data/movies/gm93834ee9.jpg
+2024-12-20 11:35:19,401 - INFO - GET request: /data/movies/gm63dc7250.jpg
+2024-12-20 11:35:23,949 - INFO - GET request: /data/movies/gm8ca508a3.jpg
+2024-12-20 11:35:28,682 - INFO - GET request: /data/movies/gma1d5c1cd.jpg
+2024-12-20 11:35:33,531 - INFO - GET request: /data/movies/gm6b67748f.jpg
+2024-12-20 11:35:38,486 - INFO - GET request: /data/movies/gm29a1ea1e.jpg
+2024-12-20 11:35:43,569 - INFO - GET request: /data/movies/gmc49a1477.jpg
+2024-12-20 11:35:48,777 - INFO - GET request: /data/movies/gm46ac8f6b.jpg
+2024-12-20 11:35:53,999 - INFO - GET request: /data/movies/gm71b7c51f.jpg
+2024-12-20 11:36:09,645 - INFO - GET request: /data/movies/gm63dc7250.jpg
+2024-12-20 11:36:16,905 - INFO - GET request: /data/movies/gma1d5c1cd.jpg
+2024-12-20 11:36:35,916 - INFO - GET request: /data/movies/gm29a1ea1e.jpg
+2024-12-20 11:36:49,907 - INFO - GET request: /data/movies/gm71b7c51f.jpg
+2024-12-20 14:34:41,539 - INFO - GET request: /
+2024-12-20 14:34:41,541 - INFO - GET request: /
+2024-12-20 14:34:41,684 - INFO - GET request: /js/script.js
+2024-12-20 14:34:42,141 - INFO - GET request: /data/movies.json
+2024-12-20 14:34:42,667 - INFO - GET request: /data/movies/gm415d6e6f.jpg
+2024-12-20 14:34:52,683 - INFO - GET request: /data/movies/gm358a0a80.jpg
+2024-12-20 14:35:00,030 - INFO - GET request: /data/movies/gm9c04d5ed.jpg
+2024-12-20 14:35:08,506 - INFO - GET request: /data/movies/gm25a5a151.jpg
+2024-12-20 14:35:15,520 - INFO - GET request: /data/movies/gm0509b83f.jpg
+2024-12-20 14:35:26,069 - INFO - GET request: /data/movies/gmdb88a36c.jpg
+2024-12-20 14:35:34,505 - INFO - GET request: /data/movies/gmfadd09d6.jpg
+2024-12-20 14:35:42,935 - INFO - GET request: /data/movies/gm6c5aac25.jpg
+2024-12-20 14:35:51,656 - INFO - GET request: /data/movies/gm3ad3a514.jpg
+2024-12-20 14:35:58,426 - INFO - GET request: /data/movies/gmc04c51a6.jpg
+2024-12-20 14:36:08,057 - INFO - GET request: /data/movies/gm874a9625.jpg
+2024-12-20 14:36:25,498 - INFO - GET request: /data/movies/gm19735676.jpg
+2024-12-20 14:36:35,110 - INFO - GET request: /data/movies/gmf1632d7c.jpg
+2024-12-20 14:36:43,923 - INFO - GET request: /data/movies/gmc49a1477.jpg
+2024-12-20 14:36:52,109 - INFO - GET request: /data/movies/gm56c63be4.jpg
+2024-12-20 14:37:00,103 - INFO - GET request: /data/movies/gm1bb540ac.jpg
+2024-12-20 14:37:09,523 - INFO - GET request: /data/movies/gm158dcabf.jpg
+2024-12-20 14:37:16,782 - INFO - GET request: /data/movies/gmf57964a4.jpg
+2024-12-20 14:37:25,063 - INFO - GET request: /data/movies/gm231f4fa3.jpg
+2024-12-20 14:37:33,152 - INFO - GET request: /data/movies/gmae40f02a.jpg
+2024-12-20 14:37:40,491 - INFO - GET request: /data/movies/gm9c04d5ed.jpg
+2024-12-20 14:38:03,070 - INFO - GET request: /data/movies/gm9c04d5ed.jpg
+2024-12-20 14:38:15,440 - INFO - GET request: /data/movies/gm3ad3a514.jpg
+2024-12-20 14:38:22,342 - INFO - GET request: /data/movies/gm9c04d5ed.jpg
+2024-12-20 14:40:47,902 - INFO - GET request: /
+2024-12-20 14:40:47,904 - INFO - GET request: /
+2024-12-20 14:40:48,451 - INFO - GET request: /data/movies.json
+2024-12-20 14:40:48,901 - INFO - GET request: /data/movies/gm5abadb39.jpg
+2024-12-20 14:40:59,352 - INFO - GET request: /data/movies/gmaafef949.jpg
+2024-12-20 14:41:06,841 - INFO - GET request: /data/movies/gm8e958929.jpg
+2024-12-20 14:41:25,994 - INFO - GET request: /data/movies/gma0dcf269.jpg
+2024-12-20 14:41:45,147 - INFO - GET request: /data/movies/gmecc3d0d2.jpg
+2024-12-20 14:42:04,288 - INFO - GET request: /data/movies/gmed65d6ac.jpg
+2024-12-20 14:42:23,562 - INFO - GET request: /data/movies/gm2153f47d.jpg
+2024-12-20 14:42:42,791 - INFO - GET request: /data/movies/gm93834ee9.jpg
+2024-12-20 14:43:01,912 - INFO - GET request: /data/movies/gma8d7851b.jpg
+2024-12-20 14:43:21,093 - INFO - GET request: /data/movies/gmf5b8920e.jpg
+2024-12-20 14:43:40,363 - INFO - GET request: /data/movies/gmfeea8489.jpg
+2024-12-20 14:44:00,043 - INFO - GET request: /data/movies/gmc546bcc7.jpg
+2024-12-20 14:44:19,202 - INFO - GET request: /data/movies/gm94c6d027.jpg
+2024-12-20 14:44:38,372 - INFO - GET request: /data/movies/gmd2b96aa8.jpg
+2024-12-20 14:44:57,774 - INFO - GET request: /data/movies/gmd3c3ff8e.jpg
+2024-12-20 14:45:17,335 - INFO - GET request: /data/movies/gmce03ef36.jpg
+2024-12-20 14:45:36,603 - INFO - GET request: /data/movies/gmd7b1b6de.jpg
+2024-12-20 14:45:40,349 - INFO - GET request: /
+2024-12-20 14:45:40,644 - INFO - GET request: /data/movies.json
+2024-12-20 14:45:40,842 - INFO - GET request: /data/movies/gm4a351712.jpg
+2024-12-20 14:45:44,979 - INFO - GET request: /
+2024-12-20 14:45:45,229 - INFO - GET request: /data/movies.json
+2024-12-20 14:45:45,422 - INFO - GET request: /data/movies/gm0def23d0.jpg
+2024-12-20 14:45:50,341 - INFO - GET request: /
+2024-12-20 14:45:50,342 - INFO - GET request: /
+2024-12-20 14:45:50,597 - INFO - GET request: /data/movies.json
+2024-12-20 14:45:50,823 - INFO - GET request: /data/movies/gm07bb1c04.jpg
+2024-12-20 14:45:58,103 - INFO - GET request: /data/movies/gm1783998b.jpg
+2024-12-20 14:46:05,688 - INFO - GET request: /data/movies/gm594b4402.jpg
+2024-12-20 14:46:13,596 - INFO - GET request: /data/movies/gmf98c5394.jpg
+2024-12-20 14:46:24,041 - INFO - GET request: /data/movies/gma03bae06.jpg
+2024-12-20 14:46:34,220 - INFO - GET request: /data/movies/gmb77efb25.jpg
+2024-12-20 14:46:41,841 - INFO - GET request: /data/movies/gmf80686bc.jpg
+2024-12-20 14:46:51,266 - INFO - GET request: /data/movies/gm9b7be14a.jpg
+2024-12-20 14:47:00,346 - INFO - GET request: /data/movies/gm89352800.jpg
+2024-12-20 14:47:12,469 - INFO - GET request: /data/movies/gmc482f52f.jpg
+2024-12-20 14:47:22,102 - INFO - GET request: /data/movies/gmd9203372.jpg
+2024-12-20 14:47:30,714 - INFO - GET request: /data/movies/gm29a1ea1e.jpg
+2024-12-20 14:47:40,146 - INFO - GET request: /data/movies/gm8cbacc28.jpg
+2024-12-20 14:47:49,844 - INFO - GET request: /data/movies/gmc04c51a6.jpg
+2024-12-20 14:48:02,458 - INFO - GET request: /data/movies/gm1bb2bfe1.jpg
+2024-12-20 14:48:12,527 - INFO - GET request: /data/movies/gmd8f20939.jpg
+2024-12-20 14:48:21,991 - INFO - GET request: /data/movies/gme38e6261.jpg
+2024-12-20 14:48:34,399 - INFO - GET request: /data/movies/gm31d34b38.jpg
+2024-12-20 14:48:42,118 - INFO - GET request: /data/movies/gm8b49d2c1.jpg
+2024-12-20 14:48:49,329 - INFO - GET request: /data/movies/gmb9f48c17.jpg
+2024-12-20 14:48:56,332 - INFO - GET request: /data/movies/gmc04c51a6.jpg
+2024-12-20 14:49:04,691 - INFO - GET request: /data/movies/gm8b49d2c1.jpg
+2024-12-20 14:49:22,482 - INFO - GET request: /data/movies/gm89352800.jpg
+2024-12-20 14:55:32,010 - INFO - GET request: /
+2024-12-20 14:55:32,012 - INFO - GET request: /
+2024-12-20 15:03:36,976 - DEBUG - Starting server on port 8888
+2024-12-20 15:03:36,977 - DEBUG - Current working directory: /root/Projects/GTM/src/server
+2024-12-20 15:03:36,978 - DEBUG - Client directory: /root/Projects/GTM/src/client
+2024-12-20 15:03:36,979 - DEBUG - Data directory: /root/Projects/GTM/data
+2024-12-20 15:03:36,980 - ERROR - Server error: [Errno 98] Address already in use
+2024-12-20 15:10:06,742 - DEBUG - Starting server on port 8888
+2024-12-20 15:10:06,742 - DEBUG - Current working directory: /root/Projects/GTM/src/server
+2024-12-20 15:10:06,743 - DEBUG - Client directory: /root/Projects/GTM/src/client
+2024-12-20 15:10:06,743 - DEBUG - Data directory: /root/Projects/GTM/data
+2024-12-20 15:10:06,744 - INFO - Server running on 0.0.0.0:8888
+2024-12-20 15:10:06,744 - INFO - Try accessing via:
+2024-12-20 15:10:06,745 - INFO - - http://localhost:8888
+2024-12-20 15:10:06,745 - INFO - - http://127.0.0.1:8888
+2024-12-20 15:10:06,745 - INFO - - http://[your-ip]:8888
+2024-12-20 15:27:34,218 - INFO - GET request: /js/script.js
+2024-12-20 15:27:34,334 - INFO - GET request: /data/movies.json
+2024-12-20 15:27:34,888 - INFO - GET request: /data/movies/gm76e0f6f1.jpg
+2024-12-20 15:27:51,226 - INFO - GET request: /data/movies/gm0815e71b.jpg
+2024-12-20 15:27:58,060 - INFO - GET request: /data/movies/gm594b4402.jpg
+2024-12-20 15:28:07,071 - INFO - GET request: /data/movies/gm1783998b.jpg
+2024-12-20 15:28:15,623 - INFO - GET request: /data/movies/gm08da885e.jpg
+2024-12-20 15:28:25,155 - INFO - GET request: /data/movies/gm8af9fd57.jpg
+2024-12-20 15:28:33,540 - INFO - GET request: /data/movies/gm07bb1c04.jpg
+2024-12-20 15:28:40,016 - INFO - GET request: /data/movies/gm4dbee8ba.jpg
+2024-12-20 15:28:52,204 - INFO - GET request: /data/movies/gmdb83e623.jpg
+2024-12-20 15:28:59,801 - INFO - GET request: /data/movies/gm19735676.jpg
+2024-12-20 15:29:06,417 - INFO - GET request: /data/movies/gm93831101.jpg
+2024-12-20 15:29:17,373 - INFO - GET request: /data/movies/gmce03ef36.jpg
+2024-12-20 15:29:25,482 - INFO - GET request: /data/movies/gm7dad8777.jpg
+2024-12-20 15:29:34,107 - INFO - GET request: /data/movies/gm0de52ace.jpg
+2024-12-20 15:29:41,961 - INFO - GET request: /data/movies/gm2153f47d.jpg
+2024-12-20 15:29:50,935 - INFO - GET request: /data/movies/gm231f4fa3.jpg
+2024-12-20 15:30:03,535 - INFO - GET request: /data/movies/gmb868f954.jpg
+2024-12-20 15:30:10,377 - INFO - GET request: /data/movies/gm4501cdb5.jpg
+2024-12-20 15:30:20,541 - INFO - GET request: /data/movies/gmd8399ca0.jpg
+2024-12-20 15:30:29,843 - INFO - GET request: /data/movies/gm158dcabf.jpg
+2024-12-20 15:30:36,805 - INFO - GET request: /data/movies/gm231f4fa3.jpg
+2024-12-20 15:30:47,270 - INFO - GET request: /data/movies/gm0815e71b.jpg
+2024-12-20 15:31:05,151 - INFO - GET request: /data/movies/gmb868f954.jpg
+2024-12-20 15:31:11,715 - INFO - GET request: /data/movies/gm76e0f6f1.jpg
+2024-12-20 15:38:47,494 - INFO - GET request: /
+2024-12-20 15:38:47,525 - INFO - GET request: /js/script.js
+2024-12-20 15:38:48,025 - INFO - GET request: /data/movies.json
+2024-12-20 15:38:48,567 - INFO - GET request: /data/movies/gm8cbacc28.jpg
+2024-12-20 15:38:57,788 - INFO - GET request: /data/movies/gme83beb6b.jpg
+2024-12-20 15:39:04,312 - INFO - GET request: /data/movies/gm0f838310.jpg
+2024-12-20 15:39:15,069 - INFO - GET request: /data/movies/gmf15052c8.jpg
+2024-12-20 15:39:21,754 - INFO - GET request: /data/movies/gma3a38109.jpg
+2024-12-20 15:39:26,775 - INFO - GET request: /data/movies/gm38f3fe84.jpg
+2024-12-20 15:39:31,508 - INFO - GET request: /data/movies/gm7fa952a6.jpg
+2024-12-20 15:39:36,531 - INFO - GET request: /data/movies/gm6ec9934a.jpg
+2024-12-20 15:39:41,526 - INFO - GET request: /data/movies/gm0666ba13.jpg
+2024-12-20 15:39:46,439 - INFO - GET request: /data/movies/gmaa74fa0f.jpg
+2024-12-20 15:39:52,566 - INFO - GET request: /data/movies/gm62ced758.jpg
+2024-12-20 15:40:04,232 - INFO - GET request: /data/movies/gm6c239ffd.jpg
+2024-12-20 15:40:09,817 - INFO - GET request: /data/movies/gm0f838310.jpg
+2024-12-20 15:40:20,078 - INFO - GET request: /data/movies/gm0815e71b.jpg
+2024-12-20 15:40:28,942 - INFO - GET request: /data/movies/gmd3c3ff8e.jpg
+2024-12-20 15:40:36,761 - INFO - GET request: /data/movies/gm22a3aabd.jpg
+2024-12-20 15:40:48,404 - INFO - GET request: /data/movies/gmd6f9c50c.jpg
+2024-12-20 15:40:53,491 - INFO - GET request: /data/movies/gmde3d25c3.jpg
+2024-12-20 15:40:59,903 - INFO - GET request: /data/movies/gm1783998b.jpg
+2024-12-20 15:41:06,668 - INFO - GET request: /data/movies/gmaf4ce5b6.jpg
+2024-12-20 15:41:13,666 - INFO - GET request: /data/movies/gm6ec9934a.jpg
+2024-12-20 15:41:26,657 - INFO - GET request: /data/movies/gm62ced758.jpg
+2024-12-20 15:41:41,271 - INFO - GET request: /data/movies/gmd6f9c50c.jpg
+2024-12-20 15:41:48,851 - INFO - GET request: /data/movies/gm22a3aabd.jpg
+2024-12-20 15:58:49,243 - INFO - GET request: /
+2024-12-20 15:58:49,245 - INFO - GET request: /
+2024-12-20 15:58:49,304 - INFO - GET request: /js/script.js
+2024-12-20 15:58:49,770 - INFO - GET request: /data/movies.json
+2024-12-20 15:58:50,265 - INFO - GET request: /data/movies/gmdec667c6.jpg
+2024-12-20 15:58:59,865 - INFO - GET request: /data/movies/gmf57964a4.jpg
+2024-12-20 15:59:06,240 - INFO - GET request: /data/movies/gm151ecbf4.jpg
+2024-12-20 15:59:11,775 - INFO - GET request: /data/movies/gm18fa16c0.jpg
+2024-12-20 15:59:24,023 - INFO - GET request: /data/movies/gm91a82c5f.jpg
+2024-12-20 15:59:30,798 - INFO - GET request: /data/movies/gmb9c8b1a0.jpg
+2024-12-20 15:59:38,622 - INFO - GET request: /data/movies/gma1d5c1cd.jpg
+2024-12-20 15:59:44,800 - INFO - GET request: /data/movies/gmd9203372.jpg
+2024-12-20 15:59:51,171 - INFO - GET request: /data/movies/gm31d34b38.jpg
+2024-12-20 15:59:59,525 - INFO - GET request: /data/movies/gm93831101.jpg
+2024-12-20 16:00:20,296 - INFO - GET request: /data/movies/gm65587bbd.jpg
+2024-12-20 16:00:31,123 - INFO - GET request: /data/movies/gmdec667c6.jpg
+2024-12-20 16:00:42,541 - INFO - GET request: /data/movies/gmc04c51a6.jpg
+2024-12-20 16:00:52,380 - INFO - GET request: /data/movies/gm1bb2bfe1.jpg
+2024-12-20 16:01:02,717 - INFO - GET request: /data/movies/gmbe95acb9.jpg
+2024-12-20 16:01:10,608 - INFO - GET request: /data/movies/gm8e958929.jpg
+2024-12-20 16:01:18,152 - INFO - GET request: /data/movies/gm017f9a97.jpg
+2024-12-20 16:01:28,514 - INFO - GET request: /data/movies/gm5d917b87.jpg
+2024-12-20 16:01:40,631 - INFO - GET request: /data/movies/gmf0796303.jpg
+2024-12-20 16:01:47,537 - INFO - GET request: /data/movies/gm18fa16c0.jpg
+2024-12-20 16:01:58,060 - INFO - GET request: /data/movies/gmd9203372.jpg
+2024-12-20 16:02:08,687 - INFO - GET request: /data/movies/gma1d5c1cd.jpg
+2024-12-20 16:02:17,149 - INFO - GET request: /data/movies/gm151ecbf4.jpg
+2024-12-20 16:02:24,751 - INFO - GET request: /data/movies/gmf57964a4.jpg
+2024-12-20 20:31:44,225 - INFO - GET request: /
+2024-12-20 20:31:44,263 - INFO - GET request: /js/script.js
+2024-12-20 20:31:44,925 - INFO - GET request: /data/movies.json
+2024-12-20 20:31:45,405 - INFO - GET request: /data/movies/gmffcad7b8.jpg
+2024-12-20 20:31:54,587 - INFO - GET request: /data/movies/gm3ad3a514.jpg
+2024-12-20 20:32:03,917 - INFO - GET request: /data/movies/gmc9a7f178.jpg
+2024-12-20 20:32:12,335 - INFO - GET request: /data/movies/gm8f592452.jpg
+2024-12-20 20:32:21,717 - INFO - GET request: /data/movies/gm25fdc00c.jpg
+2024-12-20 20:32:29,235 - INFO - GET request: /data/movies/gm848b7a27.jpg
+2024-12-20 20:32:36,642 - INFO - GET request: /data/movies/gm9e2e2199.jpg
+2024-12-20 20:32:44,979 - INFO - GET request: /data/movies/gm62ced758.jpg
+2024-12-20 20:32:53,896 - INFO - GET request: /data/movies/gmf1632d7c.jpg
+2024-12-20 20:33:03,085 - INFO - GET request: /data/movies/gmda1a688b.jpg
+2024-12-20 20:33:12,577 - INFO - GET request: /data/movies/gm1451642c.jpg
+2024-12-20 20:33:21,315 - INFO - GET request: /data/movies/gm0baba481.jpg
+2024-12-20 20:33:29,446 - INFO - GET request: /data/movies/gm64a8b59b.jpg
+2024-12-20 20:33:38,709 - INFO - GET request: /data/movies/gm3d0efb5e.jpg
+2024-12-20 20:33:49,357 - INFO - GET request: /data/movies/gmc04c51a6.jpg
+2024-12-20 20:34:00,541 - INFO - GET request: /data/movies/gm3fa796de.jpg
+2024-12-20 20:34:08,325 - INFO - GET request: /data/movies/gm19735676.jpg
+2024-12-20 20:34:16,081 - INFO - GET request: /data/movies/gm3565aa3f.jpg
+2024-12-20 20:34:24,678 - INFO - GET request: /data/movies/gme2179dbb.jpg
+2024-12-20 20:34:32,066 - INFO - GET request: /data/movies/gmeb620cd6.jpg
+2024-12-21 08:11:51,221 - DEBUG - Starting server on port 8888
+2024-12-21 08:11:51,222 - DEBUG - Current working directory: /root/Projects/GTM/src/server
+2024-12-21 08:11:51,222 - DEBUG - Client directory: /root/Projects/GTM/src/client
+2024-12-21 08:11:51,223 - DEBUG - Data directory: /root/Projects/GTM/data
+2024-12-21 08:11:51,223 - INFO - Server running on 0.0.0.0:8888
+2024-12-21 08:11:51,224 - INFO - Try accessing via:
+2024-12-21 08:11:51,224 - INFO - - http://localhost:8888
+2024-12-21 08:11:51,224 - INFO - - http://127.0.0.1:8888
+2024-12-21 08:11:51,224 - INFO - - http://[your-ip]:8888
+2024-12-21 08:16:36,834 - INFO - GET request: /
+2024-12-21 08:16:36,907 - INFO - GET request: /js/script.js
+2024-12-21 08:16:37,410 - INFO - GET request: /data/movies.json
+2024-12-21 08:16:37,911 - INFO - GET request: /data/movies/gm2ae4dc1c.jpg
+2024-12-21 08:16:45,338 - INFO - GET request: /data/movies/gm3fa796de.jpg
+2024-12-21 08:16:55,546 - INFO - GET request: /data/movies/gm93831101.jpg
+2024-12-21 08:17:03,078 - INFO - GET request: /data/movies/gm4501cdb5.jpg
+2024-12-21 08:17:11,716 - INFO - GET request: /data/movies/gm5650df22.jpg
+2024-12-21 08:17:22,035 - INFO - GET request: /data/movies/gm3727eb4b.jpg
+2024-12-21 08:17:30,532 - INFO - GET request: /data/movies/gm3d0efb5e.jpg
+2024-12-21 08:17:38,176 - INFO - GET request: /data/movies/gm158dcabf.jpg
+2024-12-21 08:17:45,347 - INFO - GET request: /data/movies/gm6c239ffd.jpg
+2024-12-21 08:17:52,507 - INFO - GET request: /data/movies/gmfeea8489.jpg
+2024-12-21 08:18:02,990 - INFO - GET request: /data/movies/gmd8f20939.jpg
+2024-12-21 08:18:09,597 - INFO - GET request: /data/movies/gm8e958929.jpg
+2024-12-21 08:18:17,556 - INFO - GET request: /data/movies/gm82215394.jpg
+2024-12-21 08:18:24,934 - INFO - GET request: /data/movies/gmfadd09d6.jpg
+2024-12-21 08:18:32,429 - INFO - GET request: /data/movies/gmb868f954.jpg
+2024-12-21 08:18:42,766 - INFO - GET request: /data/movies/gm38f3fe84.jpg
+2024-12-21 08:18:49,773 - INFO - GET request: /data/movies/gm848b7a27.jpg
+2024-12-21 08:18:57,227 - INFO - GET request: /data/movies/gmf5b8920e.jpg
+2024-12-21 08:19:08,687 - INFO - GET request: /data/movies/gm44a838be.jpg
+2024-12-21 08:19:15,017 - INFO - GET request: /data/movies/gm36949ba2.jpg
+2024-12-21 08:22:51,089 - INFO - GET request: /
+2024-12-21 08:22:51,090 - INFO - GET request: /
+2024-12-21 08:22:51,533 - INFO - GET request: /data/movies.json
+2024-12-21 08:22:51,966 - INFO - GET request: /data/movies/gm2dd49cd2.jpg
+2024-12-21 08:23:00,891 - INFO - GET request: /data/movies/gm4de10230.jpg
+2024-12-21 08:23:06,594 - INFO - GET request: /data/movies/gm9e2e2199.jpg
+2024-12-21 08:23:12,428 - INFO - GET request: /data/movies/gm1783998b.jpg
+2024-12-21 08:23:18,600 - INFO - GET request: /data/movies/gmd3c3ff8e.jpg
+2024-12-21 08:23:27,883 - INFO - GET request: /data/movies/gm25fdc00c.jpg
+2024-12-21 08:23:34,896 - INFO - GET request: /data/movies/gm31d34b38.jpg
+2024-12-21 08:23:41,499 - INFO - GET request: /data/movies/gmd2b96aa8.jpg
+2024-12-21 08:23:48,879 - INFO - GET request: /data/movies/gmd8f20939.jpg
+2024-12-21 08:23:56,336 - INFO - GET request: /data/movies/gm2f84822c.jpg
+2024-12-21 08:24:11,403 - INFO - GET request: /data/movies/gm1289cd05.jpg
+2024-12-21 08:24:19,776 - INFO - GET request: /data/movies/gm89352800.jpg
+2024-12-21 08:24:24,854 - INFO - GET request: /data/movies/gm2f3f3c31.jpg
+2024-12-21 08:24:29,785 - INFO - GET request: /data/movies/gmba69acc7.jpg
+2024-12-21 08:24:35,709 - INFO - GET request: /data/movies/gm07bb1c04.jpg
+2024-12-21 08:24:41,337 - INFO - GET request: /data/movies/gm0509b83f.jpg
+2024-12-21 08:24:47,427 - INFO - GET request: /data/movies/gmc19f1a61.jpg
+2024-12-21 08:24:53,045 - INFO - GET request: /data/movies/gmd8399ca0.jpg
+2024-12-21 08:24:58,730 - INFO - GET request: /data/movies/gm8fb7ba07.jpg
+2024-12-21 08:25:04,412 - INFO - GET request: /data/movies/gm0baba481.jpg
+2024-12-21 08:29:29,726 - INFO - GET request: /
+2024-12-21 08:29:30,212 - INFO - GET request: /data/movies.json
+2024-12-21 08:29:30,722 - INFO - GET request: /data/movies/gm9276d440.jpg
+2024-12-21 08:29:50,333 - INFO - GET request: /data/movies/gmfeea8489.jpg
+2024-12-21 08:30:00,672 - INFO - GET request: /data/movies/gm93831101.jpg
+2024-12-21 08:30:07,357 - INFO - GET request: /data/movies/gm8591e2ed.jpg
+2024-12-21 08:30:26,511 - INFO - GET request: /data/movies/gm18e3b884.jpg
+2024-12-21 08:30:45,731 - INFO - GET request: /data/movies/gm7de881f9.jpg
+2024-12-21 08:31:04,874 - INFO - GET request: /data/movies/gm1d92d7c9.jpg
+2024-12-21 08:31:24,073 - INFO - GET request: /data/movies/gma03bae06.jpg
+2024-12-21 08:31:43,233 - INFO - GET request: /data/movies/gmfb149fb4.jpg
+2024-12-22 20:18:55,878 - INFO - GET request: /
+2024-12-22 20:18:55,881 - INFO - GET request: /
+2024-12-22 20:18:56,001 - INFO - GET request: /css/styles.css
+2024-12-22 20:18:56,082 - INFO - GET request: /js/config.js
+2024-12-22 20:18:56,087 - INFO - GET request: /js/script.js
+2024-12-22 20:18:56,099 - INFO - GET request: /js/movieDb.js
+2024-12-22 20:18:56,944 - INFO - GET request: /data/movies.json
+2024-12-22 20:18:57,096 - INFO - GET request: /data/movies/gm64a8b59b.jpg
+2024-12-22 20:19:05,453 - INFO - GET request: /data/movies/gm74b63b48.jpg
+2024-12-22 20:19:14,865 - INFO - GET request: /data/movies/gm71b7c51f.jpg
+2024-12-22 20:19:22,947 - INFO - GET request: /data/movies/gm1bb540ac.jpg
+2024-12-22 20:19:31,020 - INFO - GET request: /data/movies/gmfb149fb4.jpg
+2024-12-22 20:19:41,031 - INFO - GET request: /data/movies/gm6276188b.jpg
+2024-12-22 20:19:49,545 - INFO - GET request: /data/movies/gm2f84822c.jpg
+2024-12-22 20:19:56,582 - INFO - GET request: /data/movies/gm415d6e6f.jpg
+2024-12-22 20:20:04,140 - INFO - GET request: /data/movies/gm848690a2.jpg
+2024-12-22 20:20:13,367 - INFO - GET request: /data/movies/gm19e45189.jpg
+2024-12-22 20:20:23,110 - INFO - GET request: /data/movies/gmf57964a4.jpg
+2024-12-22 20:20:30,008 - INFO - GET request: /data/movies/gmaa74fa0f.jpg
+2024-12-22 20:20:38,010 - INFO - GET request: /data/movies/gm7de881f9.jpg
+2024-12-22 20:20:45,708 - INFO - GET request: /data/movies/gm7d22458f.jpg
+2024-12-22 20:20:54,732 - INFO - GET request: /data/movies/gm56c63be4.jpg
+2024-12-22 20:21:03,110 - INFO - GET request: /data/movies/gm0f838310.jpg
+2024-12-22 20:21:11,790 - INFO - GET request: /data/movies/gm6423887d.jpg
+2024-12-22 20:21:22,181 - INFO - GET request: /data/movies/gmce03ef36.jpg
+2024-12-22 20:21:30,100 - INFO - GET request: /data/movies/gm0729e5a3.jpg
+2024-12-22 20:21:40,820 - INFO - GET request: /data/movies/gmb77efb25.jpg
+2024-12-22 20:21:49,034 - INFO - GET request: /data/movies/gm848690a2.jpg
+2024-12-22 20:21:57,238 - INFO - GET request: /data/movies/gm6423887d.jpg
+2024-12-22 20:22:06,744 - INFO - GET request: /data/movies/gm6276188b.jpg
+2024-12-22 20:22:14,864 - INFO - GET request: /data/movies/gmfb149fb4.jpg
+2024-12-22 20:22:35,765 - INFO - GET request: /data/movies/gm6423887d.jpg
+2024-12-22 20:44:23,978 - DEBUG - Starting server on port 8888
+2024-12-22 20:44:23,979 - DEBUG - Current working directory: /root/Projects/GTM/src/server
+2024-12-22 20:44:23,979 - DEBUG - Client directory: /root/Projects/GTM/src/client
+2024-12-22 20:44:23,979 - DEBUG - Data directory: /root/Projects/GTM/data
+2024-12-22 20:44:23,979 - ERROR - Server error: [Errno 98] Address already in use
+2024-12-22 20:45:28,668 - DEBUG - Starting server on port 8888
+2024-12-22 20:45:28,669 - DEBUG - Current working directory: /root/Projects/GTM/src/server
+2024-12-22 20:45:28,669 - DEBUG - Client directory: /root/Projects/GTM/src/client
+2024-12-22 20:45:28,669 - DEBUG - Data directory: /root/Projects/GTM/data
+2024-12-22 20:45:28,669 - INFO - Server running on 0.0.0.0:8888
+2024-12-22 20:45:28,670 - INFO - Try accessing via:
+2024-12-22 20:45:28,670 - INFO - - http://localhost:8888
+2024-12-22 20:45:28,670 - INFO - - http://127.0.0.1:8888
+2024-12-22 20:45:28,670 - INFO - - http://[your-ip]:8888
+2024-12-22 20:46:12,213 - INFO - GET request: /
+2024-12-22 20:46:12,766 - INFO - GET request: /data/movies.json
+2024-12-22 20:46:13,315 - INFO - GET request: /data/movies/gm594b4402.jpg
+2024-12-22 20:46:22,564 - INFO - GET request: /data/movies/gmd8f20939.jpg
+2024-12-22 20:46:29,513 - INFO - GET request: /data/movies/gm6ec9934a.jpg
+2024-12-22 20:46:37,088 - INFO - GET request: /data/movies/gm48357c2b.jpg
+2024-12-22 20:46:46,848 - INFO - GET request: /data/movies/gm0258e4a1.jpg
+2024-12-22 20:46:57,924 - INFO - GET request: /data/movies/gm727d684b.jpg
+2024-12-22 20:47:05,629 - INFO - GET request: /data/movies/gm29a1ea1e.jpg
+2024-12-22 20:47:13,410 - INFO - GET request: /data/movies/gmc0b43473.jpg
+2024-12-22 20:47:20,403 - INFO - GET request: /data/movies/gm93834ee9.jpg
+2024-12-22 20:47:27,808 - INFO - GET request: /data/movies/gmf5b8920e.jpg
+2024-12-22 20:47:38,047 - INFO - GET request: /data/movies/gm8a65f1d0.jpg
+2024-12-22 20:47:44,685 - INFO - GET request: /data/movies/gmbde2da5a.jpg
+2024-12-22 20:47:51,967 - INFO - GET request: /data/movies/gm25a5a151.jpg
+2024-12-22 20:47:58,864 - INFO - GET request: /data/movies/gmd0a9542e.jpg
+2024-12-22 20:48:05,735 - INFO - GET request: /data/movies/gme634d01a.jpg
+2024-12-22 20:48:11,649 - INFO - GET request: /data/movies/gma939e3ee.jpg
+2024-12-22 20:48:25,519 - INFO - GET request: /data/movies/gm3fa796de.jpg
+2024-12-22 20:48:37,357 - INFO - GET request: /data/movies/gm48357c2b.jpg
+2024-12-22 20:48:43,672 - INFO - GET request: /data/movies/gmf0796303.jpg
+2024-12-22 20:48:52,351 - INFO - GET request: /data/movies/gm594b4402.jpg
+2024-12-22 20:49:00,218 - INFO - GET request: /data/movies/gm25a5a151.jpg
+2024-12-22 20:49:07,830 - INFO - GET request: /data/movies/gm0258e4a1.jpg
+2024-12-22 20:49:17,256 - INFO - GET request: /data/movies/gm594b4402.jpg
+2024-12-22 20:49:24,704 - INFO - GET request: /data/movies/gme634d01a.jpg
+2024-12-22 20:49:32,964 - INFO - GET request: /data/movies/gm6ec9934a.jpg
+2024-12-22 20:49:39,553 - INFO - GET request: /data/movies/gmd0a9542e.jpg
+2024-12-22 20:49:47,812 - INFO - GET request: /data/movies/gmd8f20939.jpg
+2024-12-22 20:49:58,242 - INFO - GET request: /data/movies/gm594b4402.jpg
+2024-12-22 20:50:04,912 - INFO - GET request: /data/movies/gm6ec9934a.jpg
+2024-12-22 20:54:15,366 - DEBUG - Starting server on port 8888
+2024-12-22 20:54:15,366 - DEBUG - Current working directory: /root/Projects/GTM/src/server
+2024-12-22 20:54:15,366 - DEBUG - Client directory: /root/Projects/GTM/src/client
+2024-12-22 20:54:15,366 - DEBUG - Data directory: /root/Projects/GTM/data
+2024-12-22 20:54:15,367 - INFO - Server running on 0.0.0.0:8888
+2024-12-22 20:54:15,367 - INFO - Try accessing via:
+2024-12-22 20:54:15,367 - INFO - - http://localhost:8888
+2024-12-22 20:54:15,367 - INFO - - http://127.0.0.1:8888
+2024-12-22 20:54:15,367 - INFO - - http://[your-ip]:8888
+2024-12-22 21:28:23,099 - DEBUG - Starting server on port 8888
+2024-12-22 21:28:23,100 - DEBUG - Current working directory: /root/Projects/GTM/src/server
+2024-12-22 21:28:23,100 - DEBUG - Client directory: /root/Projects/GTM/src/client
+2024-12-22 21:28:23,100 - DEBUG - Data directory: /root/Projects/GTM/data
+2024-12-22 21:28:23,100 - ERROR - Server error: [Errno 98] Address already in use
+2024-12-22 21:28:56,994 - DEBUG - Starting server on port 8888
+2024-12-22 21:28:56,994 - DEBUG - Current working directory: /root/Projects/GTM/src/server
+2024-12-22 21:28:56,994 - DEBUG - Client directory: /root/Projects/GTM/src/client
+2024-12-22 21:28:56,994 - DEBUG - Data directory: /root/Projects/GTM/data
+2024-12-22 21:28:56,995 - ERROR - Server error: [Errno 98] Address already in use
+2024-12-22 21:29:23,535 - DEBUG - Starting server on port 8888
+2024-12-22 21:29:23,535 - DEBUG - Current working directory: /root/Projects/GTM/src/server
+2024-12-22 21:29:23,536 - DEBUG - Client directory: /root/Projects/GTM/src/client
+2024-12-22 21:29:23,536 - DEBUG - Data directory: /root/Projects/GTM/data
+2024-12-22 21:29:23,536 - INFO - Server running on 0.0.0.0:8888
+2024-12-22 21:29:23,536 - INFO - Try accessing via:
+2024-12-22 21:29:23,537 - INFO - - http://localhost:8888
+2024-12-22 21:29:23,537 - INFO - - http://127.0.0.1:8888
+2024-12-22 21:29:23,537 - INFO - - http://[your-ip]:8888
+2024-12-22 21:34:25,161 - DEBUG - Starting server on port 8888
+2024-12-22 21:34:25,161 - DEBUG - Current working directory: /root/Projects/GTM/src/server
+2024-12-22 21:34:25,161 - DEBUG - Client directory: /root/Projects/GTM/src/client
+2024-12-22 21:34:25,161 - DEBUG - Data directory: /root/Projects/GTM/data
+2024-12-22 21:34:25,162 - INFO - Server running on 0.0.0.0:8888
+2024-12-22 21:34:25,162 - INFO - Try accessing via:
+2024-12-22 21:34:25,162 - INFO - - http://localhost:8888
+2024-12-22 21:34:25,162 - INFO - - http://127.0.0.1:8888
+2024-12-22 21:34:25,162 - INFO - - http://[your-ip]:8888
+2024-12-22 21:43:14,487 - DEBUG - Starting server on port 8888
+2024-12-22 21:43:14,488 - DEBUG - Current working directory: /root/Projects/GTM/src/server
+2024-12-22 21:43:14,488 - DEBUG - Client directory: /root/Projects/GTM/src/client
+2024-12-22 21:43:14,488 - DEBUG - Data directory: /root/Projects/GTM/data
+2024-12-22 21:43:14,488 - INFO - Server running on 0.0.0.0:8888
+2024-12-22 21:43:14,488 - INFO - Try accessing via:
+2024-12-22 21:43:14,488 - INFO - - http://localhost:8888
+2024-12-22 21:43:14,488 - INFO - - http://127.0.0.1:8888
+2024-12-22 21:43:14,488 - INFO - - http://[your-ip]:8888
+2024-12-22 21:47:14,900 - INFO - GET request: /
+2024-12-22 21:47:35,326 - INFO - GET request: /js/script.js
+2024-12-22 21:49:43,003 - DEBUG - Starting server on port 8888
+2024-12-22 21:49:43,003 - DEBUG - Current working directory: /root/Projects/GTM/src/server
+2024-12-22 21:49:43,003 - DEBUG - Client directory: /root/Projects/GTM/src/client
+2024-12-22 21:49:43,003 - DEBUG - Data directory: /root/Projects/GTM/data
+2024-12-22 21:49:43,004 - INFO - Server running on 0.0.0.0:8888
+2024-12-22 21:49:43,004 - INFO - Try accessing via:
+2024-12-22 21:49:43,004 - INFO - - http://localhost:8888
+2024-12-22 21:49:43,004 - INFO - - http://127.0.0.1:8888
+2024-12-22 21:49:43,005 - INFO - - http://[your-ip]:8888
+2024-12-22 21:49:55,436 - INFO - GET request: /
+2024-12-22 21:49:56,160 - INFO - GET request: /data/movies.json
+2024-12-22 21:49:56,855 - INFO - GET request: /data/movies/gm7de881f9.jpg
+2024-12-22 21:50:09,239 - INFO - GET request: /data/movies/gm97a2a73e.jpg
+2024-12-22 21:50:19,619 - INFO - GET request: /data/movies/gmb8b27dc0.jpg
+2024-12-22 21:50:27,784 - INFO - GET request: /data/movies/gm1451642c.jpg
+2024-12-22 21:50:34,506 - INFO - GET request: /data/movies/gmde3d25c3.jpg
+2024-12-22 21:50:43,217 - INFO - GET request: /data/movies/gm1d92d7c9.jpg
+2024-12-22 21:50:51,887 - INFO - GET request: /data/movies/gmecc3d0d2.jpg
+2024-12-22 21:51:01,672 - INFO - GET request: /data/movies/gm1bb540ac.jpg
+2024-12-22 21:51:10,022 - INFO - GET request: /data/movies/gm2153f47d.jpg
+2024-12-22 21:51:17,772 - INFO - GET request: /data/movies/gmb1c2ff60.jpg
+2024-12-22 21:51:27,420 - INFO - GET request: /data/movies/gmba69acc7.jpg
+2024-12-22 21:51:33,983 - INFO - GET request: /data/movies/gm3727eb4b.jpg
+2024-12-22 21:51:41,443 - INFO - GET request: /data/movies/gmc0972f99.jpg
+2024-12-22 21:51:50,073 - INFO - GET request: /data/movies/gm1bb540ac.jpg
+2024-12-22 21:52:01,542 - INFO - GET request: /data/movies/gmc0b43473.jpg
+2024-12-22 21:52:08,418 - INFO - GET request: /data/movies/gmbde2da5a.jpg
+2024-12-22 21:52:15,704 - INFO - GET request: /data/movies/gmaf4ce5b6.jpg
+2024-12-22 21:52:23,331 - INFO - GET request: /data/movies/gm7de881f9.jpg
+2024-12-22 21:52:32,184 - INFO - GET request: /data/movies/gm1bb540ac.jpg
+2024-12-22 21:52:40,025 - INFO - GET request: /data/movies/gm8a65f1d0.jpg
+2024-12-22 21:58:24,192 - INFO - GET request: /
+2024-12-22 21:58:24,630 - INFO - GET request: /data/movies.json
+2024-12-22 21:58:25,153 - INFO - GET request: /data/movies/gmc9a7f178.jpg
+2024-12-22 21:58:45,214 - INFO - GET request: /data/movies/gmfeea8489.jpg
+2024-12-22 21:59:04,560 - INFO - GET request: /data/movies/gm63dc7250.jpg
+2024-12-22 21:59:23,716 - INFO - GET request: /data/movies/gm0a71c5f4.jpg
+2024-12-22 21:59:42,890 - INFO - GET request: /data/movies/gm9807f775.jpg
+2024-12-22 22:00:02,460 - INFO - GET request: /data/movies/gm22a3aabd.jpg
+2024-12-22 22:00:21,596 - INFO - GET request: /data/movies/gm19735676.jpg
+2024-12-22 22:00:40,865 - INFO - GET request: /data/movies/gmc4fffd8e.jpg
+2024-12-22 22:01:00,047 - INFO - GET request: /data/movies/gm8cfc7882.jpg
+2024-12-22 22:01:19,224 - INFO - GET request: /data/movies/gma1d5c1cd.jpg
+2024-12-22 22:01:38,438 - INFO - GET request: /data/movies/gme643729c.jpg
+2024-12-22 22:01:57,729 - INFO - GET request: /data/movies/gmc5971592.jpg
+2024-12-22 22:02:17,057 - INFO - GET request: /data/movies/gm8e958929.jpg
+2024-12-22 22:02:36,193 - INFO - GET request: /data/movies/gm1b18e4aa.jpg
+2024-12-22 22:02:55,489 - INFO - GET request: /data/movies/gm7d896835.jpg
+2024-12-22 22:03:14,897 - INFO - GET request: /data/movies/gm2153f47d.jpg
+2024-12-22 22:03:34,072 - INFO - GET request: /data/movies/gm826f54e9.jpg
+2024-12-22 22:03:53,228 - INFO - GET request: /data/movies/gm40732337.jpg
+2024-12-22 22:04:12,403 - INFO - GET request: /data/movies/gm9b7be14a.jpg
+2024-12-22 22:04:31,744 - INFO - GET request: /data/movies/gmbe95acb9.jpg
+2024-12-22 22:09:48,848 - INFO - GET request: /data/movies/gmfeea8489.jpg
+2024-12-22 22:09:48,851 - INFO - GET request: /
+2024-12-22 22:09:49,653 - INFO - GET request: /data/movies.json
+2024-12-22 22:09:49,827 - INFO - GET request: /data/movies/gm91a82c5f.jpg
+2024-12-22 22:09:56,165 - INFO - GET request: /data/movies/gmfeea8489.jpg
+2024-12-22 22:10:02,739 - INFO - GET request: /data/movies/gm89352800.jpg
+2024-12-22 22:10:10,882 - INFO - GET request: /data/movies/gma0dcf269.jpg
+2024-12-22 22:10:27,313 - INFO - GET request: /data/movies/gm0fc3b595.jpg
+2024-12-22 22:10:34,242 - INFO - GET request: /data/movies/gm08a4945c.jpg
+2024-12-22 22:10:43,077 - INFO - GET request: /data/movies/gmc19f1a61.jpg
+2024-12-22 22:10:52,650 - INFO - GET request: /data/movies/gm681273e2.jpg
+2024-12-22 22:10:59,183 - INFO - GET request: /data/movies/gm19735676.jpg
+2024-12-22 22:11:05,453 - INFO - GET request: /data/movies/gm69cc21fe.jpg
+2024-12-22 22:11:14,845 - INFO - GET request: /data/movies/gmb8b27dc0.jpg
+2024-12-22 22:11:23,387 - INFO - GET request: /data/movies/gm8cbacc28.jpg
+2024-12-22 22:11:30,174 - INFO - GET request: /data/movies/gmd2b96aa8.jpg
+2024-12-22 22:11:38,506 - INFO - GET request: /data/movies/gm4de10230.jpg
+2024-12-22 22:11:47,586 - INFO - GET request: /data/movies/gm70188fd3.jpg
+2024-12-22 22:11:53,925 - INFO - GET request: /data/movies/gm46a37624.jpg
+2024-12-22 22:12:02,783 - INFO - GET request: /data/movies/gm21712215.jpg
+2024-12-22 22:12:09,558 - INFO - GET request: /data/movies/gm7d896835.jpg
+2024-12-22 22:12:17,878 - INFO - GET request: /data/movies/gm19735676.jpg
+2024-12-22 22:12:24,391 - INFO - GET request: /data/movies/gmc4a09711.jpg
+2024-12-22 22:12:36,227 - INFO - GET request: /data/movies/gm91a82c5f.jpg
+2024-12-22 22:12:44,177 - INFO - GET request: /data/movies/gmd2b96aa8.jpg
+2024-12-22 22:12:51,925 - INFO - GET request: /data/movies/gm7d896835.jpg
+2024-12-22 22:12:59,049 - INFO - GET request: /data/movies/gma0dcf269.jpg
+2024-12-22 22:13:05,878 - INFO - GET request: /data/movies/gm89352800.jpg
+2024-12-22 22:13:12,155 - INFO - GET request: /data/movies/gmfeea8489.jpg
+2024-12-22 22:13:20,961 - INFO - GET request: /data/movies/gmc4a09711.jpg
+2024-12-22 22:13:34,589 - INFO - GET request: /data/movies/gmd2b96aa8.jpg
+2024-12-22 22:14:15,783 - INFO - GET request: /
+2024-12-22 22:14:16,228 - INFO - GET request: /data/movies.json
+2024-12-22 22:14:16,644 - INFO - GET request: /data/movies/gm95aa3aa4.jpg
+2024-12-22 22:14:35,883 - INFO - GET request: /data/movies/gma9486e35.jpg
+2024-12-22 22:14:55,893 - INFO - GET request: /data/movies/gm8cfc7882.jpg
+2024-12-22 22:15:15,535 - INFO - GET request: /data/movies/gme634d01a.jpg
+2024-12-22 22:15:35,022 - INFO - GET request: /data/movies/gma3a38109.jpg
+2024-12-22 22:15:54,165 - INFO - GET request: /data/movies/gm82215394.jpg
+2024-12-22 22:16:13,309 - INFO - GET request: /data/movies/gmdb88a36c.jpg
+2024-12-22 22:16:32,800 - INFO - GET request: /data/movies/gm6f16d362.jpg
+2024-12-22 22:16:52,162 - INFO - GET request: /data/movies/gmc0b43473.jpg
+2024-12-22 22:17:11,323 - INFO - GET request: /data/movies/gm93834ee9.jpg
+2024-12-22 22:17:31,005 - INFO - GET request: /data/movies/gm1bb540ac.jpg
+2024-12-22 22:17:50,183 - INFO - GET request: /data/movies/gm2dd49cd2.jpg
+2024-12-22 22:18:09,437 - INFO - GET request: /data/movies/gm2c254c24.jpg
+2024-12-22 22:18:29,016 - INFO - GET request: /data/movies/gma939e3ee.jpg
+2024-12-22 22:18:48,384 - INFO - GET request: /data/movies/gmb9f48c17.jpg
+2024-12-22 22:19:07,845 - INFO - GET request: /data/movies/gm74b63b48.jpg
+2024-12-22 22:19:27,446 - INFO - GET request: /data/movies/gme634d01a.jpg
+2024-12-22 22:19:46,710 - INFO - GET request: /data/movies/gm2c254c24.jpg
+2024-12-22 22:20:06,587 - INFO - GET request: /data/movies/gmc5cc4304.jpg
+2024-12-22 22:20:24,087 - DEBUG - Starting server on port 8888
+2024-12-22 22:20:24,088 - DEBUG - Current working directory: /root/Projects/GTM/src/server
+2024-12-22 22:20:24,088 - DEBUG - Client directory: /root/Projects/GTM/src/client
+2024-12-22 22:20:24,089 - DEBUG - Data directory: /root/Projects/GTM/data
+2024-12-22 22:20:24,089 - INFO - Server running on 0.0.0.0:8888
+2024-12-22 22:20:24,090 - INFO - Try accessing via:
+2024-12-22 22:20:24,090 - INFO - - http://localhost:8888
+2024-12-22 22:20:24,091 - INFO - - http://127.0.0.1:8888
+2024-12-22 22:20:24,091 - INFO - - http://[your-ip]:8888
+2024-12-22 22:20:25,734 - INFO - GET request: /data/movies/gm1b18e4aa.jpg
+2024-12-22 22:20:40,310 - INFO - GET request: /data/movies.json
+2024-12-22 22:20:40,834 - INFO - GET request: /data/movies/gm9c04d5ed.jpg
+2024-12-22 22:20:49,334 - INFO - GET request: /data/movies/gm6ec9934a.jpg
+2024-12-22 22:20:54,152 - INFO - GET request: /data/movies/gmc5cc4304.jpg
+2024-12-22 22:20:59,001 - INFO - GET request: /data/movies/gm4dbee8ba.jpg
+2024-12-22 22:21:04,081 - INFO - GET request: /data/movies/gm5d528698.jpg
+2024-12-22 22:21:10,307 - INFO - GET request: /data/movies/gm76e0f6f1.jpg
+2024-12-22 22:21:15,517 - INFO - GET request: /data/movies/gm2cdc7379.jpg
+2024-12-22 22:21:20,748 - INFO - GET request: /data/movies/gm8cbacc28.jpg
+2024-12-22 22:21:25,857 - INFO - GET request: /data/movies/gm594b4402.jpg
+2024-12-22 22:21:30,868 - INFO - GET request: /data/movies/gm9c04d5ed.jpg
+2024-12-22 22:21:36,390 - INFO - GET request: /data/movies/gm848690a2.jpg
+2024-12-22 22:21:41,509 - INFO - GET request: /data/movies/gm6697a933.jpg
+2024-12-22 22:21:46,734 - INFO - GET request: /data/movies/gmb868f954.jpg
+2024-12-22 22:21:51,769 - INFO - GET request: /data/movies/gm0baba481.jpg
+2024-12-22 22:21:57,315 - INFO - GET request: /data/movies/gm1b18e4aa.jpg
+2024-12-22 22:22:03,097 - INFO - GET request: /data/movies/gm874a9625.jpg
+2024-12-22 22:22:08,570 - INFO - GET request: /data/movies/gm64a8b59b.jpg
+2024-12-22 22:22:14,704 - INFO - GET request: /data/movies/gm358a0a80.jpg
+2024-12-22 22:22:20,311 - INFO - GET request: /data/movies/gmf57964a4.jpg
+2024-12-22 22:22:26,733 - INFO - GET request: /data/movies/gm2f84822c.jpg
+2024-12-22 22:22:32,404 - INFO - GET request: /data/movies/gm76e0f6f1.jpg
+2024-12-22 22:22:42,155 - INFO - GET request: /data/movies/gm6ec9934a.jpg
+2024-12-22 22:22:47,702 - INFO - GET request: /data/movies/gmb868f954.jpg
+2024-12-22 22:22:53,134 - INFO - GET request: /data/movies/gm1b18e4aa.jpg
+2024-12-22 22:22:58,269 - INFO - GET request: /data/movies/gm9c04d5ed.jpg
+2024-12-22 22:23:03,719 - INFO - GET request: /data/movies/gmc5cc4304.jpg
+2024-12-22 22:23:08,586 - INFO - GET request: /data/movies/gm2f84822c.jpg
+2024-12-22 22:23:14,430 - INFO - GET request: /data/movies/gm64a8b59b.jpg
+2024-12-22 22:23:19,824 - INFO - GET request: /data/movies/gm874a9625.jpg
+2024-12-22 22:23:25,952 - INFO - GET request: /data/movies/gm5d528698.jpg
+2024-12-22 22:23:31,936 - INFO - GET request: /data/movies/gm594b4402.jpg
+2024-12-22 22:23:37,643 - INFO - GET request: /data/movies/gmf57964a4.jpg
+2024-12-22 22:23:44,552 - INFO - GET request: /data/movies/gm4dbee8ba.jpg
+2024-12-22 22:23:51,015 - INFO - GET request: /data/movies/gm0baba481.jpg
+2024-12-22 22:23:59,543 - INFO - GET request: /data/movies/gm2cdc7379.jpg
+2024-12-22 22:24:08,153 - INFO - GET request: /data/movies/gm358a0a80.jpg
+2024-12-22 22:24:15,958 - INFO - GET request: /data/movies/gm9c04d5ed.jpg
+2024-12-22 22:24:25,372 - INFO - GET request: /data/movies/gm6697a933.jpg
+2024-12-22 22:24:35,871 - INFO - GET request: /data/movies/gmc5cc4304.jpg
+2024-12-22 22:24:44,372 - INFO - GET request: /data/movies/gmb868f954.jpg
+2024-12-22 22:24:58,333 - INFO - GET request: /data/movies/gm64a8b59b.jpg
+2024-12-22 22:25:05,380 - INFO - GET request: /data/movies/gm2f84822c.jpg
+2024-12-22 22:25:11,864 - INFO - GET request: /data/movies/gm76e0f6f1.jpg
+2024-12-22 22:25:20,191 - INFO - GET request: /data/movies/gm5d528698.jpg
+2024-12-22 22:25:29,735 - INFO - GET request: /data/movies/gm6ec9934a.jpg
+2024-12-22 22:25:52,534 - INFO - GET request: /data/movies/gm2f84822c.jpg
+2024-12-22 22:26:02,836 - INFO - GET request: /data/movies/gm6ec9934a.jpg
+2024-12-22 22:26:29,808 - INFO - GET request: /data/movies/gm6ec9934a.jpg
+2024-12-22 22:30:45,393 - INFO - GET request: /
+2024-12-22 22:30:45,401 - INFO - GET request: /
+2024-12-22 22:30:45,871 - INFO - GET request: /data/movies.json
+2024-12-22 22:30:46,320 - INFO - GET request: /data/movies/gm4c2b23ae.jpg
+2024-12-22 22:31:06,261 - INFO - GET request: /data/movies/gm8e958929.jpg
+2024-12-22 22:31:25,851 - INFO - GET request: /data/movies/gm6f16d362.jpg
+2024-12-22 22:31:46,124 - INFO - GET request: /data/movies/gm0509b83f.jpg
+2024-12-22 22:32:05,894 - INFO - GET request: /data/movies/gm4baafe8d.jpg
+2024-12-22 22:32:25,129 - INFO - GET request: /data/movies/gmba69acc7.jpg
+2024-12-22 22:32:44,260 - INFO - GET request: /data/movies/gme83beb6b.jpg
+2024-12-22 22:32:59,208 - INFO - GET request: /data/movies/gmcffc7e1d.jpg
+2024-12-22 22:32:59,265 - INFO - GET request: /
+2024-12-22 22:32:59,601 - INFO - GET request: /data/movies.json
+2024-12-22 22:32:59,769 - INFO - GET request: /data/movies/gm826f54e9.jpg
+2024-12-22 22:33:18,942 - INFO - GET request: /data/movies/gm7787d8c3.jpg
+2024-12-22 22:33:38,088 - INFO - GET request: /data/movies/gm9b7be14a.jpg
+2024-12-22 22:33:57,242 - INFO - GET request: /data/movies/gmc5971592.jpg
+2024-12-22 22:34:16,530 - INFO - GET request: /data/movies/gm6b67748f.jpg
+2024-12-22 22:34:35,673 - INFO - GET request: /data/movies/gm2153f47d.jpg
+2024-12-22 22:34:45,443 - INFO - GET request: /data/movies/gm96d783d2.jpg
+2024-12-22 22:34:53,840 - INFO - GET request: /data/movies/gm9b7be14a.jpg
+2024-12-22 22:35:03,229 - INFO - GET request: /data/movies/gm89352800.jpg
+2024-12-22 22:35:11,960 - INFO - GET request: /data/movies/gm79781109.jpg
+2024-12-22 22:35:19,341 - INFO - GET request: /data/movies/gm7de881f9.jpg
+2024-12-22 22:35:29,029 - INFO - GET request: /data/movies/gma8d30658.jpg
+2024-12-22 22:35:40,158 - INFO - GET request: /data/movies/gma346d034.jpg
+2024-12-22 22:35:47,362 - INFO - GET request: /data/movies/gmbe95acb9.jpg
+2024-12-22 22:35:56,479 - INFO - GET request: /data/movies/gm46ac8f6b.jpg
+2024-12-22 22:36:03,772 - INFO - GET request: /data/movies/gmc630fb51.jpg
+2024-12-22 22:36:11,858 - INFO - GET request: /data/movies/gm19735676.jpg
+2024-12-22 22:36:18,521 - INFO - GET request: /data/movies/gm6276188b.jpg
+2024-12-22 22:36:25,417 - INFO - GET request: /data/movies/gmf80686bc.jpg
+2024-12-22 22:36:32,515 - INFO - GET request: /data/movies/gm1e9e0e14.jpg
+2024-12-22 22:36:51,096 - INFO - GET request: /data/movies/gm6b67748f.jpg
+2024-12-22 22:36:59,104 - INFO - GET request: /data/movies/gm7787d8c3.jpg
+2024-12-22 22:37:06,798 - INFO - GET request: /data/movies/gmc5971592.jpg
+2024-12-22 22:37:14,054 - INFO - GET request: /data/movies/gm826f54e9.jpg
+2024-12-22 22:37:21,369 - INFO - GET request: /data/movies/gm6276188b.jpg
+2024-12-22 22:37:28,210 - INFO - GET request: /data/movies/gm9b7be14a.jpg
+2024-12-22 22:37:34,803 - INFO - GET request: /data/movies/gm7787d8c3.jpg
+2024-12-22 22:40:45,781 - INFO - GET request: /
+2024-12-22 22:40:46,227 - INFO - GET request: /data/movies.json
+2024-12-22 22:40:46,655 - INFO - GET request: /data/movies/gm2c782511.jpg
+2024-12-22 22:41:05,808 - INFO - GET request: /data/movies/gm0a71c5f4.jpg
+2024-12-22 22:41:24,907 - INFO - GET request: /data/movies/gm74b63b48.jpg
+2024-12-22 22:41:44,133 - INFO - GET request: /data/movies/gme634d01a.jpg
+2024-12-22 22:42:03,321 - INFO - GET request: /data/movies/gm848b7a27.jpg
+2024-12-22 22:42:22,448 - INFO - GET request: /data/movies/gm5992b6aa.jpg
+2024-12-22 22:42:41,590 - INFO - GET request: /data/movies/gmaac3c7bd.jpg
+2024-12-22 22:43:00,888 - INFO - GET request: /data/movies/gm7e79bc0f.jpg
+2024-12-22 22:43:05,031 - INFO - GET request: /
+2024-12-22 22:43:05,313 - INFO - GET request: /data/movies.json
+2024-12-22 22:43:05,520 - INFO - GET request: /data/movies/gm848b7a27.jpg
+2024-12-22 22:43:07,211 - INFO - GET request: /
+2024-12-22 22:43:07,448 - INFO - GET request: /data/movies.json
+2024-12-22 22:43:07,644 - INFO - GET request: /data/movies/gmfc4d80f1.jpg
+2024-12-22 22:43:08,131 - INFO - GET request: /
+2024-12-22 22:43:08,376 - INFO - GET request: /data/movies.json
+2024-12-22 22:43:08,569 - INFO - GET request: /data/movies/gm8f592452.jpg
+2024-12-22 22:43:08,923 - INFO - GET request: /
+2024-12-22 22:43:09,310 - INFO - GET request: /data/movies.json
+2024-12-22 22:43:09,515 - INFO - GET request: /data/movies/gmd3c3ff8e.jpg
+2024-12-22 22:43:11,175 - INFO - GET request: /
+2024-12-22 22:43:11,423 - INFO - GET request: /data/movies.json
+2024-12-22 22:43:11,615 - INFO - GET request: /data/movies/gme57c04da.jpg
+2024-12-22 22:43:12,501 - INFO - GET request: /
+2024-12-22 22:43:12,806 - INFO - GET request: /data/movies.json
+2024-12-22 22:43:13,018 - INFO - GET request: /data/movies/gm25c16a83.jpg
+2024-12-22 22:43:14,315 - INFO - GET request: /
+2024-12-22 22:43:14,588 - INFO - GET request: /data/movies.json
+2024-12-22 22:43:14,769 - INFO - GET request: /data/movies/gme9d1b4aa.jpg
+2024-12-22 22:43:16,527 - INFO - GET request: /
+2024-12-22 22:43:16,770 - INFO - GET request: /data/movies.json
+2024-12-22 22:43:16,964 - INFO - GET request: /data/movies/gma6e95d41.jpg
+2024-12-22 22:43:22,639 - INFO - GET request: /
+2024-12-22 22:43:22,640 - INFO - GET request: /
+2024-12-22 22:43:22,893 - INFO - GET request: /data/movies.json
+2024-12-22 22:43:23,088 - INFO - GET request: /data/movies/gm7de881f9.jpg
+2024-12-22 22:43:42,202 - INFO - GET request: /data/movies/gm6ec9934a.jpg
+2024-12-22 22:44:01,305 - INFO - GET request: /data/movies/gm8b49d2c1.jpg
+2024-12-22 22:44:11,698 - INFO - GET request: /data/movies.json
+2024-12-22 22:44:12,209 - INFO - GET request: /data/movies/gm08da885e.jpg
+2024-12-22 22:44:31,318 - INFO - GET request: /data/movies/gm19a0cb23.jpg
+2024-12-22 22:44:50,481 - INFO - GET request: /data/movies/gm36949ba2.jpg
+2024-12-22 22:45:09,803 - INFO - GET request: /data/movies/gma566c498.jpg
+2024-12-22 22:45:28,956 - INFO - GET request: /data/movies/gm8fb7ba07.jpg
+2024-12-22 22:45:48,204 - INFO - GET request: /data/movies/gm0baba481.jpg
+2024-12-22 22:46:07,480 - INFO - GET request: /data/movies/gm8591e2ed.jpg
+2024-12-22 22:46:26,636 - INFO - GET request: /data/movies/gm97100b7e.jpg
+2024-12-22 22:46:47,450 - DEBUG - Starting server on port 8888
+2024-12-22 22:46:47,450 - DEBUG - Current working directory: /root/Projects/GTM/src/server
+2024-12-22 22:46:47,450 - DEBUG - Client directory: /root/Projects/GTM/src/client
+2024-12-22 22:46:47,450 - DEBUG - Data directory: /root/Projects/GTM/data
+2024-12-22 22:46:47,451 - INFO - Server running on 0.0.0.0:8888
+2024-12-22 22:46:47,451 - INFO - Try accessing via:
+2024-12-22 22:46:47,451 - INFO - - http://localhost:8888
+2024-12-22 22:46:47,451 - INFO - - http://127.0.0.1:8888
+2024-12-22 22:46:47,451 - INFO - - http://[your-ip]:8888
+2024-12-22 22:50:01,381 - INFO - GET request: /
+2024-12-22 22:50:01,719 - INFO - GET request: /data/movies.json
+2024-12-22 22:50:01,902 - INFO - GET request: /data/movies/gmdb88a36c.jpg
+2024-12-22 22:50:18,965 - INFO - GET request: /data/movies/gmd7b1b6de.jpg
+2024-12-22 22:50:38,162 - INFO - GET request: /data/movies/gm2dd49cd2.jpg
+2024-12-22 22:50:57,319 - INFO - GET request: /data/movies/gm8ca508a3.jpg
+2024-12-22 22:51:16,425 - INFO - GET request: /data/movies/gm0def23d0.jpg
+2024-12-22 22:51:35,710 - INFO - GET request: /data/movies/gm8787c5fd.jpg
+2024-12-22 22:51:54,967 - INFO - GET request: /data/movies/gm5abadb39.jpg
+2024-12-22 22:52:14,103 - INFO - GET request: /data/movies/gm2ae4dc1c.jpg
+2024-12-22 22:52:33,271 - INFO - GET request: /data/movies/gm7d896835.jpg
+2024-12-22 22:52:52,688 - INFO - GET request: /data/movies/gmc4a09711.jpg
+2024-12-22 22:53:11,836 - INFO - GET request: /data/movies/gm8ef6d1b7.jpg
+2024-12-22 22:53:24,882 - DEBUG - Starting server on port 8888
+2024-12-22 22:53:24,882 - DEBUG - Current working directory: /root/Projects/GTM/src/server
+2024-12-22 22:53:24,883 - DEBUG - Client directory: /root/Projects/GTM/src/client
+2024-12-22 22:53:24,883 - DEBUG - Data directory: /root/Projects/GTM/data
+2024-12-22 22:53:24,883 - INFO - Server running on 0.0.0.0:8888
+2024-12-22 22:53:24,883 - INFO - Try accessing via:
+2024-12-22 22:53:24,883 - INFO - - http://localhost:8888
+2024-12-22 22:53:24,884 - INFO - - http://127.0.0.1:8888
+2024-12-22 22:53:24,884 - INFO - - http://[your-ip]:8888
+2024-12-22 22:53:31,009 - INFO - GET request: /data/movies/gm38f3fe84.jpg
+2024-12-22 22:53:37,627 - INFO - GET request: /data/movies.json
+2024-12-22 22:53:38,150 - INFO - GET request: /data/movies/gm0def23d0.jpg
+2024-12-22 22:53:47,196 - INFO - GET request: /data/movies/gmfc4d80f1.jpg
+2024-12-22 22:53:56,179 - INFO - GET request: /data/movies/gmba69acc7.jpg
+2024-12-22 22:54:02,793 - INFO - GET request: /data/movies/gm8cbacc28.jpg
+2024-12-22 22:54:11,834 - INFO - GET request: /data/movies/gm5650df22.jpg
+2024-12-22 22:54:26,048 - INFO - GET request: /data/movies/gmfadd09d6.jpg
+2024-12-22 22:54:34,468 - INFO - GET request: /data/movies/gmbde2da5a.jpg
+2024-12-22 22:54:41,497 - INFO - GET request: /data/movies/gm459c7da1.jpg
+2024-12-22 22:54:48,223 - INFO - GET request: /data/movies/gm9b7be14a.jpg
+2024-12-22 22:54:55,100 - INFO - GET request: /data/movies/gm4c2b23ae.jpg
+2024-12-22 22:55:02,057 - INFO - GET request: /data/movies/gmcc9dcb79.jpg
+2024-12-22 22:55:09,337 - INFO - GET request: /data/movies/gm1783998b.jpg
+2024-12-22 22:55:17,474 - INFO - GET request: /data/movies/gm22a3aabd.jpg
+2024-12-22 22:55:24,756 - INFO - GET request: /data/movies/gm8fb7ba07.jpg
+2024-12-22 22:55:36,893 - INFO - GET request: /data/movies/gmd8399ca0.jpg
+2024-12-22 22:55:43,502 - INFO - GET request: /data/movies/gm2cdc7379.jpg
+2024-12-22 22:55:51,198 - INFO - GET request: /data/movies/gm0def23d0.jpg
+2024-12-22 22:55:58,186 - INFO - GET request: /data/movies/gmd2b96aa8.jpg
+2024-12-22 22:56:07,207 - INFO - GET request: /data/movies/gm25a5a151.jpg
+2024-12-22 22:56:14,823 - INFO - GET request: /data/movies/gm4c2b23ae.jpg
+2024-12-22 22:57:36,686 - INFO - GET request: /
+2024-12-22 22:57:36,693 - INFO - GET request: /
+2024-12-22 22:57:37,117 - INFO - GET request: /data/movies.json
+2024-12-22 22:57:37,527 - INFO - GET request: /data/movies/gm62ced758.jpg
+2024-12-22 22:57:56,823 - INFO - GET request: /data/movies/gm4de10230.jpg
+2024-12-22 22:58:16,477 - INFO - GET request: /data/movies/gm31d34b38.jpg
+2024-12-22 22:58:35,619 - INFO - GET request: /data/movies/gm49fad91c.jpg
+2024-12-22 22:58:55,012 - INFO - GET request: /data/movies/gmc49a1477.jpg
+2024-12-22 22:59:16,123 - DEBUG - Starting server on port 8888
+2024-12-22 22:59:16,124 - DEBUG - Current working directory: /root/Projects/GTM/src/server
+2024-12-22 22:59:16,124 - DEBUG - Client directory: /root/Projects/GTM/src/client
+2024-12-22 22:59:16,124 - DEBUG - Data directory: /root/Projects/GTM/data
+2024-12-22 22:59:16,124 - INFO - Server running on 0.0.0.0:8888
+2024-12-22 22:59:16,124 - INFO - Try accessing via:
+2024-12-22 22:59:16,125 - INFO - - http://localhost:8888
+2024-12-22 22:59:16,125 - INFO - - http://127.0.0.1:8888
+2024-12-22 22:59:16,125 - INFO - - http://[your-ip]:8888
+2024-12-22 22:59:31,410 - INFO - GET request: /data/movies.json
+2024-12-22 22:59:31,934 - INFO - GET request: /data/movies/gmb76b0823.jpg
+2024-12-22 22:59:55,698 - INFO - GET request: /
+2024-12-22 22:59:55,706 - INFO - GET request: /
+2024-12-22 22:59:55,956 - INFO - GET request: /data/movies.json
+2024-12-22 22:59:56,158 - INFO - GET request: /data/movies/gm38f3fe84.jpg
+2024-12-22 23:00:15,328 - INFO - GET request: /data/movies/gm0e4e1dae.jpg
+2024-12-22 23:00:34,592 - INFO - GET request: /data/movies/gma8d30658.jpg
+2024-12-22 23:00:53,830 - INFO - GET request: /data/movies/gm151ecbf4.jpg
+2024-12-22 23:01:13,051 - INFO - GET request: /data/movies/gm017f9a97.jpg
+2024-12-22 23:01:32,521 - INFO - GET request: /data/movies/gm8ba7faa2.jpg
+2024-12-22 23:01:51,620 - INFO - GET request: /data/movies/gm848b7a27.jpg
+2024-12-22 23:02:10,836 - INFO - GET request: /data/movies/gmc7045614.jpg
+2024-12-22 23:02:30,117 - INFO - GET request: /data/movies/gm1289cd05.jpg
+2024-12-22 23:02:49,600 - INFO - GET request: /data/movies/gmb8b27dc0.jpg
+2024-12-22 23:03:09,133 - INFO - GET request: /data/movies/gm3fa796de.jpg
+2024-12-22 23:03:28,740 - INFO - GET request: /data/movies/gm8e958929.jpg
+2024-12-22 23:03:47,898 - INFO - GET request: /data/movies/gma1df0ad7.jpg
+2024-12-22 23:04:07,099 - INFO - GET request: /data/movies/gm25fdc00c.jpg
+2024-12-22 23:04:26,340 - INFO - GET request: /data/movies/gm1bb540ac.jpg
+2024-12-22 23:04:45,483 - INFO - GET request: /data/movies/gm1e9e0e14.jpg
+2024-12-22 23:04:55,903 - DEBUG - Starting server on port 8888
+2024-12-22 23:04:55,904 - DEBUG - Current working directory: /root/Projects/GTM/src/server
+2024-12-22 23:04:55,904 - DEBUG - Client directory: /root/Projects/GTM/src/client
+2024-12-22 23:04:55,904 - DEBUG - Data directory: /root/Projects/GTM/data
+2024-12-22 23:04:55,904 - INFO - Server running on 0.0.0.0:8888
+2024-12-22 23:04:55,904 - INFO - Try accessing via:
+2024-12-22 23:04:55,904 - INFO - - http://localhost:8888
+2024-12-22 23:04:55,905 - INFO - - http://127.0.0.1:8888
+2024-12-22 23:04:55,905 - INFO - - http://[your-ip]:8888
+2024-12-22 23:05:04,631 - INFO - GET request: /data/movies/gmacb1738d.jpg
+2024-12-22 23:05:15,657 - INFO - GET request: /data/movies.json
+2024-12-22 23:05:16,153 - INFO - GET request: /data/movies/gm2153f47d.jpg
+2024-12-22 23:05:32,491 - INFO - GET request: /data/movies/gmf5b8920e.jpg
+2024-12-22 23:05:41,235 - INFO - GET request: /data/movies/gm8e958929.jpg
+2024-12-22 23:05:51,998 - INFO - GET request: /data/movies/gma3a38109.jpg
+2024-12-22 23:06:10,227 - INFO - GET request: /data/movies/gmd8f20939.jpg
+2024-12-22 23:06:11,148 - INFO - GET request: /data/movies/gm231f4fa3.jpg
+2024-12-22 23:06:30,296 - INFO - GET request: /data/movies/gm08eb1940.jpg
+2024-12-22 23:06:49,495 - INFO - GET request: /data/movies/gm0729e5a3.jpg
+2024-12-22 23:06:49,497 - INFO - GET request: /
+2024-12-22 23:06:49,661 - INFO - GET request: /
+2024-12-22 23:06:49,893 - INFO - GET request: /data/movies.json
+2024-12-22 23:06:50,125 - INFO - GET request: /data/movies.json
+2024-12-22 23:06:50,262 - INFO - GET request: /data/movies/gm459c7da1.jpg
+2024-12-22 23:06:50,470 - INFO - GET request: /data/movies/gm1beefc29.jpg
+2024-12-22 23:07:09,608 - INFO - GET request: /data/movies/gmc04c51a6.jpg
+2024-12-22 23:07:29,212 - INFO - GET request: /data/movies/gm2c782511.jpg
+2024-12-22 23:07:48,375 - INFO - GET request: /data/movies/gm46ac8f6b.jpg
+2024-12-22 23:08:07,826 - INFO - GET request: /data/movies/gm017f9a97.jpg
+2024-12-22 23:08:27,163 - INFO - GET request: /data/movies/gm4d3327bf.jpg
+2024-12-22 23:08:46,285 - INFO - GET request: /data/movies/gm8ba7faa2.jpg
+2024-12-22 23:09:05,395 - INFO - GET request: /data/movies/gm25a5a151.jpg
+2024-12-22 23:09:24,502 - INFO - GET request: /data/movies/gmc49a1477.jpg
+2024-12-22 23:09:38,618 - DEBUG - Starting server on port 8888
+2024-12-22 23:09:38,619 - DEBUG - Current working directory: /root/Projects/GTM/src/server
+2024-12-22 23:09:38,619 - DEBUG - Client directory: /root/Projects/GTM/src/client
+2024-12-22 23:09:38,619 - DEBUG - Data directory: /root/Projects/GTM/data
+2024-12-22 23:09:38,619 - INFO - Server running on 0.0.0.0:8888
+2024-12-22 23:09:38,619 - INFO - Try accessing via:
+2024-12-22 23:09:38,619 - INFO - - http://localhost:8888
+2024-12-22 23:09:38,619 - INFO - - http://127.0.0.1:8888
+2024-12-22 23:09:38,620 - INFO - - http://[your-ip]:8888
+2024-12-22 23:09:43,863 - INFO - GET request: /data/movies/gmf5b8920e.jpg
+2024-12-22 23:09:45,994 - INFO - GET request: /data/movies.json
+2024-12-22 23:09:46,524 - INFO - GET request: /data/movies/gm2dd49cd2.jpg
+2024-12-22 23:10:05,687 - INFO - GET request: /data/movies/gmc7045614.jpg
+2024-12-22 23:10:25,020 - INFO - GET request: /data/movies/gm8a65f1d0.jpg
+2024-12-22 23:10:44,237 - INFO - GET request: /data/movies/gmf80686bc.jpg
+2024-12-22 23:11:03,349 - INFO - GET request: /data/movies/gm554747f7.jpg
+2024-12-22 23:11:22,676 - INFO - GET request: /data/movies/gm64a8b59b.jpg
+2024-12-22 23:11:41,783 - INFO - GET request: /data/movies/gm0258e4a1.jpg
+2024-12-22 23:12:01,215 - INFO - GET request: /data/movies/gm9276d440.jpg
+2024-12-22 23:13:39,871 - DEBUG - Starting server on port 8888
+2024-12-22 23:13:39,871 - DEBUG - Current working directory: /root/Projects/GTM/src/server
+2024-12-22 23:13:39,872 - DEBUG - Client directory: /root/Projects/GTM/src/client
+2024-12-22 23:13:39,872 - DEBUG - Data directory: /root/Projects/GTM/data
+2024-12-22 23:13:39,872 - INFO - Server running on 0.0.0.0:8888
+2024-12-22 23:13:39,872 - INFO - Try accessing via:
+2024-12-22 23:13:39,872 - INFO - - http://localhost:8888
+2024-12-22 23:13:39,872 - INFO - - http://127.0.0.1:8888
+2024-12-22 23:13:39,872 - INFO - - http://[your-ip]:8888
+2024-12-22 23:13:45,430 - INFO - GET request: /data/movies.json
+2024-12-22 23:13:45,934 - INFO - GET request: /data/movies/gma1d5c1cd.jpg
+2024-12-22 23:17:28,602 - DEBUG - Starting server on port 8888
+2024-12-22 23:17:28,602 - DEBUG - Current working directory: /root/Projects/GTM/src/server
+2024-12-22 23:17:28,602 - DEBUG - Client directory: /root/Projects/GTM/src/client
+2024-12-22 23:17:28,602 - DEBUG - Data directory: /root/Projects/GTM/data
+2024-12-22 23:17:28,602 - INFO - Server running on 0.0.0.0:8888
+2024-12-22 23:17:28,602 - INFO - Try accessing via:
+2024-12-22 23:17:28,602 - INFO - - http://localhost:8888
+2024-12-22 23:17:28,603 - INFO - - http://127.0.0.1:8888
+2024-12-22 23:17:28,603 - INFO - - http://[your-ip]:8888
+2024-12-22 23:17:35,037 - INFO - GET request: /data/movies.json
+2024-12-22 23:17:35,705 - INFO - GET request: /data/movies/gmc49a1477.jpg
+2024-12-22 23:17:55,034 - INFO - GET request: /data/movies/gmbde2da5a.jpg
+2024-12-22 23:18:14,168 - INFO - GET request: /data/movies/gm46ac8f6b.jpg
+2024-12-22 23:18:33,759 - INFO - GET request: /data/movies/gmd8f20939.jpg
+2024-12-22 23:18:53,121 - INFO - GET request: /data/movies/gm25a5a151.jpg
+2024-12-22 23:19:12,245 - INFO - GET request: /data/movies/gm1b18e4aa.jpg
+2024-12-22 23:19:31,547 - INFO - GET request: /data/movies/gmfeea8489.jpg
+2024-12-22 23:19:51,165 - INFO - GET request: /data/movies/gm7eaae010.jpg
+2024-12-22 23:20:10,400 - INFO - GET request: /data/movies/gm462782ac.jpg
+2024-12-22 23:20:29,575 - INFO - GET request: /data/movies/gm320a2c20.jpg
+2024-12-22 23:20:48,779 - INFO - GET request: /data/movies/gm9b7be14a.jpg
+2024-12-22 23:21:07,893 - INFO - GET request: /data/movies/gmaafef949.jpg
+2024-12-22 23:21:27,134 - INFO - GET request: /data/movies/gm9c04d5ed.jpg
+2024-12-22 23:21:46,390 - INFO - GET request: /data/movies/gm08da885e.jpg
+2024-12-22 23:22:05,492 - INFO - GET request: /data/movies/gm8cbacc28.jpg
+2024-12-22 23:22:24,643 - INFO - GET request: /data/movies/gm8ba7faa2.jpg
+2024-12-22 23:22:43,756 - INFO - GET request: /data/movies/gm8b49d2c1.jpg
+2024-12-22 23:23:02,945 - INFO - GET request: /data/movies/gm320a2c20.jpg
+2024-12-22 23:23:22,087 - INFO - GET request: /data/movies/gm0e4e1dae.jpg
+2024-12-22 23:23:41,290 - INFO - GET request: /data/movies/gmdb88a36c.jpg
+2024-12-22 23:24:40,069 - DEBUG - Starting server on port 8888
+2024-12-22 23:24:40,070 - DEBUG - Current working directory: /root/Projects/GTM/src/server
+2024-12-22 23:24:40,070 - DEBUG - Client directory: /root/Projects/GTM/src/client
+2024-12-22 23:24:40,070 - DEBUG - Data directory: /root/Projects/GTM/data
+2024-12-22 23:24:40,071 - INFO - Server running on 0.0.0.0:8888
+2024-12-22 23:24:40,071 - INFO - Try accessing via:
+2024-12-22 23:24:40,071 - INFO - - http://localhost:8888
+2024-12-22 23:24:40,071 - INFO - - http://127.0.0.1:8888
+2024-12-22 23:24:40,071 - INFO - - http://[your-ip]:8888
+2024-12-22 23:24:47,439 - INFO - GET request: /data/movies.json
+2024-12-22 23:24:47,970 - INFO - GET request: /data/movies/gme634d01a.jpg
+2024-12-22 23:25:07,178 - INFO - GET request: /data/movies/gmd0351d5a.jpg
+2024-12-22 23:25:18,814 - INFO - GET request: /
+2024-12-22 23:25:18,878 - INFO - GET request: /css/styles.css
+2024-12-22 23:25:18,908 - INFO - GET request: /js/config.js
+2024-12-22 23:25:18,909 - INFO - GET request: /js/moviedb.js
+2024-12-22 23:25:18,911 - INFO - GET request: /js/script.js
+2024-12-22 23:25:19,442 - INFO - GET request: /data/movies/Furiosa_A_Mad_Max_Saga_2024.jpg
+2024-12-22 23:31:36,916 - DEBUG - Starting server on port 8888
+2024-12-22 23:31:36,916 - DEBUG - Current working directory: /root/Projects/GTM/src/server
+2024-12-22 23:31:36,916 - DEBUG - Client directory: /root/Projects/GTM/src/client
+2024-12-22 23:31:36,916 - DEBUG - Data directory: /root/Projects/GTM/data
+2024-12-22 23:31:36,917 - INFO - Server running on 0.0.0.0:8888
+2024-12-22 23:31:36,917 - INFO - Try accessing via:
+2024-12-22 23:31:36,917 - INFO - - http://localhost:8888
+2024-12-22 23:31:36,917 - INFO - - http://127.0.0.1:8888
+2024-12-22 23:31:36,917 - INFO - - http://[your-ip]:8888
+2024-12-22 23:31:53,789 - INFO - GET request: /data/movies.json
+2024-12-22 23:31:54,430 - INFO - GET request: /data/movies/gm81f68ed6.jpg
+2024-12-22 23:32:02,397 - INFO - GET request: /
+2024-12-22 23:32:02,475 - INFO - GET request: /js/moviedb.js
+2024-12-22 23:32:02,487 - INFO - GET request: /css/styles.css
+2024-12-22 23:32:02,489 - INFO - GET request: /js/script.js
+2024-12-22 23:32:03,123 - INFO - GET request: /data/movies/Furiosa_A_Mad_Max_Saga_2024.jpg
+2024-12-22 23:32:18,744 - INFO - GET request: /
+2024-12-22 23:32:18,785 - INFO - GET request: /css/styles.css
+2024-12-22 23:32:18,789 - INFO - GET request: /js/moviedb.js
+2024-12-22 23:32:35,249 - INFO - GET request: /data/movies/gm1b18e4aa.jpg
+2024-12-22 23:32:35,253 - INFO - GET request: /
+2024-12-22 23:32:35,567 - INFO - GET request: /js/moviedb.js
+2024-12-22 23:35:25,241 - DEBUG - Starting server on port 8888
+2024-12-22 23:35:25,242 - DEBUG - Current working directory: /root/Projects/GTM/src/server
+2024-12-22 23:35:25,242 - DEBUG - Client directory: /root/Projects/GTM/src/client
+2024-12-22 23:35:25,242 - DEBUG - Data directory: /root/Projects/GTM/data
+2024-12-22 23:35:25,242 - INFO - Server running on 0.0.0.0:8888
+2024-12-22 23:35:25,242 - INFO - Try accessing via:
+2024-12-22 23:35:25,242 - INFO - - http://localhost:8888
+2024-12-22 23:35:25,242 - INFO - - http://127.0.0.1:8888
+2024-12-22 23:35:25,242 - INFO - - http://[your-ip]:8888
+2024-12-22 23:35:29,397 - INFO - GET request: /
+2024-12-22 23:35:29,469 - INFO - GET request: /css/styles.css
+2024-12-22 23:35:29,489 - INFO - GET request: /js/moviedb.js
+2024-12-22 23:35:29,502 - INFO - GET request: /js/script.js
+2024-12-22 23:35:33,080 - INFO - GET request: /data/movies/Furiosa_A_Mad_Max_Saga_2024.jpg
+2024-12-22 23:36:15,911 - INFO - GET request: /
+2024-12-22 23:36:15,913 - INFO - GET request: /
+2024-12-22 23:36:16,020 - INFO - GET request: /js/moviedb.js
+2024-12-22 23:36:16,094 - INFO - GET request: /js/moviedb.js
+2024-12-22 23:39:05,892 - DEBUG - Starting server on port 8888
+2024-12-22 23:39:05,893 - DEBUG - Current working directory: /root/Projects/GTM/src/server
+2024-12-22 23:39:05,893 - DEBUG - Client directory: /root/Projects/GTM/src/client
+2024-12-22 23:39:05,893 - DEBUG - Data directory: /root/Projects/GTM/data
+2024-12-22 23:39:05,894 - INFO - Server running on 0.0.0.0:8888
+2024-12-22 23:39:05,894 - INFO - Try accessing via:
+2024-12-22 23:39:05,894 - INFO - - http://localhost:8888
+2024-12-22 23:39:05,894 - INFO - - http://127.0.0.1:8888
+2024-12-22 23:39:05,894 - INFO - - http://[your-ip]:8888
+2024-12-22 23:39:13,425 - INFO - GET request: /
+2024-12-22 23:39:13,508 - INFO - GET request: /js/moviedb.js
+2024-12-22 23:39:35,854 - INFO - GET request: /
+2024-12-22 23:39:35,892 - INFO - GET request: /css/styles.css
+2024-12-22 23:39:35,910 - INFO - GET request: /js/moviedb.js
+2024-12-22 23:39:35,912 - INFO - GET request: /js/script.js
+2024-12-22 23:39:36,362 - INFO - GET request: /data/movies/Furiosa_A_Mad_Max_Saga_2024.jpg
+2024-12-22 23:49:52,764 - INFO - GET request: /
+2024-12-22 23:49:52,806 - INFO - GET request: /css/styles.css
+2024-12-22 23:49:52,819 - INFO - GET request: /js/moviedb.js
+2024-12-22 23:49:52,827 - INFO - GET request: /js/script.js
+2024-12-22 23:51:55,674 - DEBUG - Starting server on port 8888
+2024-12-22 23:51:55,675 - DEBUG - Current working directory: /root/Projects/GTM/src/server
+2024-12-22 23:51:55,675 - DEBUG - Client directory: /root/Projects/GTM/src/client
+2024-12-22 23:51:55,675 - DEBUG - Data directory: /root/Projects/GTM/data
+2024-12-22 23:51:55,675 - INFO - Server running on 0.0.0.0:8888
+2024-12-22 23:51:55,676 - INFO - Try accessing via:
+2024-12-22 23:51:55,676 - INFO - - http://localhost:8888
+2024-12-22 23:51:55,676 - INFO - - http://127.0.0.1:8888
+2024-12-22 23:51:55,676 - INFO - - http://[your-ip]:8888
+2024-12-22 23:52:04,559 - INFO - GET request: /
+2024-12-22 23:52:04,689 - INFO - GET request: /js/moviedb.js
