@@ -26,6 +26,14 @@ aliases: [Tasks, Planning]
 
 ## 🚀 Hoge Prioriteit
 
+### Kritieke Bug Fixes
+- [ ] Fix startup error "Failed to load game: Cannot read properties of undefined (reading 'title')":
+  - [ ] Debug initialisatie volgorde van scripts
+  - [ ] Controleer of alle benodigde bestanden correct worden geladen
+  - [ ] Implementeer betere error handling tijdens startup
+  - [ ] Voeg duidelijke gebruikersfeedback toe tijdens laden
+  - [ ] Test verschillende browser scenarios
+
 ### Performance Verbeteringen
 - [ ] Optimaliseren van laadtijden:
   - [ ] Comprimeren van afbeeldingen
