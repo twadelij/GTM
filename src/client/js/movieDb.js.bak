@@ -12,7 +12,6 @@ const MovieDatabase = (function() {
                 return instance;
             }
             this.movies = [];
-            this.sessionPool = [];  // Pool voor huidige sessie
             this.currentMovie = null;
             this.recentlyUsedMovies = new Set();
             this.initialized = false;
@@ -28,6 +27,8 @@ const MovieDatabase = (function() {
 
             console.log('Initializing MovieDatabase...');
             try {
+                // Haal films op van de server
+                console.log('Fetching movies from:', CONFIG.MOVIES_JSON);
                 const response = await fetch(CONFIG.MOVIES_JSON);
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`);
@@ -35,11 +36,12 @@ const MovieDatabase = (function() {
                 const data = await response.json();
                 console.log('Received movies data:', data);
                 
+                // Verwerk de films uit de results array
                 if (!data.results || !Array.isArray(data.results)) {
                     throw new Error('Invalid movies data format: missing results array');
                 }
 
-                // Verwijder dubbele films
+                // Verwijder dubbele films op basis van ID en titel
                 const uniqueMovies = new Map();
                 data.results.forEach(movie => {
                     const key = `${movie.id}-${movie.title}`;
@@ -48,20 +50,27 @@ const MovieDatabase = (function() {
                     }
                 });
 
-                // Converteer naar array
-                this.movies = Array.from(uniqueMovies.values()).map(movie => ({
+                // Converteer naar array en shuffle
+                const movieArray = Array.from(uniqueMovies.values());
+                for (let i = movieArray.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [movieArray[i], movieArray[j]] = [movieArray[j], movieArray[i]];
+                }
+
+                // Selecteer de eerste 20 films
+                const selected = movieArray.slice(0, 20);
+                console.log('Selected movies:', selected.map(m => m.title));
+
+                // Verwerk de geselecteerde films
+                this.movies = selected.map(movie => ({
                     id: movie.id,
                     title: movie.title,
-                    stills: [movie.backdrop_path.replace('data/movies/', '')],
+                    stills: [movie.backdrop_path.replace('data/movies/', '')], // Remove the data/movies/ prefix
                     releaseYear: movie.year,
                     genres: movie.genres || []
                 }));
-
-                // Maak een nieuwe sessiepool van 20 willekeurige films
-                this.createSessionPool();
                 
                 console.log(`Loaded ${this.movies.length} unique movies`);
-                console.log(`Created session pool with ${this.sessionPool.length} movies`);
                 this.initialized = true;
                 return true;
             } catch (error) {
@@ -70,74 +79,35 @@ const MovieDatabase = (function() {
             }
         }
 
-        createSessionPool() {
-            // Debug: Log alle films voor shuffle
-            console.log('All available movies before shuffle:', 
-                this.movies.map(m => `${m.id}: ${m.title}`).join('\n'));
-
-            // Controleer op dubbele films
-            const duplicates = this.movies.filter((movie, index, self) =>
-                index !== self.findIndex((m) => m.id === movie.id || m.title === movie.title)
-            );
-            if (duplicates.length > 0) {
-                console.warn('Found duplicate movies:', 
-                    duplicates.map(m => `${m.id}: ${m.title}`).join('\n'));
-            }
-
-            // Shuffle alle beschikbare films
-            const shuffled = [...this.movies].sort(() => 0.5 - Math.random());
-            // Neem de eerste 20 voor deze sessie
-            this.sessionPool = shuffled.slice(0, 20);
-            this.recentlyUsedMovies.clear();
-
-            // Debug: Log de sessiepool
-            console.log('Session pool movies:', 
-                this.sessionPool.map(m => `${m.id}: ${m.title}`).join('\n'));
-        }
-
         getRandomMovies(count) {
             if (!this.initialized) {
                 console.error('MovieDatabase not initialized');
                 return [];
             }
 
-            console.log('Getting random movies, count:', count);
-            console.log('Session pool size:', this.sessionPool.length);
-            console.log('Recently used movies:', this.recentlyUsedMovies.size);
-            console.log('Recently used movie IDs:', Array.from(this.recentlyUsedMovies));
-
-            // Filter films die al gebruikt zijn uit de sessiepool
-            let availableInPool = this.sessionPool.filter(
-                movie => !this.recentlyUsedMovies.has(movie.id)
-            );
-            console.log('Available in pool:', availableInPool.length);
-            console.log('Available movies:', 
-                availableInPool.map(m => `${m.id}: ${m.title}`).join('\n'));
-
-            // Als we niet genoeg films hebben, reset de gebruikte films
-            if (availableInPool.length < count) {
-                console.log('Resetting recently used movies within session pool');
+            // Filter out recently used movies
+            const availableMovies = this.movies.filter(movie => !this.recentlyUsedMovies.has(movie.id));
+            
+            if (availableMovies.length < count) {
+                // If we don't have enough movies, clear the recently used set
                 this.recentlyUsedMovies.clear();
-                availableInPool = [...this.sessionPool];
+                return this.movies
+                    .sort(() => 0.5 - Math.random())
+                    .slice(0, count);
             }
 
-            // Shuffle de beschikbare films
-            for (let i = availableInPool.length - 1; i > 0; i--) {
-                const j = Math.floor(Math.random() * (i + 1));
-                [availableInPool[i], availableInPool[j]] = [availableInPool[j], availableInPool[i]];
-            }
+            const selectedMovies = availableMovies
+                .sort(() => 0.5 - Math.random())
+                .slice(0, count);
 
-            // Selecteer het gevraagde aantal films
-            const selectedMovies = availableInPool.slice(0, count);
-
-            // Debug: Log de selectie
-            console.log('Selected movies for this round:', 
-                selectedMovies.map(m => `${m.id}: ${m.title}`).join('\n'));
-
-            // Markeer de geselecteerde films als gebruikt
+            // Add selected movies to recently used set
             selectedMovies.forEach(movie => {
                 this.recentlyUsedMovies.add(movie.id);
-                console.log('Marking as used:', `${movie.id}: ${movie.title}`);
+                // Keep the recently used set at a reasonable size
+                if (this.recentlyUsedMovies.size > 20) {
+                    const [firstId] = this.recentlyUsedMovies;
+                    this.recentlyUsedMovies.delete(firstId);
+                }
             });
 
             return selectedMovies;

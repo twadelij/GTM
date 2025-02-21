@@ -206,6 +206,23 @@ document.addEventListener('DOMContentLoaded', () => {
     console.log('DOMContentLoaded event fired');
     console.log('window.CONFIG:', window.CONFIG);
     console.log('window.movieDb:', window.movieDb);
+    console.log('window.imageManager:', window.imageManager);
+    
+    if (!window.CONFIG) {
+        console.error('CONFIG is not loaded!');
+        return;
+    }
+    
+    if (!window.movieDb) {
+        console.error('movieDb is not loaded!');
+        return;
+    }
+    
+    if (!window.imageManager) {
+        console.error('imageManager is not loaded!');
+        return;
+    }
+    
     initializeGame();
 });
 
@@ -271,6 +288,9 @@ function updateButtons(movies) {
         button.style.margin = '0';
         optionsContainer.appendChild(button);
     });
+
+    // Direct de visible klasse toevoegen
+    optionsContainer.classList.add('visible');
 }
 
 // Helper function to update progress counter
@@ -501,19 +521,44 @@ async function handleGuess(guessedMovie) {
 
 async function startNewRound() {
     console.log('Starting new round...');
-    const movies = movieDb.getRandomMovies(6);
-    
-    if (!movies || movies.length < 6) {
-        console.error('Not enough movies available');
-        const loadingDiv = document.querySelector('.loading');
-        if (loadingDiv) {
-            loadingDiv.textContent = 'Error: Not enough movies available. Please refresh the page.';
-            loadingDiv.style.color = 'red';
+    let movies;
+
+    if (GameState.currentRound === 1) {
+        // In ronde 1: neem de volgende ongebruikte film uit de sessiepool
+        const unusedMovies = movieDb.sessionPool.filter(
+            movie => !GameState.playedMovies.has(movie.id)
+        );
+        const currentMovie = unusedMovies[0]; // Neem de eerste ongebruikte film
+        
+        // Haal 5 random andere films op voor de opties
+        const otherMovies = movieDb.sessionPool
+            .filter(m => m.id !== currentMovie.id)
+            .sort(() => 0.5 - Math.random())
+            .slice(0, 5);
+        
+        movies = [currentMovie, ...otherMovies];
+        // Extra shuffle voor de opties
+        movies.sort(() => 0.5 - Math.random());
+        
+        // Stel de huidige film in
+        movieDb.setCurrentMovie(currentMovie);
+    } else {
+        // In andere rondes: gebruik getRandomMovies zoals voorheen
+        movies = movieDb.getRandomMovies(6);
+        if (!movies || movies.length < 6) {
+            console.error('Not enough movies available');
+            const loadingDiv = document.querySelector('.loading');
+            if (loadingDiv) {
+                loadingDiv.textContent = 'Error: Not enough movies available. Please refresh the page.';
+                loadingDiv.style.color = 'red';
+            }
+            return;
         }
-        return;
     }
 
-    const correctMovie = movies[0];
+    // Kies een willekeurige film als correct antwoord
+    const correctIndex = Math.floor(Math.random() * movies.length);
+    const correctMovie = movies[correctIndex];
     movieDb.setCurrentMovie(correctMovie);
     
     // Update UI

@@ -22,13 +22,32 @@ aliases: [Tasks, Planning]
 - [x] Test modus toegevoegd
 - [x] Lazy loading implementatie
 - [x] Verbeterde error handling
+- [x] Implementatie van ronde 1 logica voor alle 20 films
 
 ## 🚀 Hoge Prioriteit
+
+### Performance Verbeteringen
+- [ ] Optimaliseren van laadtijden:
+  - [ ] Comprimeren van afbeeldingen
+  - [ ] Implementeren van progressive loading
+  - [ ] Caching strategie herzien
+  - [ ] Preload optimalisatie
+  - [ ] Lazy loading verfijnen
+
+### Film Selectie Systeem
+- [ ] Implementeer permanent film uitsluitingssysteem:
+  - [ ] Maak een JSON bestand voor uitgesloten films
+  - [ ] Bij start van nieuw spel: selecteer 20 nieuwe, nog nooit gebruikte films
+  - [ ] Na afloop: markeer deze 20 films als 'gebruikt' voor toekomstige sessies
+  - [ ] Voeg statistieken toe over hoeveel unieke films nog beschikbaar zijn
+  - [ ] Waarschuwingssysteem wanneer films bijna op zijn
+  - [ ] Reset optie voor wanneer alle films zijn gebruikt
 
 ### UI/UX Verbeteringen
 - [ ] Laad-indicator toevoegen tijdens het laden van filmafbeeldingen
 - [ ] Game Over scherm styling verbeteren
 - [ ] Toevoegen van visuele feedback tijdens laden
+- [ ] Implementeer roterende achtergrond met willekeurige filmafbeeldingen
 
 ### Bug Fixes
 - [ ] Verificatie van tijdbonus berekening
