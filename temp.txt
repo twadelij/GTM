@@ -1,0 +1,64 @@
+Hier is een samenvatting voor de nieuwe chat:
+
+# Huidige Situatie
+
+## Hardware Setup
+- Synology NAS DS216j op 192.168.2.54
+- RAID-1 configuratie met twee schijven:
+  * /dev/sda (1TB) - functioneel
+  * /dev/sdb (2TB) - problematisch
+- USB schijf "Kreta" (2TB) beschikbaar op lokale Linux machine
+
+## RAID Status (uit /proc/mdstat)
+- md2: active raid1 sdb5[0](E) - errors gedetecteerd
+- md3: active raid1 sda3[0] - één schijf mist
+- md1: active raid1 sda2[1] - één schijf mist
+- md0: active raid1 sda1[1] - één schijf mist
+
+## Te Recoveren Data
+Prioriteit ligt bij twee directories:
+1. /volume1/OpenShare2/Documents/Adelij/
+2. /volume1/OpenShare2/Documents/Nazir/
+
+Er is mogelijk een backup in:
+- /volume2/BackupVolume1/OpenShare2/Documents/
+
+## Uitgevoerde Pogingen
+- Eerdere recovery pogingen op Windows en Synology waren niet succesvol
+- Nu focus op Linux tools vanwege betere recovery mogelijkheden
+
+# Plan van Aanpak
+
+## Stap 1: Voorbereiding
+1. USB schijf "Kreta" (2TB) voorbereiden op lokale Linux machine
+2. Benodigde tools installeren:
+   - ddrescue (voor image maken)
+   - testdisk/photorec (voor recovery)
+
+## Stap 2: Image Creation
+1. SSH verbinding maken met Synology: `ssh twadelij@192.168.2.54`
+2. Image maken van problematische schijf met ddrescue
+   - Source: /dev/sdb
+   - Destination: USB schijf "Kreta"
+   - Command template: `ddrescue -d -r3 /dev/sdb /path/to/kreta/synology.img /path/to/kreta/rescue.log`
+
+## Stap 3: Recovery
+1. Image analyseren met testdisk/photorec
+2. Vergelijken van gevonden bestanden met backup locatie
+3. Waar mogelijk, bestanden combineren voor beste resultaat
+
+## Aandachtspunten
+1. Schijf bevat ongeveer 2TB aan data
+2. USB schijf heeft voldoende capaciteit (2TB)
+3. Focus op Linux recovery tools vanwege betere mogelijkheden
+4. Mogelijk slechte sectoren die omzeild moeten worden
+5. Progress monitoring nodig vanwege lange duur
+
+## Benodigde Credentials
+- SSH login: twadelij@192.168.2.54
+- Sudo wachtwoord beschikbaar (wordt mondeling gedeeld)
+
+## Volgende Stap
+Start nieuwe Cursor sessie op lokale Linux machine waar USB schijf "Kreta" direct toegankelijk is.
+
+

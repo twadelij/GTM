@@ -1,0 +1,7 @@
+{
+    "testuser1": {
+        "password": "6ff0fb66d60a545e0e62a0c24db5fbf8c1c8c81e5f27261e3f6fdb50bd4165c6",
+        "email": "testuser1@example.com",
+        "department": "Testing"
+    }
+}

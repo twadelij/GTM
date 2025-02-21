@@ -1,0 +1,13 @@
+nohup: ignoring input
+Checking for old server processes...
+Found old server processes (PIDs: 1096447). Stopping them...
+Starting server...
+Server started successfully (PID: 1099548)
+You can now access the game at:
+- http://localhost:8888
+- http://127.0.0.1:8888
+- http://192.168.2.251:8888
+
+To stop the server, run: kill 1099548
+Server logs available in: src/server/server.log
+Server output available in: src/server/server.out

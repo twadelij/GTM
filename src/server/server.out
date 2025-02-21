@@ -12,3 +12,23 @@
 2024-12-22 23:52:04,689 - INFO - GET request: /js/moviedb.js
 127.0.0.1 - - [22/Dec/2024 23:52:04] code 404, message File not found
 127.0.0.1 - - [22/Dec/2024 23:52:04] "GET /js/moviedb.js HTTP/1.1" 404 -
+2024-12-23 00:01:25,568 - INFO - GET request: /
+192.168.2.45 - - [23/Dec/2024 00:01:25] "GET / HTTP/1.1" 304 -
+2024-12-25 16:28:18,128 - INFO - GET request: /
+192.168.2.19 - - [25/Dec/2024 16:28:18] "GET / HTTP/1.1" 200 -
+2024-12-25 16:28:18,551 - INFO - GET request: /css/styles.css
+192.168.2.19 - - [25/Dec/2024 16:28:18] "GET /css/styles.css HTTP/1.1" 200 -
+2024-12-25 16:28:18,572 - INFO - GET request: /js/config.js
+192.168.2.19 - - [25/Dec/2024 16:28:18] "GET /js/config.js HTTP/1.1" 200 -
+2024-12-25 16:28:18,579 - INFO - GET request: /js/moviedb.js
+192.168.2.19 - - [25/Dec/2024 16:28:18] code 404, message File not found
+192.168.2.19 - - [25/Dec/2024 16:28:18] "GET /js/moviedb.js HTTP/1.1" 404 -
+2024-12-25 16:28:18,583 - INFO - GET request: /js/script.js
+192.168.2.19 - - [25/Dec/2024 16:28:18] "GET /js/script.js HTTP/1.1" 200 -
+2024-12-25 16:28:18,652 - INFO - GET request: /data/movies/Furiosa_A_Mad_Max_Saga_2024.jpg
+192.168.2.19 - - [25/Dec/2024 16:28:18] "GET /data/movies/Furiosa_A_Mad_Max_Saga_2024.jpg HTTP/1.1" 200 -
+2024-12-25 16:52:56,789 - INFO - GET request: /
+192.168.2.19 - - [25/Dec/2024 16:52:56] "GET / HTTP/1.1" 304 -
+2024-12-25 16:52:56,885 - INFO - GET request: /js/moviedb.js
+192.168.2.19 - - [25/Dec/2024 16:52:56] code 404, message File not found
+192.168.2.19 - - [25/Dec/2024 16:52:56] "GET /js/moviedb.js HTTP/1.1" 404 -

@@ -1,5 +1,12 @@
 TODO List voor Guess The Movie Game
 
+RECENT VOLTOOID
+--------------
+[x] Geen punten en tijdbonus in ronde 6
+[x] Toon aantal foute gokken bij de voortgangsteller
+[x] Voorkom dubbele films in de 20 films selectie
+[x] Netflix/Jellyfin styling toepassen
+
 HOGE PRIORITEIT
 --------------
 1. Performance Optimalisatie

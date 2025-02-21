@@ -1067,3 +1067,12 @@
 2024-12-22 23:51:55,676 - INFO - - http://[your-ip]:8888
 2024-12-22 23:52:04,559 - INFO - GET request: /
 2024-12-22 23:52:04,689 - INFO - GET request: /js/moviedb.js
+2024-12-23 00:01:25,568 - INFO - GET request: /
+2024-12-25 16:28:18,128 - INFO - GET request: /
+2024-12-25 16:28:18,551 - INFO - GET request: /css/styles.css
+2024-12-25 16:28:18,572 - INFO - GET request: /js/config.js
+2024-12-25 16:28:18,579 - INFO - GET request: /js/moviedb.js
+2024-12-25 16:28:18,583 - INFO - GET request: /js/script.js
+2024-12-25 16:28:18,652 - INFO - GET request: /data/movies/Furiosa_A_Mad_Max_Saga_2024.jpg
+2024-12-25 16:52:56,789 - INFO - GET request: /
+2024-12-25 16:52:56,885 - INFO - GET request: /js/moviedb.js

@@ -1,133 +1,94 @@
-# Guess The Movie Game
+---
+title: Guess The Movie Game
+created: 2024-01-09
+updated: 2024-01-09
+tags: [game, movies, project]
+aliases: [GTM, Movie Game]
+---
 
-Een spel waarbij spelers filmscènes moeten raden uit een selectie van mogelijke antwoorden.
+# 🎬 Guess The Movie Game
 
-## Project Structuur
+Een interactief spel waarbij spelers films moeten raden aan de hand van screenshots.
 
+## 📁 Projectstructuur
+
+- `src/` - Broncode van de applicatie
+- `tools/` - Hulpprogramma's en scripts
+- `data/` - Databestanden en resources
+- `docs/` - Projectdocumentatie
+- `server/` - Backend server code
+- `templates/` - HTML templates
+- `static/` - Statische bestanden (CSS, JS, afbeeldingen)
+- `uploads/` - Gebruikersuploads en tijdelijke bestanden
+
+## 🎮 Gameplay
+
+- Start met 20 willekeurige films
+- 6 rondes om alle films te raden
+- Punten per ronde:
+  - Ronde 1: 5 punten + tijdbonus
+  - Ronde 2: 4 punten + tijdbonus
+  - Ronde 3: 3 punten + tijdbonus
+  - Ronde 4: 2 punten + tijdbonus
+  - Ronde 5: 1 punt + tijdbonus
+  - Ronde 6: Laatste kans (geen punten/tijdbonus)
+- Tijdbonus: 1 punt per seconde over (niet in ronde 6)
+- Foute antwoorden gaan door naar de volgende ronde
+- Minder keuzes per ronde (6 -> 5 -> 4 -> 3 -> 2 -> 1)
+
+## 🛠️ Technische Stack
+
+- Frontend: React.js met TypeScript
+- Backend: Python met FastAPI
+- Database: PostgreSQL met Prisma
+- Testing: Jest en Pytest
+- CI/CD: GitHub Actions
+
+## 📥 Installatie
+
+1. Clone de repository:
+```bash
+git clone https://github.com/yourusername/guess-the-movie.git
+cd guess-the-movie
 ```
-GTM/
-├── README.md                 # Hoofddocumentatie
-├── src/                      # Broncode
-│   ├── client/              # Frontend code
-│   │   ├── js/             # JavaScript bestanden
-│   │   │   ├── script.js   # Hoofdgame logica
-│   │   │   ├── movieDb.js  # Film database beheer
-│   │   │   ├── auth.js     # Authenticatie
-│   │   │   └── config.js   # Configuratie
-│   │   ├── css/            # Styling
-│   │   │   └── styles.css
-│   │   └── index.html      # Hoofdpagina
-│   └── server/             # Backend code
-│       ├── server.py       # Python server
-│       └── start_server.sh # Server startup script
-├── tools/                   # Hulpprogramma's
-│   ├── clean_movies.py     # Database opschoning
-│   └── import_movies.py    # Film import script
-├── data/                    # Data bestanden
-│   ├── movies.json         # Film database
-│   └── movies/             # Film afbeeldingen
-└── docs/                    # Documentatie
-    ├── README.md           # Gedetailleerde docs
-    ├── Technical-Details.md
-    └── Troubleshooting.md
+
+2. Installeer dependencies:
+```bash
+pip install -r requirements.txt
 ```
 
-## Gameplay Mechanics
+3. Start de applicatie:
+```bash
+python src/main.py
+```
 
-- Start met 20 willekeurig geselecteerde films
-- Per ronde minder keuzemogelijkheden:
-  - Ronde 1: 6 keuzes voor alle 20 films
-  - Ronde 2: 5 keuzes voor alle foute films uit ronde 1
-  - Ronde 3: 4 keuzes voor alle foute films uit ronde 2
-  - Ronde 4: 3 keuzes voor alle foute films uit ronde 3
-  - Ronde 5: 2 keuzes voor alle foute films uit ronde 4
-  - Ronde 6: 1 keuze voor alle foute films uit ronde 5
-- Tijdbonus: 1 punt per seconde die over is
-- Basis punten per ronde nemen af (5 -> 4 -> 3 -> 2 -> 1 -> 0)
-- 15 seconden per vraag
+## 👩‍💻 Ontwikkeling
 
-## Installatie & Opstarten
+1. Maak een nieuwe branch voor je feature:
+```bash
+git checkout -b feature/nieuwe-feature
+```
 
-1. Clone de repository
-2. Installeer de vereiste dependencies
-3. Start de server op een van de volgende manieren:
+2. Start de development server:
+```bash
+python src/main.py --dev
+```
 
-   A. Ontwikkelmodus (stopt als terminal sluit):
-   ```bash
-   cd src/server
-   python3 server.py
-   ```
+3. Run de tests:
+```bash
+pytest tests/
+```
 
-   B. Productie modus (blijft draaien na afsluiten terminal):
-   ```bash
-   cd src/server
-   nohup python3 server.py > nohup.out 2>&1 &
-   ```
+## 📝 Links
 
-4. Open de game in je browser:
-   - Lokaal: `http://localhost:8888`
-   - Extern: `http://[server-ip]:8888`
+- [[TODO]] - Project ToDo lijst
+- [[CHANGELOG]] - Versie geschiedenis
+- [[CONTRIBUTING]] - Bijdrage richtlijnen
 
-5. Server stoppen:
-   ```bash
-   # Vind het process ID
-   ps aux | grep python3 | grep server.py
-   # Stop de server
-   kill [process-id]
-   ```
+## 🤝 Bijdragen
 
-6. Server logs bekijken:
-   ```bash
-   # In de src/server directory
-   tail -f nohup.out    # Voor productie modus
-   tail -f server.log   # Voor algemene server logs
-   ```
+Bijdragen zijn welkom! Zie [[CONTRIBUTING]] voor details.
 
-## Huidige Status (21 December 2024)
+## 📄 Licentie
 
-### Wat Werkt
-- Basis gameplay mechanica
-- Film selectie en weergave
-- Score systeem met tijdbonus
-- Ronde progressie met correct aantal keuzes
-- Voortgangsteller toont juiste aantal films
-- Verticale layout voor filmkeuzes
-- Voorkomen van dubbele films in keuzes
-- Database cleanup script
-- Git versie beheer geïmplementeerd
-- Server blijft draaien na afsluiten terminal (productie modus)
-
-### Recent Opgeloste Issues
-1. **Gameplay Fixes**:
-   - ✅ Voortgangsteller begint bij 20 films
-   - ✅ Correcte ronde-progressie geïmplementeerd
-   - ✅ Consistent aantal keuzes per ronde
-   - ✅ Voorkom dubbele films in keuzes
-   - ✅ Spel gaat correct door na 20 films als er foute antwoorden zijn
-   - ✅ Server blijft draaien in productie modus
-
-2. **UI Verbeteringen**:
-   - ✅ Verticale layout voor filmkeuzes
-   - ✅ Duidelijkere weergave van huidige ronde
-
-### Openstaande Punten
-1. **Bug Fixes**:
-   - Laadtijd van afbeeldingen optimaliseren
-   - Verificatie van tijdbonus berekening
-
-2. **UI Verbeteringen**:
-   - Game Over scherm styling verbeteren
-   - Laad-indicator voor filmafbeeldingen
-
-3. **Toekomstige Features**:
-   - Highscore systeem
-   - Verschillende moeilijkheidsgraden
-   - Categorieën/genres selectie
-
-## Development Notes
-
-- Server draait op poort 8888
-- Films worden opgeslagen in `data/movies.json`
-- Gebruik `tools/clean_movies.py` voor database onderhoud
-- Git repository geïnitialiseerd voor versiebeheer
-- Server logs beschikbaar in `src/server/server.log` en `src/server/nohup.out`
+Dit project is gelicenseerd onder de MIT License - zie het [[LICENSE]] bestand voor details.

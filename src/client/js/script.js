@@ -278,22 +278,23 @@ function updateProgressCounter() {
     const progressCounter = document.querySelector('.progress-counter');
     if (progressCounter) {
         let remaining;
+        const totalWrong = GameState.incorrectMovies.length + GameState.nextRoundMovies.length;
+        
         if (GameState.currentRound === 1) {
             remaining = GameState.totalMovies - (GameState.correctAnswers + GameState.incorrectMovies.length);
-            const wrongCount = GameState.incorrectMovies.length;
             progressCounter.innerHTML = `
                 <div class="progress-text">Ronde ${GameState.currentRound}: nog ${remaining} films te gaan</div>
-                <div class="wrong-count ${wrongCount > 0 ? 'has-errors' : ''}">
-                    ${wrongCount} fout${wrongCount !== 1 ? 'en' : ''}
+                <div class="wrong-count ${totalWrong > 0 ? 'has-errors' : ''}">
+                    ${totalWrong} fout${totalWrong !== 1 ? 'en' : ''} totaal
                 </div>
             `;
         } else {
             remaining = GameState.incorrectMovies.length;
-            const nextRoundCount = GameState.nextRoundMovies.length;
+            const roundWrong = GameState.nextRoundMovies.length;
             progressCounter.innerHTML = `
                 <div class="progress-text">Ronde ${GameState.currentRound}: nog ${remaining} films te gaan</div>
-                <div class="wrong-count ${nextRoundCount > 0 ? 'has-errors' : ''}">
-                    ${nextRoundCount} fout${nextRoundCount !== 1 ? 'en' : ''} in deze ronde
+                <div class="wrong-count ${totalWrong > 0 ? 'has-errors' : ''}">
+                    ${roundWrong} fout${roundWrong !== 1 ? 'en' : ''} deze ronde (${totalWrong} totaal)
                 </div>
             `;
         }
@@ -308,7 +309,13 @@ function updateScoreDisplay() {
     }
 }
 
+function updateBackgroundImage(stillPath) {
+    // We gebruiken nu een vaste achtergrond, dus deze functie doet niets
+    return;
+}
+
 function showGameOver() {
+    updateBackgroundImage(null); // Remove background when game is over
     const gameOverDiv = document.createElement('div');
     gameOverDiv.className = 'game-over';
     gameOverDiv.innerHTML = `
@@ -396,28 +403,29 @@ async function handleGuess(guessedMovie) {
     const isCorrect = guessedMovie.id === currentMovie.id;
     
     if (isCorrect) {
-        const points = getPointsForRound(GameState.currentRound);
-        const timeBonus = getTimeBonus();
-        GameState.currentScore += points + timeBonus;
-        GameState.correctAnswers++;
-        GameState.playedMovies.add(currentMovie.id);
-        
-        updateScoreDisplay();
-        updateProgressCounter();
-        
-        // Aangepaste melding voor ronde 6
-        if (GameState.currentRound >= 6) {
-            await showSplashScreen('Correct!', [
-                'Laatste kans goed benut!',
-                `Totale score blijft: ${GameState.currentScore}`
-            ]);
-        } else {
+        if (GameState.currentRound < 6) {
+            const points = getPointsForRound(GameState.currentRound);
+            const timeBonus = getTimeBonus();
+            GameState.currentScore += points + timeBonus;
+            
             await showSplashScreen('Correct!', [
                 `+${points} punten (Ronde ${GameState.currentRound})`,
                 `+${timeBonus} punten tijdsbonus`,
                 `Totale score: ${GameState.currentScore}`
             ], timeBonus > 0 ? `Bonus: +${timeBonus}` : '');
+        } else {
+            // Geen punten en geen tijdbonus in ronde 6
+            await showSplashScreen('Correct!', [
+                'Laatste kans goed benut!',
+                `Totale score blijft: ${GameState.currentScore}`
+            ]);
         }
+        
+        GameState.correctAnswers++;
+        GameState.playedMovies.add(currentMovie.id);
+        
+        updateScoreDisplay();
+        updateProgressCounter();
 
         if (GameState.currentRound === 1) {
             if (GameState.correctAnswers + GameState.incorrectMovies.length >= GameState.totalMovies) {
@@ -532,6 +540,8 @@ async function startNewRound() {
                     console.log('Loading image:', fullPath);
                     movieImage.src = fullPath;
                     movieImage.alt = `Scene from ${correctMovie.title}`;
+                    // Update background
+                    updateBackgroundImage(fullPath);
                 });
                 
                 loadingDiv.style.display = 'none';
@@ -547,12 +557,12 @@ async function startNewRound() {
                 }
             } catch (error) {
                 console.error('Failed to load movie image:', error);
-                loadingDiv.textContent = 'Failed to load movie image: ' + error.message;
-                loadingDiv.style.color = 'red';
+                loadingDiv.textContent = 'Failed to load movie image';
+                updateBackgroundImage(null);
             }
         } else {
-            loadingDiv.textContent = 'No movie still available for: ' + correctMovie.title;
-            loadingDiv.style.color = 'red';
+            loadingDiv.textContent = 'No movie still available';
+            updateBackgroundImage(null);
         }
     }
 }
@@ -630,8 +640,11 @@ async function startNextRound() {
                 await new Promise((resolve, reject) => {
                     movieImage.onload = resolve;
                     movieImage.onerror = reject;
-                    movieImage.src = stillPath;
+                    const fullPath = CONFIG.MOVIES_DIR + stillPath;
+                    movieImage.src = fullPath;
                     movieImage.alt = `Scene from ${currentMovie.title}`;
+                    // Update background
+                    updateBackgroundImage(fullPath);
                 });
                 
                 loadingDiv.style.display = 'none';
@@ -648,9 +661,11 @@ async function startNextRound() {
             } catch (error) {
                 console.error('Failed to load movie image:', error);
                 loadingDiv.textContent = 'Failed to load movie image';
+                updateBackgroundImage(null);
             }
         } else {
             loadingDiv.textContent = 'No movie still available';
+            updateBackgroundImage(null);
         }
     }
 }
@@ -663,13 +678,17 @@ function updateTimer() {
         
         if (GameState.currentRound >= 6) {
             // Grijze timer in ronde 6 (geen tijdbonus)
-            timerBar.style.backgroundColor = '#6c757d';
+            timerBar.style.background = '#6c757d';
+            timerBar.style.boxShadow = 'none';
         } else if (percentage > 60) {
-            timerBar.style.backgroundColor = '#28a745';
+            timerBar.style.background = 'linear-gradient(to right, var(--accent-color), #FF4B4B)';
+            timerBar.style.boxShadow = '0 0 10px rgba(229, 9, 20, 0.5)';
         } else if (percentage > 30) {
-            timerBar.style.backgroundColor = '#ffc107';
+            timerBar.style.background = 'linear-gradient(to right, #ffc107, #FF9800)';
+            timerBar.style.boxShadow = '0 0 10px rgba(255, 193, 7, 0.5)';
         } else {
-            timerBar.style.backgroundColor = '#dc3545';
+            timerBar.style.background = 'linear-gradient(to right, #dc3545, #FF4B4B)';
+            timerBar.style.boxShadow = '0 0 10px rgba(220, 53, 69, 0.5)';
         }
     }
 }
