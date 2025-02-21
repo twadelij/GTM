@@ -532,22 +532,30 @@ async function startNewRound() {
         const stillPath = movieDb.getRandomStillForMovie(correctMovie);
         if (stillPath) {
             try {
-                // Wait for image to load
-                await new Promise((resolve, reject) => {
-                    movieImage.onload = resolve;
-                    movieImage.onerror = () => reject(new Error('Failed to load image: ' + stillPath));
-                    const fullPath = CONFIG.MOVIES_DIR + stillPath;
-                    console.log('Loading image:', fullPath);
-                    movieImage.src = fullPath;
-                    movieImage.alt = `Scene from ${correctMovie.title}`;
-                    // Update background
-                    updateBackgroundImage(fullPath);
-                });
+                const fullPath = CONFIG.MOVIES_DIR + stillPath;
+                console.log('Loading image:', fullPath);
                 
+                // Gebruik ImageManager voor laden en caching
+                await window.imageManager.loadImage(fullPath);
+                movieImage.src = fullPath;
+                movieImage.alt = `Scene from ${correctMovie.title}`;
+                
+                // Preload afbeeldingen voor volgende ronde
+                const nextMovies = movieDb.getRandomMovies(6);
+                if (nextMovies && nextMovies.length > 0) {
+                    const nextStills = nextMovies
+                        .map(movie => movieDb.getRandomStillForMovie(movie))
+                        .filter(Boolean)
+                        .map(still => CONFIG.MOVIES_DIR + still);
+                    window.imageManager.preloadImages(nextStills);
+                }
+                
+                // Update UI
                 loadingDiv.style.display = 'none';
                 movieImage.style.display = 'block';
                 
-                // Show options and start timer only after image loads
+                // Update background en toon opties
+                updateBackgroundImage(fullPath);
                 if (optionsContainer) {
                     optionsContainer.style.display = 'flex';
                     optionsContainer.style.flexDirection = 'column';
@@ -557,8 +565,27 @@ async function startNewRound() {
                 }
             } catch (error) {
                 console.error('Failed to load movie image:', error);
-                loadingDiv.textContent = 'Failed to load movie image';
-                updateBackgroundImage(null);
+                loadingDiv.textContent = 'Failed to load movie image. Retrying...';
+                // Probeer opnieuw met een andere afbeelding
+                const newStillPath = movieDb.getRandomStillForMovie(correctMovie, true);
+                if (newStillPath) {
+                    const newFullPath = CONFIG.MOVIES_DIR + newStillPath;
+                    try {
+                        await window.imageManager.loadImage(newFullPath);
+                        movieImage.src = newFullPath;
+                        movieImage.alt = `Scene from ${correctMovie.title}`;
+                        loadingDiv.style.display = 'none';
+                        movieImage.style.display = 'block';
+                        updateBackgroundImage(newFullPath);
+                    } catch (retryError) {
+                        console.error('Retry failed:', retryError);
+                        loadingDiv.textContent = 'Failed to load movie image';
+                        updateBackgroundImage(null);
+                    }
+                } else {
+                    loadingDiv.textContent = 'No alternative movie still available';
+                    updateBackgroundImage(null);
+                }
             }
         } else {
             loadingDiv.textContent = 'No movie still available';

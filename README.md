@@ -13,10 +13,13 @@ Een interactief spel waarbij spelers films moeten raden aan de hand van screensh
 ## 📁 Projectstructuur
 
 - `src/` - Broncode van de applicatie
+  - `client/` - Frontend code
+    - `js/` - JavaScript modules
+    - `css/` - Styling
+  - `server/` - Backend server code
 - `tools/` - Hulpprogramma's en scripts
 - `data/` - Databestanden en resources
 - `docs/` - Projectdocumentatie
-- `server/` - Backend server code
 - `templates/` - HTML templates
 - `static/` - Statische bestanden (CSS, JS, afbeeldingen)
 - `uploads/` - Gebruikersuploads en tijdelijke bestanden
@@ -43,13 +46,22 @@ Een interactief spel waarbij spelers films moeten raden aan de hand van screensh
 - Database: PostgreSQL met Prisma
 - Testing: Jest en Pytest
 - CI/CD: GitHub Actions
+- Image Management: Custom ImageManager met caching en preloading
+
+## 🆕 Laatste Updates
+
+- Geoptimaliseerde afbeeldingslaadtijd met caching
+- Preloading van volgende ronde afbeeldingen
+- Verbeterde error handling
+- Lazy loading implementatie
+- Test modus toegevoegd
 
 ## 📥 Installatie
 
 1. Clone de repository:
 ```bash
-git clone https://github.com/yourusername/guess-the-movie.git
-cd guess-the-movie
+git clone https://github.com/twadelij/GTM.git
+cd GTM
 ```
 
 2. Installeer dependencies:
@@ -57,9 +69,9 @@ cd guess-the-movie
 pip install -r requirements.txt
 ```
 
-3. Start de applicatie:
+3. Start de server:
 ```bash
-python src/main.py
+python src/server/server.py
 ```
 
 ## 👩‍💻 Ontwikkeling
@@ -71,13 +83,26 @@ git checkout -b feature/nieuwe-feature
 
 2. Start de development server:
 ```bash
-python src/main.py --dev
+python src/server/server.py --dev
 ```
 
 3. Run de tests:
 ```bash
 pytest tests/
 ```
+
+## 🧪 Test Modus
+
+Om het spel te testen zonder handmatig te spelen:
+
+1. Open de browser console (F12)
+2. Voer het volgende commando uit:
+```javascript
+runGameTest(5); // Test met 5 foute antwoorden in ronde 1
+```
+
+Parameters:
+- `forcedWrongAnswers`: Aantal foute antwoorden in ronde 1 (default: 5)
 
 ## 📝 Links
 

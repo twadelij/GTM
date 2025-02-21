@@ -16,13 +16,14 @@ aliases: [Tasks, Planning]
 - [x] Netflix/Jellyfin styling toepassen
 - [x] Cursor regels geïmplementeerd
 - [x] README.md in Obsidian formaat
+- [x] Laadtijd van filmafbeeldingen verbeteren
+- [x] Preloading van volgende filmafbeeldingen implementeren
+- [x] Caching mechanisme voor veel gebruikte afbeeldingen
+- [x] Test modus toegevoegd
+- [x] Lazy loading implementatie
+- [x] Verbeterde error handling
 
 ## 🚀 Hoge Prioriteit
-
-### Performance Optimalisatie
-- [ ] Laadtijd van filmafbeeldingen verbeteren
-- [ ] Preloading van volgende filmafbeeldingen implementeren
-- [ ] Caching mechanisme voor veel gebruikte afbeeldingen
 
 ### UI/UX Verbeteringen
 - [ ] Laad-indicator toevoegen tijdens het laden van filmafbeeldingen
@@ -65,15 +66,15 @@ aliases: [Tasks, Planning]
 ## 🆕 Cursor Rules Implementatie
 
 ### Documentatie & Structuur
-- [ ] Centrale ToDo.md voor alle projecten maken
-- [ ] Project-specifieke ToDo.md's maken
+- [x] Centrale ToDo.md voor alle projecten maken
+- [x] Project-specifieke ToDo.md's maken
 - [ ] Obsidian synchronisatie opzetten
-- [ ] Consistente bestandsstructuur implementeren
+- [x] Consistente bestandsstructuur implementeren
 - [ ] Git branches workflow documenteren
 
 ### GitHub Integratie
-- [ ] Alle projecten als WIP op GitHub plaatsen
-- [ ] Branch strategie implementeren
+- [x] Alle projecten als WIP op GitHub plaatsen
+- [x] Branch strategie implementeren
 - [ ] Code review proces opzetten
 - [ ] Feedback mechanisme implementeren
 
@@ -95,4 +96,5 @@ aliases: [Tasks, Planning]
 - Onderzoek mogelijkheden voor progressive image loading
 - Plan nodig voor schaalbaarheid bij groei gebruikersbase
 - Regelmatige code reviews inplannen
-- Feedback verzamelen van gebruikers voor nieuwe features 
+- Feedback verzamelen van gebruikers voor nieuwe features
+- Test modus is nu beschikbaar via console: runGameTest(5) 

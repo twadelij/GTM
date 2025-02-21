@@ -166,11 +166,12 @@ h1 {
 .movie-image {
     position: relative;
     width: 100%;
-    aspect-ratio: 16/9;
-    background: var(--primary-bg);
-    border-radius: 8px;
+    height: 400px;
+    border-radius: 12px;
     overflow: hidden;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+    background: rgba(0, 0, 0, 0.2);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
 }
 
 .movie-image::after {
@@ -194,6 +195,19 @@ h1 {
     height: 100%;
     object-fit: cover;
     transition: transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
+    will-change: transform;
+    backface-visibility: hidden;
+    transform: translateZ(0);
+    -webkit-font-smoothing: subpixel-antialiased;
+}
+
+.movie-image img[loading="lazy"] {
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+}
+
+.movie-image img:not([loading]) {
+    opacity: 1;
 }
 
 .movie-image:hover img {
@@ -221,6 +235,7 @@ h1 {
     border-top-color: var(--accent-color);
     border-radius: 50%;
     animation: loading-spinner 1s linear infinite;
+    will-change: transform;
 }
 
 @keyframes loading-spinner {
@@ -229,10 +244,29 @@ h1 {
     }
 }
 
+.loading.error {
+    color: var(--error-color);
+}
+
+.loading.error::after {
+    border-color: var(--error-color);
+    border-top-color: var(--accent-color);
+    animation: none;
+    transform: rotate(45deg);
+}
+
 .options-container {
     display: flex;
     flex-direction: column;
     gap: 12px;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: all 0.3s ease-out;
+}
+
+.options-container.visible {
+    opacity: 1;
+    transform: translateY(0);
 }
 
 .option-btn {
@@ -505,4 +539,46 @@ h1 {
         padding: 14px 20px;
         font-size: 1rem;
     }
+}
+
+.test-controls {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    margin-top: 10px;
+}
+
+.test-button {
+    background: rgba(70, 211, 105, 0.2);
+    border: 1px solid rgba(70, 211, 105, 0.3);
+    color: var(--success-color);
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: all 0.3s ease;
+}
+
+.test-button:hover {
+    background: rgba(70, 211, 105, 0.3);
+    transform: translateY(-1px);
+}
+
+.test-controls select {
+    background: rgba(20, 20, 20, 0.85);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: var(--text-secondary);
+    padding: 8px 12px;
+    border-radius: 4px;
+    font-size: 0.9rem;
+    cursor: pointer;
+}
+
+.test-controls select:hover {
+    border-color: rgba(255, 255, 255, 0.2);
+}
+
+.test-controls select:focus {
+    outline: none;
+    border-color: var(--accent-color);
 }

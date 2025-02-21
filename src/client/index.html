@@ -6,17 +6,28 @@
     <title>Guess The Movie</title>
     <link rel="stylesheet" href="css/styles.css">
     <link rel="icon" type="image/png" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAGASURBVFhH7ZY9TsNAEIXXQUgUFJQUFJScgYKGM1BQcgYKGs5AQckZKGg4AwUNZ6Cg4QwUFGHezOyPHa+dxFYaKZ80Wu/svO/t2t6N0mg0Go3G/8KyrFvoAroKx7yGxuE0H1g8g35C39BvS99Qzhf0BF2Ea3Nh0R7kB99YgBvoHVRr36EHaBiuXw8LrKFP6GQVLMc5dAzVhg/oOoRWw8QBpBrXFWBsF3qFat0JtBPC82HCGfQeolUYO4Q+oFp7H8LzYcIWpA3kIkTKMNaDnqFa+xLC82HCBvQcoqsxxwPqPEQWw4QN6DVEyzBWOxFz9KFZiCyGCSuQNhBvKPcgWoaxbegFqrVXITwfJuxD3kB0A8bHkK5/rbsL4fkwYQjpW1A7EXN0jPUtaO1RCK+GBbuQNhBvKGO4iXQt6DwYhfBqWNCH9C2kDSWFOXXm6xDWNZ+GcD4s1LegHUUbyiI4Vxc7gXTm6/+GvNp/AYu1E2lDSWHOxk6j0Wg0/gxF8QNkrMuY4QhV5QAAAABJRU5ErkJggg==">
+    <!-- Preload kritieke afbeeldingen -->
+    <link rel="preload" as="image" href="css/loading-spinner.gif">
 </head>
 <body>
     <div class="header-area">
         <h1>Guess The Movie</h1>
+        <div class="test-controls">
+            <button id="runTest" class="test-button" onclick="runGameTest(5)">🧪 Test Spel (5 fouten)</button>
+            <select id="wrongAnswers" onchange="document.getElementById('runTest').onclick = () => runGameTest(Number(this.value))">
+                <option value="5">5 foute antwoorden</option>
+                <option value="10">10 foute antwoorden</option>
+                <option value="15">15 foute antwoorden</option>
+                <option value="0">Geen foute antwoorden</option>
+            </select>
+        </div>
     </div>
     <div class="container">
         <div class="progress-counter"></div>
         <div class="score-display">Score: 0</div>
         <div class="game-container">
             <div class="movie-image">
-                <img style="display: none;">
+                <img style="display: none;" loading="lazy">
                 <div class="loading">Loading...</div>
             </div>
             <div class="options-container"></div>
@@ -26,6 +37,7 @@
         </div>
     </div>
     <script src="js/config.js"></script>
+    <script src="js/imageManager.js"></script>
     <script src="js/moviedb.js"></script>
     <script src="js/script.js"></script>
 </body>
