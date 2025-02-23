@@ -34,6 +34,20 @@ aliases: [Tasks, Planning]
   - [ ] Voeg duidelijke gebruikersfeedback toe tijdens laden
   - [ ] Test verschillende browser scenarios
 
+- [ ] Server startup stabiliteit verbeteren:
+  - [ ] Onderzoek waarom server twee keer moet worden opgestart
+  - [ ] Implementeer robuustere poort verificatie
+  - [ ] Voeg retry mechanisme toe voor server startup
+  - [ ] Verbeter process handling en cleanup
+  - [ ] Implementeer health check endpoint
+
+- [ ] Fix dubbele films in ronde 1:
+  - [ ] Debug film selectie logica
+  - [ ] Implementeer strikte controle op unieke films
+  - [ ] Voeg logging toe voor film selectie process
+  - [ ] Garandeer dat alle 20 films exact één keer worden getoond
+  - [ ] Voeg test functie toe om film distributie te verifiëren
+
 ### Performance Verbeteringen
 - [ ] Optimaliseren van laadtijden:
   - [ ] Comprimeren van afbeeldingen

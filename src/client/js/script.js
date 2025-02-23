@@ -71,18 +71,53 @@ async function initializeGame() {
     const loadingDiv = document.querySelector('.loading');
     
     try {
-        if (!window.movieDb) {
-            throw new Error('MovieDb not loaded');
+        if (!window.CONFIG) {
+            throw new Error('CONFIG is not loaded. Controleer of config.js correct is geladen.');
         }
+        console.log('CONFIG loaded:', window.CONFIG);
+
+        if (!window.movieDb) {
+            throw new Error('MovieDb is not loaded. Controleer of movieDb.js correct is geladen.');
+        }
+        console.log('MovieDb instance found');
+
+        if (!window.imageManager) {
+            throw new Error('ImageManager is not loaded. Controleer of imageManager.js correct is geladen.');
+        }
+        console.log('ImageManager instance found');
+
         GameState.reset();
+        
+        if (loadingDiv) {
+            loadingDiv.textContent = 'Database initialiseren...';
+        }
+        
         await window.movieDb.initialize();
+        
+        if (window.movieDb.initializationError) {
+            throw window.movieDb.initializationError;
+        }
+        
+        if (!window.movieDb.movies || window.movieDb.movies.length === 0) {
+            throw new Error('Geen films gevonden in de database.');
+        }
+        
         console.log('Starting first round...');
+        if (loadingDiv) {
+            loadingDiv.textContent = 'Eerste ronde starten...';
+        }
+        
         await startNewRound();
     } catch (error) {
         console.error('Failed to initialize game:', error);
         if (loadingDiv) {
-            loadingDiv.textContent = 'Failed to load game: ' + error.message + '. Please refresh the page.';
-            loadingDiv.style.color = 'red';
+            loadingDiv.innerHTML = `
+                <div style="color: red; text-align: center;">
+                    <p>Fout bij het laden van het spel:</p>
+                    <p>${error.message}</p>
+                    <p>Vernieuw de pagina om het opnieuw te proberen.</p>
+                </div>
+            `;
         }
     }
 }
@@ -521,27 +556,45 @@ async function handleGuess(guessedMovie) {
 
 async function startNewRound() {
     console.log('Starting new round...');
+    console.log('Current round:', GameState.currentRound);
+    console.log('Played movies:', Array.from(GameState.playedMovies));
     let movies;
 
     if (GameState.currentRound === 1) {
-        // In ronde 1: neem de volgende ongebruikte film uit de sessiepool
+        // In ronde 1: gebruik de sessiepool in volgorde
         const unusedMovies = movieDb.sessionPool.filter(
             movie => !GameState.playedMovies.has(movie.id)
         );
-        const currentMovie = unusedMovies[0]; // Neem de eerste ongebruikte film
+        console.log('Unused movies in pool:', unusedMovies.map(m => m.title));
+        
+        if (unusedMovies.length === 0) {
+            console.error('No unused movies available');
+            const loadingDiv = document.querySelector('.loading');
+            if (loadingDiv) {
+                loadingDiv.textContent = 'Error: No movies available. Please refresh the page.';
+                loadingDiv.style.color = 'red';
+            }
+            return;
+        }
+
+        // Neem de eerste ongebruikte film als huidige film
+        const currentMovie = unusedMovies[0];
+        console.log('Selected current movie:', currentMovie.title);
         
         // Haal 5 random andere films op voor de opties
         const otherMovies = movieDb.sessionPool
-            .filter(m => m.id !== currentMovie.id)
-            .sort(() => 0.5 - Math.random())
-            .slice(0, 5);
+            .filter(m => m.id !== currentMovie.id) // Exclude current movie
+            .sort(() => 0.5 - Math.random()) // Shuffle
+            .slice(0, 5); // Take 5
         
+        // Combineer en shuffle de opties
         movies = [currentMovie, ...otherMovies];
-        // Extra shuffle voor de opties
         movies.sort(() => 0.5 - Math.random());
         
         // Stel de huidige film in
         movieDb.setCurrentMovie(currentMovie);
+        
+        console.log('Final movies for options:', movies.map(m => m.title));
     } else {
         // In andere rondes: gebruik getRandomMovies zoals voorheen
         movies = movieDb.getRandomMovies(6);
@@ -554,13 +607,13 @@ async function startNewRound() {
             }
             return;
         }
+        
+        // Kies een willekeurige film als correct antwoord
+        const correctIndex = Math.floor(Math.random() * movies.length);
+        const correctMovie = movies[correctIndex];
+        movieDb.setCurrentMovie(correctMovie);
     }
 
-    // Kies een willekeurige film als correct antwoord
-    const correctIndex = Math.floor(Math.random() * movies.length);
-    const correctMovie = movies[correctIndex];
-    movieDb.setCurrentMovie(correctMovie);
-    
     // Update UI
     const movieImage = document.querySelector('.movie-image img');
     const loadingDiv = document.querySelector('.loading');
@@ -573,8 +626,9 @@ async function startNewRound() {
         optionsContainer.style.display = 'none';
     }
     
-    if (movieImage && loadingDiv && correctMovie) {
-        const stillPath = movieDb.getRandomStillForMovie(correctMovie);
+    if (movieImage && loadingDiv) {
+        const currentMovie = movieDb.getCurrentMovie();
+        const stillPath = movieDb.getRandomStillForMovie(currentMovie);
         if (stillPath) {
             try {
                 const fullPath = CONFIG.MOVIES_DIR + stillPath;
@@ -583,16 +637,30 @@ async function startNewRound() {
                 // Gebruik ImageManager voor laden en caching
                 await window.imageManager.loadImage(fullPath);
                 movieImage.src = fullPath;
-                movieImage.alt = `Scene from ${correctMovie.title}`;
+                movieImage.alt = `Scene from ${currentMovie.title}`;
                 
                 // Preload afbeeldingen voor volgende ronde
-                const nextMovies = movieDb.getRandomMovies(6);
-                if (nextMovies && nextMovies.length > 0) {
-                    const nextStills = nextMovies
-                        .map(movie => movieDb.getRandomStillForMovie(movie))
-                        .filter(Boolean)
-                        .map(still => CONFIG.MOVIES_DIR + still);
-                    window.imageManager.preloadImages(nextStills);
+                if (GameState.currentRound === 1) {
+                    // In ronde 1: preload de volgende ongebruikte film
+                    const nextUnused = movieDb.sessionPool.find(
+                        movie => !GameState.playedMovies.has(movie.id) && movie.id !== currentMovie.id
+                    );
+                    if (nextUnused) {
+                        const nextStill = movieDb.getRandomStillForMovie(nextUnused);
+                        if (nextStill) {
+                            window.imageManager.preloadImages([CONFIG.MOVIES_DIR + nextStill]);
+                        }
+                    }
+                } else {
+                    // In andere rondes: preload zoals voorheen
+                    const nextMovies = movieDb.getRandomMovies(6);
+                    if (nextMovies && nextMovies.length > 0) {
+                        const nextStills = nextMovies
+                            .map(movie => movieDb.getRandomStillForMovie(movie))
+                            .filter(Boolean)
+                            .map(still => CONFIG.MOVIES_DIR + still);
+                        window.imageManager.preloadImages(nextStills);
+                    }
                 }
                 
                 // Update UI
@@ -612,13 +680,13 @@ async function startNewRound() {
                 console.error('Failed to load movie image:', error);
                 loadingDiv.textContent = 'Failed to load movie image. Retrying...';
                 // Probeer opnieuw met een andere afbeelding
-                const newStillPath = movieDb.getRandomStillForMovie(correctMovie, true);
+                const newStillPath = movieDb.getRandomStillForMovie(currentMovie, true);
                 if (newStillPath) {
                     const newFullPath = CONFIG.MOVIES_DIR + newStillPath;
                     try {
                         await window.imageManager.loadImage(newFullPath);
                         movieImage.src = newFullPath;
-                        movieImage.alt = `Scene from ${correctMovie.title}`;
+                        movieImage.alt = `Scene from ${currentMovie.title}`;
                         loadingDiv.style.display = 'none';
                         movieImage.style.display = 'block';
                         updateBackgroundImage(newFullPath);

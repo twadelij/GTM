@@ -16,6 +16,7 @@ const MovieDatabase = (function() {
             this.currentMovie = null;
             this.recentlyUsedMovies = new Set();
             this.initialized = false;
+            this.initializationError = null;
             instance = this;
         }
 
@@ -26,33 +27,64 @@ const MovieDatabase = (function() {
                 return true;
             }
 
+            if (!window.CONFIG) {
+                this.initializationError = new Error('CONFIG is not loaded');
+                console.error('CONFIG is not loaded');
+                throw this.initializationError;
+            }
+
+            if (!window.CONFIG.MOVIES_JSON) {
+                this.initializationError = new Error('MOVIES_JSON path is not configured');
+                console.error('MOVIES_JSON path is not configured');
+                throw this.initializationError;
+            }
+
             console.log('Initializing MovieDatabase...');
+            console.log('Fetching movies from:', window.CONFIG.MOVIES_JSON);
+            
             try {
-                const response = await fetch(CONFIG.MOVIES_JSON);
+                const response = await fetch(window.CONFIG.MOVIES_JSON);
                 if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
+                    this.initializationError = new Error(`HTTP error! status: ${response.status}`);
+                    throw this.initializationError;
                 }
+                
                 const data = await response.json();
                 console.log('Received movies data:', data);
                 
                 if (!data.results || !Array.isArray(data.results)) {
-                    throw new Error('Invalid movies data format: missing results array');
+                    this.initializationError = new Error('Invalid movies data format: missing results array');
+                    throw this.initializationError;
+                }
+
+                if (data.results.length === 0) {
+                    this.initializationError = new Error('No movies found in data');
+                    throw this.initializationError;
                 }
 
                 // Verwijder dubbele films
                 const uniqueMovies = new Map();
                 data.results.forEach(movie => {
+                    if (!movie.id || !movie.title) {
+                        console.warn('Invalid movie data:', movie);
+                        return;
+                    }
                     const key = `${movie.id}-${movie.title}`;
                     if (!uniqueMovies.has(key)) {
                         uniqueMovies.set(key, movie);
                     }
                 });
 
+                if (uniqueMovies.size === 0) {
+                    this.initializationError = new Error('No valid movies found after filtering');
+                    throw this.initializationError;
+                }
+
                 // Converteer naar array
                 this.movies = Array.from(uniqueMovies.values()).map(movie => ({
                     id: movie.id,
                     title: movie.title,
-                    stills: [movie.backdrop_path.replace('data/movies/', '')],
+                    stills: movie.backdrop_path ? [movie.backdrop_path.replace('data/movies/', '')] : [],
                     releaseYear: movie.year,
                     genres: movie.genres || []
                 }));
@@ -65,6 +97,7 @@ const MovieDatabase = (function() {
                 this.initialized = true;
                 return true;
             } catch (error) {
+                this.initializationError = error;
                 console.error('Error initializing MovieDatabase:', error);
                 throw error;
             }

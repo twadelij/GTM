@@ -10,15 +10,6 @@
 <body>
     <div class="header-area">
         <h1>Guess The Movie</h1>
-        <div class="test-controls">
-            <button id="runTest" class="test-button" onclick="runGameTest(5)">🧪 Test Spel (5 fouten)</button>
-            <select id="wrongAnswers" onchange="document.getElementById('runTest').onclick = () => runGameTest(Number(this.value))">
-                <option value="5">5 foute antwoorden</option>
-                <option value="10">10 foute antwoorden</option>
-                <option value="15">15 foute antwoorden</option>
-                <option value="0">Geen foute antwoorden</option>
-            </select>
-        </div>
     </div>
     <div class="container">
         <div class="progress-counter"></div>

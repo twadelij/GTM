@@ -5,103 +5,173 @@ import json
 import os
 import logging
 from urllib.parse import urlparse, parse_qs
+from pathlib import Path
 
-# Logging configuratie
+# Configureer logging
 logging.basicConfig(
-    level=logging.DEBUG,
+    level=logging.DEBUG,  # Verander naar DEBUG voor meer informatie
     format='%(asctime)s - %(levelname)s - %(message)s',
     handlers=[
-        logging.FileHandler('server.log'),
+        logging.FileHandler('server.log', mode='w'),  # Overschrijf oude logs
         logging.StreamHandler()
     ]
 )
 
-# Basis directory configuratie
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-CLIENT_DIR = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'client')
-DATA_DIR = os.path.join(BASE_DIR, 'data')
+logger = logging.getLogger(__name__)
+
+def verify_server_setup():
+    """Controleer of alle benodigde bestanden en mappen aanwezig zijn."""
+    logger.info("Verifiëren van server setup...")
+    
+    # Log huidige directory
+    current_dir = os.getcwd()
+    logger.info(f"Huidige directory: {current_dir}")
+    
+    # Controleer data directory
+    data_dir = os.path.join(current_dir, "data", "movies")
+    logger.info(f"Zoeken naar data directory: {data_dir}")
+    if not os.path.exists(data_dir):
+        logger.error(f"Data directory niet gevonden: {data_dir}")
+        return False
+    
+    # Controleer movies.json
+    movies_json = os.path.join(current_dir, "data", "movies.json")
+    logger.info(f"Zoeken naar movies.json: {movies_json}")
+    if not os.path.exists(movies_json):
+        logger.error(f"movies.json niet gevonden: {movies_json}")
+        return False
+    
+    # Valideer movies.json structuur
+    try:
+        logger.info("Valideren van movies.json...")
+        with open(movies_json, 'r', encoding='utf-8') as f:
+            data = json.load(f)
+            if not isinstance(data, dict) or 'results' not in data:
+                logger.error("Ongeldige movies.json structuur")
+                return False
+            if not data['results']:
+                logger.error("Geen films gevonden in movies.json")
+                return False
+            logger.info(f"Aantal films gevonden: {len(data['results'])}")
+    except json.JSONDecodeError as e:
+        logger.error(f"Fout bij lezen movies.json: {e}")
+        return False
+    except Exception as e:
+        logger.error(f"Onverwachte fout bij valideren movies.json: {e}")
+        return False
+    
+    # Controleer client bestanden
+    src_dir = os.path.join(current_dir, "src", "client")
+    logger.info(f"Zoeken naar client bestanden in: {src_dir}")
+    
+    required_files = [
+        os.path.join(src_dir, "index.html"),
+        os.path.join(src_dir, "js", "config.js"),
+        os.path.join(src_dir, "js", "movieDb.js"),
+        os.path.join(src_dir, "js", "script.js"),
+        os.path.join(src_dir, "js", "imageManager.js"),
+        os.path.join(src_dir, "css", "styles.css")
+    ]
+    
+    for file_path in required_files:
+        logger.info(f"Controleren bestand: {file_path}")
+        if not os.path.exists(file_path):
+            logger.error(f"Benodigd bestand niet gevonden: {file_path}")
+            return False
+    
+    logger.info("Server setup verificatie succesvol!")
+    return True
 
 class MovieGameHandler(http.server.SimpleHTTPRequestHandler):
     def __init__(self, *args, **kwargs):
-        super().__init__(*args, directory=CLIENT_DIR, **kwargs)
+        # Gebruik de src/client directory als root
+        current_dir = os.getcwd()
+        client_dir = os.path.join(current_dir, "src", "client")
+        super().__init__(*args, directory=client_dir, **kwargs)
+    
+    def log_message(self, format, *args):
+        logger.info(format%args)
     
     def do_GET(self):
+        logger.info(f"GET request ontvangen voor: {self.path}")
         try:
-            # Parse URL
-            parsed_url = urlparse(self.path)
-            path = parsed_url.path
-            
-            # Log request
-            logging.info(f"GET request: {path}")
-            
-            # API endpoints
-            if path.startswith('/data/'):
-                self.serve_data_file(path)
-            else:
-                super().do_GET()
-                
+            # Speciale afhandeling voor /data/ requests
+            if self.path.startswith('/data/'):
+                self.serve_data_file()
+                return
+            super().do_GET()
         except Exception as e:
-            logging.error(f"Error handling GET request: {str(e)}")
+            logger.error(f"Fout bij afhandelen GET request: {e}")
             self.send_error(500, f"Internal Server Error: {str(e)}")
     
-    def serve_data_file(self, path):
+    def serve_data_file(self):
         try:
             # Verwijder /data/ prefix en normaliseer pad
-            relative_path = os.path.normpath(path.replace('/data/', ''))
-            file_path = os.path.join(DATA_DIR, relative_path)
+            path = self.path.replace('/data/', '')
+            current_dir = os.getcwd()
+            file_path = os.path.join(current_dir, "data", path)
             
-            # Veiligheidscheck - voorkom directory traversal
-            if not file_path.startswith(DATA_DIR):
+            # Veiligheidscheck
+            if not os.path.abspath(file_path).startswith(os.path.abspath(os.path.join(current_dir, "data"))):
                 self.send_error(403, "Forbidden")
                 return
             
-            # Check bestandstype en zet juiste content-type
-            if file_path.endswith('.json'):
-                self.send_response(200)
-                self.send_header('Content-Type', 'application/json')
-                self.end_headers()
-                with open(file_path, 'rb') as f:
-                    self.wfile.write(f.read())
-            elif file_path.endswith(('.jpg', '.jpeg')):
-                self.send_response(200)
-                self.send_header('Content-Type', 'image/jpeg')
-                self.end_headers()
-                with open(file_path, 'rb') as f:
-                    self.wfile.write(f.read())
-            else:
+            if not os.path.exists(file_path):
                 self.send_error(404, "File not found")
-        
+                return
+            
+            # Bepaal content type
+            if file_path.endswith('.json'):
+                content_type = 'application/json'
+            elif file_path.endswith(('.jpg', '.jpeg')):
+                content_type = 'image/jpeg'
+            else:
+                self.send_error(415, "Unsupported Media Type")
+                return
+            
+            # Stuur het bestand
+            self.send_response(200)
+            self.send_header('Content-Type', content_type)
+            self.end_headers()
+            with open(file_path, 'rb') as f:
+                self.wfile.write(f.read())
+                
         except Exception as e:
-            logging.error(f"Error serving data file: {str(e)}")
+            logger.error(f"Fout bij serveren data bestand: {e}")
             self.send_error(500, f"Internal Server Error: {str(e)}")
 
 def run_server(port=8888):
+    """Start de server met health checks."""
     try:
-        logging.debug(f"Starting server on port {port}")
-        logging.debug(f"Current working directory: {os.getcwd()}")
-        logging.debug(f"Client directory: {CLIENT_DIR}")
-        logging.debug(f"Data directory: {DATA_DIR}")
+        # Voer setup verificatie uit
+        if not verify_server_setup():
+            logger.error("Server setup verificatie mislukt. Server wordt niet gestart.")
+            return False
         
-        # Maak socket met SO_REUSEADDR optie
-        socketserver.TCPServer.allow_reuse_address = True
-        
-        with socketserver.TCPServer(("0.0.0.0", port), MovieGameHandler) as httpd:
-            logging.info(f"Server running on 0.0.0.0:{port}")
-            logging.info(f"Try accessing via:")
-            logging.info(f"- http://localhost:{port}")
-            logging.info(f"- http://127.0.0.1:{port}")
-            logging.info(f"- http://[your-ip]:{port}")
+        # Start de server
+        logger.info("Setup verificatie succesvol, server wordt gestart...")
+        with socketserver.TCPServer(("", port), MovieGameHandler) as httpd:
+            logger.info(f"Server draait op http://localhost:{port}")
+            logger.info("Gebruik Ctrl+C om te stoppen")
             httpd.serve_forever()
+            
     except OSError as e:
         if e.errno == 98:  # Address already in use
-            logging.error("Port is already in use. Please stop any running server first.")
-            logging.error("You can use: pkill -f 'python3.*server.py'")
+            logger.error(f"Poort {port} is al in gebruik. Probeer eerst: pkill -f 'python.*server.py'")
         else:
-            logging.error(f"Server error: {str(e)}")
-        raise
+            logger.error(f"OS Error bij starten server: {e}")
+        return False
+    except KeyboardInterrupt:
+        logger.info("Server gestopt door gebruiker")
+        return True
     except Exception as e:
-        logging.error(f"Server error: {str(e)}")
-        raise
+        logger.error(f"Onverwachte fout bij starten server: {e}")
+        return False
+    return True
 
 if __name__ == "__main__":
-    run_server()
+    logger.info("Movie Game Server wordt gestart...")
+    success = run_server()
+    if not success:
+        logger.error("Server kon niet worden gestart.")
+        exit(1)
