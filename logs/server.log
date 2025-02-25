@@ -1,0 +1,79 @@
+2025-02-25 07:12:53,206 - INFO - Movie Game Server starting...
+2025-02-25 07:12:53,206 - INFO - Verifying server setup...
+2025-02-25 07:12:53,206 - INFO - Current directory: /root/Projects/GTM
+2025-02-25 07:12:53,206 - INFO - Looking for data directory: /root/Projects/GTM/data/movies
+2025-02-25 07:12:53,207 - INFO - Looking for movies.json: /root/Projects/GTM/data/movies.json
+2025-02-25 07:12:53,207 - INFO - Validating movies.json...
+2025-02-25 07:12:53,208 - INFO - Number of movies found: 280
+2025-02-25 07:12:53,208 - INFO - Looking for client files in: /root/Projects/GTM/src/client
+2025-02-25 07:12:53,209 - INFO - Checking file: /root/Projects/GTM/src/client/index.html
+2025-02-25 07:12:53,209 - INFO - Checking file: /root/Projects/GTM/src/client/js/config.js
+2025-02-25 07:12:53,209 - INFO - Checking file: /root/Projects/GTM/src/client/js/movieDb.js
+2025-02-25 07:12:53,209 - INFO - Checking file: /root/Projects/GTM/src/client/js/script.js
+2025-02-25 07:12:53,209 - INFO - Checking file: /root/Projects/GTM/src/client/js/imageManager.js
+2025-02-25 07:12:53,209 - INFO - Checking file: /root/Projects/GTM/src/client/css/styles.css
+2025-02-25 07:12:53,210 - INFO - Server setup verification successful!
+2025-02-25 07:12:53,210 - INFO - Setup verification successful, starting server...
+2025-02-25 07:12:53,210 - INFO - Server running at http://localhost:8888
+2025-02-25 07:12:53,210 - INFO - Use Ctrl+C to stop
+2025-02-25 07:13:03,073 - INFO - GET request received for: /data/movies.json
+2025-02-25 07:13:03,074 - INFO - "GET /data/movies.json HTTP/1.1" 200 -
+2025-02-25 07:13:03,089 - INFO - GET request received for: /data/movies/Furiosa_A_Mad_Max_Saga_2024.jpg
+2025-02-25 07:13:03,090 - INFO - code 404, message File not found
+2025-02-25 07:13:03,090 - INFO - "GET /data/movies/Furiosa_A_Mad_Max_Saga_2024.jpg HTTP/1.1" 404 -
+2025-02-25 07:13:03,466 - INFO - GET request received for: /data/movies/gm6b67748f.jpg
+2025-02-25 07:13:03,466 - INFO - "GET /data/movies/gm6b67748f.jpg HTTP/1.1" 200 -
+2025-02-25 07:13:03,977 - INFO - GET request received for: /data/movies/gmd7b1b6de.jpg
+2025-02-25 07:13:03,978 - INFO - "GET /data/movies/gmd7b1b6de.jpg HTTP/1.1" 200 -
+2025-02-25 07:13:17,886 - INFO - GET request received for: /data/movies/gmecc3d0d2.jpg
+2025-02-25 07:13:17,887 - INFO - "GET /data/movies/gmecc3d0d2.jpg HTTP/1.1" 200 -
+2025-02-25 07:13:26,082 - INFO - GET request received for: /data/movies/gme83beb6b.jpg
+2025-02-25 07:13:26,083 - INFO - "GET /data/movies/gme83beb6b.jpg HTTP/1.1" 200 -
+2025-02-25 07:13:32,152 - INFO - GET request received for: /data/movies/gme83beb6b.jpg
+2025-02-25 07:13:32,153 - INFO - "GET /data/movies/gme83beb6b.jpg HTTP/1.1" 200 -
+2025-02-25 07:13:32,204 - INFO - GET request received for: /data/movies/gm18fa16c0.jpg
+2025-02-25 07:13:32,204 - INFO - "GET /data/movies/gm18fa16c0.jpg HTTP/1.1" 200 -
+2025-02-25 07:13:38,620 - INFO - GET request received for: /data/movies/gm0fc3b595.jpg
+2025-02-25 07:13:38,620 - INFO - "GET /data/movies/gm0fc3b595.jpg HTTP/1.1" 200 -
+2025-02-25 07:13:38,640 - INFO - GET request received for: /data/movies/gm18fa16c0.jpg
+2025-02-25 07:13:38,640 - INFO - "GET /data/movies/gm18fa16c0.jpg HTTP/1.1" 200 -
+2025-02-25 07:13:49,071 - INFO - GET request received for: /data/movies/gmc49a1477.jpg
+2025-02-25 07:13:49,071 - INFO - "GET /data/movies/gmc49a1477.jpg HTTP/1.1" 200 -
+2025-02-25 07:13:57,478 - INFO - GET request received for: /data/movies/gmc49a1477.jpg
+2025-02-25 07:13:57,479 - INFO - "GET /data/movies/gmc49a1477.jpg HTTP/1.1" 200 -
+2025-02-25 07:13:57,517 - INFO - GET request received for: /data/movies/gm459c7da1.jpg
+2025-02-25 07:13:57,518 - INFO - "GET /data/movies/gm459c7da1.jpg HTTP/1.1" 200 -
+2025-02-25 07:14:04,213 - INFO - GET request received for: /data/movies/gm46ac8f6b.jpg
+2025-02-25 07:14:04,213 - INFO - "GET /data/movies/gm46ac8f6b.jpg HTTP/1.1" 200 -
+2025-02-25 07:14:11,632 - INFO - GET request received for: /data/movies/gmeb620cd6.jpg
+2025-02-25 07:14:11,632 - INFO - "GET /data/movies/gmeb620cd6.jpg HTTP/1.1" 200 -
+2025-02-25 07:14:11,648 - INFO - GET request received for: /data/movies/gm46ac8f6b.jpg
+2025-02-25 07:14:11,648 - INFO - "GET /data/movies/gm46ac8f6b.jpg HTTP/1.1" 200 -
+2025-02-25 07:14:18,567 - INFO - GET request received for: /data/movies/gm7d22458f.jpg
+2025-02-25 07:14:18,568 - INFO - "GET /data/movies/gm7d22458f.jpg HTTP/1.1" 200 -
+2025-02-25 07:14:27,599 - INFO - GET request received for: /data/movies/gm7d22458f.jpg
+2025-02-25 07:14:27,599 - INFO - "GET /data/movies/gm7d22458f.jpg HTTP/1.1" 200 -
+2025-02-25 07:14:27,646 - INFO - GET request received for: /data/movies/gm1c4dc534.jpg
+2025-02-25 07:14:27,647 - INFO - "GET /data/movies/gm1c4dc534.jpg HTTP/1.1" 200 -
+2025-02-25 07:14:35,520 - INFO - GET request received for: /data/movies/gm1289cd05.jpg
+2025-02-25 07:14:35,521 - INFO - "GET /data/movies/gm1289cd05.jpg HTTP/1.1" 200 -
+2025-02-25 07:14:41,698 - INFO - GET request received for: /data/movies/gm0def23d0.jpg
+2025-02-25 07:14:41,699 - INFO - "GET /data/movies/gm0def23d0.jpg HTTP/1.1" 200 -
+2025-02-25 07:14:41,720 - INFO - GET request received for: /data/movies/gm1289cd05.jpg
+2025-02-25 07:14:41,720 - INFO - "GET /data/movies/gm1289cd05.jpg HTTP/1.1" 200 -
+2025-02-25 07:14:48,491 - INFO - GET request received for: /data/movies/gm0d521e3a.jpg
+2025-02-25 07:14:48,491 - INFO - "GET /data/movies/gm0d521e3a.jpg HTTP/1.1" 200 -
+2025-02-25 07:14:54,678 - INFO - GET request received for: /data/movies/gmf0796303.jpg
+2025-02-25 07:14:54,678 - INFO - "GET /data/movies/gmf0796303.jpg HTTP/1.1" 200 -
+2025-02-25 07:15:01,537 - INFO - GET request received for: /data/movies/gm2dd49cd2.jpg
+2025-02-25 07:15:01,538 - INFO - "GET /data/movies/gm2dd49cd2.jpg HTTP/1.1" 200 -
+2025-02-25 07:15:01,553 - INFO - GET request received for: /data/movies/gmf0796303.jpg
+2025-02-25 07:15:01,554 - INFO - "GET /data/movies/gmf0796303.jpg HTTP/1.1" 200 -
+2025-02-25 07:15:09,457 - INFO - GET request received for: /data/movies/gmd9203372.jpg
+2025-02-25 07:15:09,457 - INFO - "GET /data/movies/gmd9203372.jpg HTTP/1.1" 200 -
+2025-02-25 07:15:16,112 - INFO - GET request received for: /data/movies/gmc546bcc7.jpg
+2025-02-25 07:15:16,113 - INFO - "GET /data/movies/gmc546bcc7.jpg HTTP/1.1" 200 -
+2025-02-25 07:15:22,344 - INFO - GET request received for: /data/movies/gm50a9b0a8.jpg
+2025-02-25 07:15:22,345 - INFO - "GET /data/movies/gm50a9b0a8.jpg HTTP/1.1" 200 -
+2025-02-25 07:15:22,401 - INFO - GET request received for: /data/movies/gmc546bcc7.jpg
+2025-02-25 07:15:22,402 - INFO - "GET /data/movies/gmc546bcc7.jpg HTTP/1.1" 200 -

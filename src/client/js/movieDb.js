@@ -1,6 +1,6 @@
 console.log('movieDb.js loaded');
 
-// MovieDatabase class definitie
+// MovieDatabase class definition
 const MovieDatabase = (function() {
     console.log('Creating MovieDatabase instance');
     let instance = null;
@@ -12,7 +12,7 @@ const MovieDatabase = (function() {
                 return instance;
             }
             this.movies = [];
-            this.sessionPool = [];  // Pool voor huidige sessie
+            this.sessionPool = [];  // Pool for current session
             this.currentMovie = null;
             this.recentlyUsedMovies = new Set();
             this.initialized = false;
@@ -62,7 +62,7 @@ const MovieDatabase = (function() {
                     throw this.initializationError;
                 }
 
-                // Verwijder dubbele films
+                // Remove duplicate movies
                 const uniqueMovies = new Map();
                 data.results.forEach(movie => {
                     if (!movie.id || !movie.title) {
@@ -80,7 +80,7 @@ const MovieDatabase = (function() {
                     throw this.initializationError;
                 }
 
-                // Converteer naar array
+                // Convert to array
                 this.movies = Array.from(uniqueMovies.values()).map(movie => ({
                     id: movie.id,
                     title: movie.title,
@@ -89,7 +89,7 @@ const MovieDatabase = (function() {
                     genres: movie.genres || []
                 }));
 
-                // Maak een nieuwe sessiepool van 20 willekeurige films
+                // Create a new session pool of 20 random movies
                 this.createSessionPool();
                 
                 console.log(`Loaded ${this.movies.length} unique movies`);
@@ -104,11 +104,11 @@ const MovieDatabase = (function() {
         }
 
         createSessionPool() {
-            // Debug: Log alle films voor shuffle
+            // Debug: Log all movies before shuffle
             console.log('All available movies before shuffle:', 
                 this.movies.map(m => `${m.id}: ${m.title}`).join('\n'));
 
-            // Controleer op dubbele films
+            // Check for duplicate movies
             const duplicates = this.movies.filter((movie, index, self) =>
                 index !== self.findIndex((m) => m.id === movie.id || m.title === movie.title)
             );
@@ -117,13 +117,13 @@ const MovieDatabase = (function() {
                     duplicates.map(m => `${m.id}: ${m.title}`).join('\n'));
             }
 
-            // Shuffle alle beschikbare films
+            // Shuffle all available movies
             const shuffled = [...this.movies].sort(() => 0.5 - Math.random());
-            // Neem de eerste 20 voor deze sessie
+            // Take the first 20 for this session
             this.sessionPool = shuffled.slice(0, 20);
             this.recentlyUsedMovies.clear();
 
-            // Debug: Log de sessiepool
+            // Debug: Log the session pool
             console.log('Session pool movies:', 
                 this.sessionPool.map(m => `${m.id}: ${m.title}`).join('\n'));
         }
@@ -139,7 +139,7 @@ const MovieDatabase = (function() {
             console.log('Recently used movies:', this.recentlyUsedMovies.size);
             console.log('Recently used movie IDs:', Array.from(this.recentlyUsedMovies));
 
-            // Filter films die al gebruikt zijn uit de sessiepool
+            // Filter movies that have already been used from the session pool
             let availableInPool = this.sessionPool.filter(
                 movie => !this.recentlyUsedMovies.has(movie.id)
             );
@@ -147,27 +147,27 @@ const MovieDatabase = (function() {
             console.log('Available movies:', 
                 availableInPool.map(m => `${m.id}: ${m.title}`).join('\n'));
 
-            // Als we niet genoeg films hebben, reset de gebruikte films
+            // If we don't have enough movies, reset the used movies
             if (availableInPool.length < count) {
                 console.log('Resetting recently used movies within session pool');
                 this.recentlyUsedMovies.clear();
                 availableInPool = [...this.sessionPool];
             }
 
-            // Shuffle de beschikbare films
+            // Shuffle the available movies
             for (let i = availableInPool.length - 1; i > 0; i--) {
                 const j = Math.floor(Math.random() * (i + 1));
                 [availableInPool[i], availableInPool[j]] = [availableInPool[j], availableInPool[i]];
             }
 
-            // Selecteer het gevraagde aantal films
+            // Select the requested number of movies
             const selectedMovies = availableInPool.slice(0, count);
 
-            // Debug: Log de selectie
+            // Debug: Log the selection
             console.log('Selected movies for this round:', 
                 selectedMovies.map(m => `${m.id}: ${m.title}`).join('\n'));
 
-            // Markeer de geselecteerde films als gebruikt
+            // Mark the selected movies as used
             selectedMovies.forEach(movie => {
                 this.recentlyUsedMovies.add(movie.id);
                 console.log('Marking as used:', `${movie.id}: ${movie.title}`);
@@ -207,6 +207,6 @@ const MovieDatabase = (function() {
     return new MovieDatabaseClass();
 })();
 
-// Exporteer de singleton instantie
+// Export the singleton instance
 console.log('Exporting MovieDatabase instance');
 window.movieDb = MovieDatabase;

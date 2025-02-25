@@ -1,141 +1,221 @@
 ---
-title: Project ToDo's
+title: Project TODOs
 created: 2024-01-09
-updated: 2024-01-09
+updated: 2024-02-24
 tags: [todo, planning, tasks]
 aliases: [Tasks, Planning]
 ---
 
-# 📋 Project ToDo's
+# 📋 Project TODOs
 
-## ✅ Recent Voltooid
+## ✅ Recently Completed
 
-- [x] Geen punten en tijdbonus in ronde 6
-- [x] Toon aantal foute gokken bij de voortgangsteller
-- [x] Voorkom dubbele films in de 20 films selectie
-- [x] Netflix/Jellyfin styling toepassen
-- [x] Cursor regels geïmplementeerd
-- [x] README.md in Obsidian formaat
-- [x] Laadtijd van filmafbeeldingen verbeteren
-- [x] Preloading van volgende filmafbeeldingen implementeren
-- [x] Caching mechanisme voor veel gebruikte afbeeldingen
-- [x] Test modus toegevoegd
-- [x] Lazy loading implementatie
-- [x] Verbeterde error handling
-- [x] Implementatie van ronde 1 logica voor alle 20 films
+- [x] No points and time bonus in round 6
+- [x] Show wrong guess count in progress counter
+- [x] Prevent duplicate movies in 20 movie selection
+- [x] Apply Netflix/Jellyfin styling
+- [x] Cursor rules implemented
+- [x] README.md in Obsidian format
+- [x] Improve image loading time
+- [x] Implement next image preloading
+- [x] Caching mechanism for frequently used images
+- [x] Test mode added
+- [x] Lazy loading implementation
+- [x] Improved error handling
+- [x] Round 1 logic implementation for all 20 movies
+- [x] Test mode removed for production
+- [x] Server startup script added
+- [x] Round 1 gameplay optimized
+- [x] Translate all game text to English
+- [x] Update Game Over screen to be more positive
+- [x] Implement one-shot per week limit
 
-## 🚀 Hoge Prioriteit
+## 🔥 High Priority
 
-### Kritieke Bug Fixes
+### Phase 1: Game Mechanics & UX
+- [ ] Implement weekly game limit:
+  - [ ] Add timestamp for last played game
+  - [ ] Store user progress in localStorage
+  - [ ] Show countdown to next available game
+  - [ ] Add server-side validation
+  - [ ] Implement weekly reset logic
+- [ ] Enhance Game Over screen:
+  - [ ] Show statistics for current game
+  - [ ] Display personal best scores
+  - [ ] Add share button for results
+  - [ ] Show countdown to next game
+- [ ] Improve feedback messages:
+  - [ ] Add more varied success messages
+  - [ ] Create engaging failure messages
+  - [ ] Implement progressive difficulty hints
+
+### Phase 2: User Authentication & Admin System
+- [ ] Implement user authentication system:
+  - [ ] User registration with email verification
+  - [ ] Login/logout functionality
+  - [ ] Password reset system
+  - [ ] OAuth integration (Google, GitHub)
+  - [ ] Session management
+  - [ ] User profiles with statistics
+  - [ ] Test all authentication flows
+- [ ] Create admin dashboard:
+  - [ ] Secure admin login system
+  - [ ] Image management interface
+  - [ ] Bulk image upload functionality
+  - [ ] Movie metadata editor
+  - [ ] Test mode activation button
+  - [ ] User management tools
+  - [ ] System statistics overview
+  - [ ] Activity logging
+  - [ ] Test all admin features
+
+### Phase 3: TMDB API Integration
+- [ ] Implement TMDB API for images:
+  - [ ] Configure API key management
+  - [ ] Add fallback mechanism for local images
+  - [ ] Implement caching for TMDB images
+  - [ ] Add rate limiting for API requests
+  - [ ] Create script for fetching new movie stills
+  - [ ] Implement error handling for API requests
+  - [ ] Add logging for API usage
+  - [ ] Create configuration file for API settings
+  - [ ] Add tool for refreshing outdated images
+  - [ ] Implement queue system for bulk downloads
+
+### Personality & User Experience
+- [ ] Implement rotating game feedback (30+ variations):
+  - [ ] Funny reactions to correct answers
+  - [ ] Cynical remarks for wrong answers
+  - [ ] Surprising progress messages
+  - [ ] Encouraging words for low scores
+  - [ ] Sarcastic game-over messages
+  - [ ] Easter eggs for special achievements
+
+### Critical Bug Fixes
 - [ ] Fix startup error "Failed to load game: Cannot read properties of undefined (reading 'title')":
-  - [ ] Debug initialisatie volgorde van scripts
-  - [ ] Controleer of alle benodigde bestanden correct worden geladen
-  - [ ] Implementeer betere error handling tijdens startup
-  - [ ] Voeg duidelijke gebruikersfeedback toe tijdens laden
-  - [ ] Test verschillende browser scenarios
+  - [ ] Debug script initialization order
+  - [ ] Verify all required files are loaded correctly
+  - [ ] Implement better error handling during startup
+  - [ ] Add clear user feedback during loading
+  - [ ] Test various browser scenarios
 
-- [ ] Server startup stabiliteit verbeteren:
-  - [ ] Onderzoek waarom server twee keer moet worden opgestart
-  - [ ] Implementeer robuustere poort verificatie
-  - [ ] Voeg retry mechanisme toe voor server startup
-  - [ ] Verbeter process handling en cleanup
-  - [ ] Implementeer health check endpoint
+### Performance Improvements
+- [ ] Optimize loading times:
+  - [ ] Compress images
+  - [ ] Implement progressive loading
+  - [ ] Review caching strategy
+  - [ ] Optimize preloading
+  - [ ] Refine lazy loading
 
-- [ ] Fix dubbele films in ronde 1:
-  - [ ] Debug film selectie logica
-  - [ ] Implementeer strikte controle op unieke films
-  - [ ] Voeg logging toe voor film selectie process
-  - [ ] Garandeer dat alle 20 films exact één keer worden getoond
-  - [ ] Voeg test functie toe om film distributie te verifiëren
+### Movie Selection System
+- [ ] Implement permanent movie exclusion system:
+  - [ ] Create JSON file for excluded movies
+  - [ ] Select 20 new, never-used movies at game start
+  - [ ] Mark used movies as 'played' for future sessions
+  - [ ] Add statistics about remaining unique movies
+  - [ ] Warning system when movies are running low
+  - [ ] Reset option when all movies have been used
 
-### Performance Verbeteringen
-- [ ] Optimaliseren van laadtijden:
-  - [ ] Comprimeren van afbeeldingen
-  - [ ] Implementeren van progressive loading
-  - [ ] Caching strategie herzien
-  - [ ] Preload optimalisatie
-  - [ ] Lazy loading verfijnen
+### Images & Media
+- [ ] Remove movie titles from images:
+  - [ ] Implement OCR to detect text in images
+  - [ ] Filter images with visible movie titles
+  - [ ] Add option to mask specific image regions
+  - [ ] Test different OCR libraries for best results
+- [ ] Integrate external image sources:
+  - [ ] Research suitable movie screenshot APIs
+  - [ ] Implement TMDB/IMDB API integration
+  - [ ] Add caching for external images
+  - [ ] Implement fallback to local images
+  - [ ] Add image quality checks
+  - [ ] Filter NSFW/inappropriate content
 
-### Film Selectie Systeem
-- [ ] Implementeer permanent film uitsluitingssysteem:
-  - [ ] Maak een JSON bestand voor uitgesloten films
-  - [ ] Bij start van nieuw spel: selecteer 20 nieuwe, nog nooit gebruikte films
-  - [ ] Na afloop: markeer deze 20 films als 'gebruikt' voor toekomstige sessies
-  - [ ] Voeg statistieken toe over hoeveel unieke films nog beschikbaar zijn
-  - [ ] Waarschuwingssysteem wanneer films bijna op zijn
-  - [ ] Reset optie voor wanneer alle films zijn gebruikt
+### UI/UX Improvements
+- [ ] Add loading indicator during image loading
+- [ ] Improve Game Over screen styling
+- [ ] Add visual feedback during loading
+- [ ] Implement rotating background with random movie images
 
-### UI/UX Verbeteringen
-- [ ] Laad-indicator toevoegen tijdens het laden van filmafbeeldingen
-- [ ] Game Over scherm styling verbeteren
-- [ ] Toevoegen van visuele feedback tijdens laden
-- [ ] Implementeer roterende achtergrond met willekeurige filmafbeeldingen
+### File Structure Reorganization
+- [ ] Implement new folder structure:
+  ```
+  GTM/
+  ├── src/                    # Source code
+  │   ├── client/            # Frontend code
+  │   │   ├── js/           # JavaScript files
+  │   │   ├── css/          # Stylesheets
+  │   │   └── index.html    # Main page
+  │   └── server/           # Backend code
+  │       └── server.py     # Server implementation
+  ├── data/                  # Data files
+  │   ├── movies/           # Movie images
+  │   ├── movies.json       # Movie metadata
+  │   └── users.json        # User data
+  ├── tools/                 # Utility programs
+  │   ├── clean_images.py   # Image cleanup tool
+  │   └── thumbnail_viewer.py # Thumbnail viewer
+  ├── logs/                  # Log files
+  │   ├── server.log        # Server logs
+  │   └── app.log          # Application logs
+  ├── tests/                 # Test files
+  │   ├── unit/            # Unit tests
+  │   └── integration/     # Integration tests
+  ├── docs/                  # Documentation
+  │   └── api/             # API documentation
+  ├── start_server.sh       # Server startup script
+  ├── requirements.txt      # Python dependencies
+  ├── README.md            # Project documentation
+  └── TODO.md              # Project planning
+  ```
 
-### Bug Fixes
-- [ ] Verificatie van tijdbonus berekening
-- [ ] Edge cases testen met grote aantallen foute antwoorden
-- [ ] Testen van alle mogelijke game-over scenarios
+## 📝 Notes
 
-## 🔄 Medium Prioriteit
+- Consider using a CDN for faster image delivery
+- Research progressive image loading possibilities
+- Plan needed for scalability with growing user base
+- Schedule regular code reviews
+- Collect user feedback for new features
 
-### Gebruikerservaring
-- [ ] Toevoegen van een tutorial/uitleg scherm
-- [ ] Betere visuele feedback bij correcte/incorrecte antwoorden
-- [ ] Toevoegen van een pauze functie
-- [ ] Mogelijkheid om spel te hervatten na sluiten browser
-
-### Statistieken
-- [ ] Bijhouden van speelstatistieken
-- [ ] Weergave van prestaties per ronde
-- [ ] Analyse van meest gemaakte fouten
-
-## ⏳ Lage Prioriteit
-
-### Nieuwe Features
-- [ ] Implementeren van highscore systeem
-- [ ] Toevoegen van verschillende moeilijkheidsgraden
-- [ ] Categorieën/genres selectie toevoegen
-- [ ] Multiplayer modus
-- [ ] Social sharing functionaliteit
-
-### Administratie
-- [ ] Documentatie bijwerken
-- [ ] Code cleanup en optimalisatie
-- [ ] Unit tests schrijven
-- [ ] Performance metrics implementeren
-
-## 🆕 Cursor Rules Implementatie
-
-### Documentatie & Structuur
-- [x] Centrale ToDo.md voor alle projecten maken
-- [x] Project-specifieke ToDo.md's maken
-- [ ] Obsidian synchronisatie opzetten
-- [x] Consistente bestandsstructuur implementeren
-- [ ] Git branches workflow documenteren
-
-### GitHub Integratie
-- [x] Alle projecten als WIP op GitHub plaatsen
-- [x] Branch strategie implementeren
-- [ ] Code review proces opzetten
-- [ ] Feedback mechanisme implementeren
-
-### Testing & Quality
-- [ ] Test frameworks opzetten
-- [ ] Test documentatie schrijven
-- [ ] CI/CD pipeline opzetten
-- [ ] Code quality checks implementeren
-
-### Community & Best Practices
-- [ ] DRY principes documenteren
-- [ ] SOLID principes implementeren
-- [ ] Community richtlijnen opstellen
-- [ ] Bijdrage workflow documenteren
-
-## 📝 Notities
-
-- Overweeg het gebruik van een CDN voor snellere afbeeldingslevering
-- Onderzoek mogelijkheden voor progressive image loading
-- Plan nodig voor schaalbaarheid bij groei gebruikersbase
-- Regelmatige code reviews inplannen
-- Feedback verzamelen van gebruikers voor nieuwe features
-- Test modus is nu beschikbaar via console: runGameTest(5) 
+### Bestandsstructuur Reorganisatie
+- [ ] Implementeer nieuwe mappenstructuur:
+  ```
+  GTM/
+  ├── src/                    # Broncode
+  │   ├── client/            # Frontend code
+  │   │   ├── js/           # JavaScript bestanden
+  │   │   ├── css/          # Stylesheets
+  │   │   └── index.html    # Hoofdpagina
+  │   └── server/           # Backend code
+  │       └── server.py     # Server implementatie
+  ├── data/                  # Data bestanden
+  │   ├── movies/           # Film afbeeldingen
+  │   ├── movies.json       # Film metadata
+  │   └── users.json        # Gebruikersdata
+  ├── tools/                 # Hulpprogramma's
+  │   ├── clean_images.py   # Image cleanup tool
+  │   └── thumbnail_viewer.py # Thumbnail viewer
+  ├── logs/                  # Log bestanden
+  │   ├── server.log        # Server logs
+  │   └── app.log          # Applicatie logs
+  ├── tests/                 # Test bestanden
+  │   ├── unit/            # Unit tests
+  │   └── integration/     # Integratietests
+  ├── docs/                  # Documentatie
+  │   └── api/             # API documentatie
+  ├── start_server.sh       # Server startup script
+  ├── requirements.txt      # Python dependencies
+  ├── README.md            # Project documentatie
+  └── TODO.md              # Project planning
+  ```
+- [ ] Verplaats bestanden naar nieuwe structuur:
+  - [ ] Maak nieuwe `logs/` directory
+  - [ ] Verplaats alle `.log` bestanden naar `logs/`
+  - [ ] Verwijder dubbele `server/` directory in root
+  - [ ] Verwijder ongebruikte directories (`static/`, `templates/`, `uploads/`)
+  - [ ] Verwijder dubbele `images/` directory
+  - [ ] Maak nieuwe `tests/` directory
+- [ ] Update alle bestandsverwijzingen:
+  - [ ] Update imports in Python bestanden
+  - [ ] Update pad verwijzingen in JavaScript
+  - [ ] Update configuratie bestanden
+  - [ ] Test alle functionaliteit na verplaatsing 

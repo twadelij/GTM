@@ -1,6 +1,6 @@
 console.log('script.js loaded');
 
-// Game state variabelen
+// Game state variables
 const GameState = {
     wrongAnswers: 0,
     correctAnswers: 0,
@@ -13,8 +13,8 @@ const GameState = {
     timerInterval: null,
     activeSplashScreen: null,
     totalMovies: 20,
-    TIMER_DURATION: 15000, // 15 seconden per vraag
-    SPLASH_DURATION: 4000, // 4 seconden splash screen
+    TIMER_DURATION: 15000, // 15 seconds per question
+    SPLASH_DURATION: 4000, // 4 seconds splash screen
     
     reset() {
         console.log('GameState.reset() called');
@@ -31,7 +31,7 @@ const GameState = {
         const scoreDisplay = document.querySelector('.score-display');
         
         if (progressCounter) {
-            progressCounter.textContent = `Ronde ${this.currentRound}: nog ${this.totalMovies} films te gaan`;
+            progressCounter.textContent = `Round ${this.currentRound}: ${this.totalMovies} movies remaining`;
         }
         if (scoreDisplay) {
             scoreDisplay.textContent = 'Score: 0';
@@ -39,57 +39,57 @@ const GameState = {
     }
 };
 
-// Basis functies
+// Base functions
 function getChoicesForRound(round) {
-    // Vast aantal keuzes per ronde:
-    // Ronde 1: 6 keuzes
-    // Ronde 2: 5 keuzes voor ALLE foute films uit ronde 1
-    // Ronde 3: 4 keuzes voor ALLE foute films uit ronde 2
-    // Ronde 4: 3 keuzes voor ALLE foute films uit ronde 3
-    // Ronde 5: 2 keuzes voor ALLE foute films uit ronde 4
-    // Ronde 6: 1 keuze voor ALLE foute films uit ronde 5
-    return Math.max(1, 7 - round); // Start met 6 keuzes, verminder met 1 per ronde
+    // Fixed number of choices per round:
+    // Round 1: 6 choices
+    // Round 2: 5 choices for ALL wrong movies from round 1
+    // Round 3: 4 choices for ALL wrong movies from round 2
+    // Round 4: 3 choices for ALL wrong movies from round 3
+    // Round 5: 2 choices for ALL wrong movies from round 4
+    // Round 6: 1 choice for ALL wrong movies from round 5
+    return Math.max(1, 7 - round); // Start with 6 choices, decrease by 1 per round
 }
 
 function getPointsForRound(round) {
-    // Ronde 6 geeft geen punten
+    // Round 6 gives no points
     if (round >= 6) return 0;
-    // Anders normale puntentelling
-    return Math.max(0, 6 - round); // 5, 4, 3, 2, 1, 0 punten voor rondes 1-6
+    // Otherwise normal point calculation
+    return Math.max(0, 6 - round); // 5, 4, 3, 2, 1, 0 points for rounds 1-6
 }
 
 function getTimeBonus() {
-    // Geen tijdbonus in ronde 6
+    // No time bonus in round 6
     if (GameState.currentRound >= 6) return 0;
-    // Anders normale tijdbonus
-    return Math.floor(GameState.remainingTime / 1000); // 1 punt per seconde over
+    // Otherwise normal time bonus
+    return Math.floor(GameState.remainingTime / 1000); // 1 point per second remaining
 }
 
-// Initialisatie
+// Initialization
 async function initializeGame() {
     console.log('Initializing game...');
     const loadingDiv = document.querySelector('.loading');
     
     try {
         if (!window.CONFIG) {
-            throw new Error('CONFIG is not loaded. Controleer of config.js correct is geladen.');
+            throw new Error('CONFIG is not loaded. Check if config.js is loaded correctly.');
         }
         console.log('CONFIG loaded:', window.CONFIG);
 
         if (!window.movieDb) {
-            throw new Error('MovieDb is not loaded. Controleer of movieDb.js correct is geladen.');
+            throw new Error('MovieDb is not loaded. Check if movieDb.js is loaded correctly.');
         }
         console.log('MovieDb instance found');
 
         if (!window.imageManager) {
-            throw new Error('ImageManager is not loaded. Controleer of imageManager.js correct is geladen.');
+            throw new Error('ImageManager is not loaded. Check if imageManager.js is loaded correctly.');
         }
         console.log('ImageManager instance found');
 
         GameState.reset();
         
         if (loadingDiv) {
-            loadingDiv.textContent = 'Database initialiseren...';
+            loadingDiv.textContent = 'Initializing database...';
         }
         
         await window.movieDb.initialize();
@@ -99,12 +99,12 @@ async function initializeGame() {
         }
         
         if (!window.movieDb.movies || window.movieDb.movies.length === 0) {
-            throw new Error('Geen films gevonden in de database.');
+            throw new Error('No movies found in database.');
         }
         
         console.log('Starting first round...');
         if (loadingDiv) {
-            loadingDiv.textContent = 'Eerste ronde starten...';
+            loadingDiv.textContent = 'Starting first round...';
         }
         
         await startNewRound();
@@ -113,130 +113,16 @@ async function initializeGame() {
         if (loadingDiv) {
             loadingDiv.innerHTML = `
                 <div style="color: red; text-align: center;">
-                    <p>Fout bij het laden van het spel:</p>
+                    <p>Error loading game:</p>
                     <p>${error.message}</p>
-                    <p>Vernieuw de pagina om het opnieuw te proberen.</p>
+                    <p>Refresh the page to try again.</p>
                 </div>
             `;
         }
     }
 }
 
-// Test mode functies
-async function runGameTest(forcedWrongAnswers = 5) {
-    console.log('Starting game test...');
-    console.log(`Forcing ${forcedWrongAnswers} wrong answers in round 1`);
-    
-    // Reset game state
-    GameState.reset();
-    await window.movieDb.initialize();
-    
-    // Override timer voor sneller testen
-    const originalTimerDuration = GameState.TIMER_DURATION;
-    const originalSplashDuration = GameState.SPLASH_DURATION;
-    GameState.TIMER_DURATION = 100;
-    GameState.SPLASH_DURATION = 100;
-    
-    let wrongCount = 0;
-    let totalProcessed = 0;
-    
-    // Override de normale game loop voor testing
-    const originalHandleGuess = handleGuess;
-    handleGuess = async (guessedMovie) => {
-        const currentMovie = movieDb.getCurrentMovie();
-        console.log(`Round ${GameState.currentRound}: Processing movie ${totalProcessed + 1}`);
-        
-        // In ronde 1, forceer een aantal foute antwoorden
-        if (GameState.currentRound === 1 && wrongCount < forcedWrongAnswers) {
-            // Kies bewust het verkeerde antwoord
-            const wrongMovie = guessedMovie.id === currentMovie.id ? 
-                { id: currentMovie.id + 1, title: 'Wrong Answer' } : 
-                guessedMovie;
-            wrongCount++;
-            console.log(`Forcing wrong answer ${wrongCount}/${forcedWrongAnswers}`);
-            await originalHandleGuess(wrongMovie);
-        } else {
-            // Geef het juiste antwoord
-            await originalHandleGuess(currentMovie);
-        }
-        
-        totalProcessed++;
-        
-        // Log de game state
-        console.log('Game State:', {
-            round: GameState.currentRound,
-            correctAnswers: GameState.correctAnswers,
-            incorrectMovies: GameState.incorrectMovies.length,
-            nextRoundMovies: GameState.nextRoundMovies.length,
-            totalProcessed
-        });
-    };
-    
-    // Override updateButtons om automatisch te klikken
-    const originalUpdateButtons = updateButtons;
-    updateButtons = (movies) => {
-        originalUpdateButtons(movies);
-        // Wacht kort en klik dan automatisch
-        setTimeout(() => {
-            const currentMovie = movieDb.getCurrentMovie();
-            // In ronde 1, kies soms bewust het verkeerde antwoord
-            if (GameState.currentRound === 1 && wrongCount < forcedWrongAnswers) {
-                // Kies een willekeurige knop die NIET het juiste antwoord is
-                const buttons = Array.from(document.querySelectorAll('.option-btn'));
-                const wrongButtons = buttons.filter(btn => 
-                    btn.textContent !== currentMovie.title
-                );
-                if (wrongButtons.length > 0) {
-                    const randomWrong = wrongButtons[Math.floor(Math.random() * wrongButtons.length)];
-                    randomWrong.click();
-                }
-            } else {
-                // Kies het juiste antwoord
-                const correctButton = Array.from(document.querySelectorAll('.option-btn'))
-                    .find(btn => btn.textContent === currentMovie.title);
-                if (correctButton) {
-                    correctButton.click();
-                }
-            }
-        }, 100);
-    };
-    
-    try {
-        // Start het spel
-        await startNewRound();
-        
-        // Wacht tot het spel klaar is
-        while (totalProcessed < GameState.totalMovies || 
-               GameState.incorrectMovies.length > 0 || 
-               GameState.nextRoundMovies.length > 0) {
-            await new Promise(resolve => setTimeout(resolve, 200));
-        }
-        
-        // Herstel de originele functies en waarden
-        handleGuess = originalHandleGuess;
-        updateButtons = originalUpdateButtons;
-        GameState.TIMER_DURATION = originalTimerDuration;
-        GameState.SPLASH_DURATION = originalSplashDuration;
-        
-        console.log('Test completed!');
-        console.log('Final Game State:', {
-            round: GameState.currentRound,
-            correctAnswers: GameState.correctAnswers,
-            incorrectMovies: GameState.incorrectMovies.length,
-            nextRoundMovies: GameState.nextRoundMovies.length,
-            totalProcessed
-        });
-    } catch (error) {
-        console.error('Test failed:', error);
-        // Herstel de originele functies en waarden
-        handleGuess = originalHandleGuess;
-        updateButtons = originalUpdateButtons;
-        GameState.TIMER_DURATION = originalTimerDuration;
-        GameState.SPLASH_DURATION = originalSplashDuration;
-    }
-}
-
-// Start wanneer alles geladen is
+// Start when everything is loaded
 document.addEventListener('DOMContentLoaded', () => {
     console.log('DOMContentLoaded event fired');
     console.log('window.CONFIG:', window.CONFIG);
@@ -261,7 +147,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initializeGame();
 });
 
-// UI functies
+// UI functions
 function showSplashScreen(title, messages, bonus = '') {
     if (GameState.activeSplashScreen && GameState.activeSplashScreen.parentNode) {
         GameState.activeSplashScreen.parentNode.removeChild(GameState.activeSplashScreen);
@@ -324,7 +210,7 @@ function updateButtons(movies) {
         optionsContainer.appendChild(button);
     });
 
-    // Direct de visible klasse toevoegen
+    // Direct the visible class to add
     optionsContainer.classList.add('visible');
 }
 
@@ -338,18 +224,18 @@ function updateProgressCounter() {
         if (GameState.currentRound === 1) {
             remaining = GameState.totalMovies - (GameState.correctAnswers + GameState.incorrectMovies.length);
             progressCounter.innerHTML = `
-                <div class="progress-text">Ronde ${GameState.currentRound}: nog ${remaining} films te gaan</div>
+                <div class="progress-text">Round ${GameState.currentRound}: ${remaining} movies remaining</div>
                 <div class="wrong-count ${totalWrong > 0 ? 'has-errors' : ''}">
-                    ${totalWrong} fout${totalWrong !== 1 ? 'en' : ''} totaal
+                    ${totalWrong} wrong${totalWrong !== 1 ? 's' : ''} total
                 </div>
             `;
         } else {
             remaining = GameState.incorrectMovies.length;
             const roundWrong = GameState.nextRoundMovies.length;
             progressCounter.innerHTML = `
-                <div class="progress-text">Ronde ${GameState.currentRound}: nog ${remaining} films te gaan</div>
+                <div class="progress-text">Round ${GameState.currentRound}: ${remaining} movies remaining</div>
                 <div class="wrong-count ${totalWrong > 0 ? 'has-errors' : ''}">
-                    ${roundWrong} fout${roundWrong !== 1 ? 'en' : ''} deze ronde (${totalWrong} totaal)
+                    ${roundWrong} wrong${roundWrong !== 1 ? 's' : ''} this round (${totalWrong} total)
                 </div>
             `;
         }
@@ -365,26 +251,37 @@ function updateScoreDisplay() {
 }
 
 function updateBackgroundImage(stillPath) {
-    // We gebruiken nu een vaste achtergrond, dus deze functie doet niets
+    // We use a fixed background, so this function does nothing
     return;
 }
 
 function showGameOver() {
-    updateBackgroundImage(null); // Remove background when game is over
-    const gameOverDiv = document.createElement('div');
-    gameOverDiv.className = 'game-over';
-    gameOverDiv.innerHTML = `
-        <h2>Game Over!</h2>
-        <p>Je eindscore: ${GameState.currentScore} punten</p>
-        <button onclick="location.reload()">Opnieuw Spelen</button>
-    `;
+    const gameOverScreen = document.createElement('div');
+    gameOverScreen.className = 'game-over';
     
-    const container = document.querySelector('.container');
-    container.innerHTML = '';
-    container.appendChild(gameOverDiv);
+    const message = document.createElement('h1');
+    message.textContent = 'Thank You For Playing!';
+    gameOverScreen.appendChild(message);
+    
+    const scoreElement = document.createElement('p');
+    scoreElement.textContent = `Final Score: ${GameState.currentScore}`;
+    gameOverScreen.appendChild(scoreElement);
+    
+    const nextGameInfo = document.createElement('p');
+    nextGameInfo.textContent = 'New game available next week!';
+    gameOverScreen.appendChild(nextGameInfo);
+
+    if (IS_TEST_MODE) {
+        const playAgainBtn = document.createElement('button');
+        playAgainBtn.textContent = 'Play Again (Test Mode)';
+        playAgainBtn.onclick = resetGame;
+        gameOverScreen.appendChild(playAgainBtn);
+    }
+    
+    document.body.appendChild(gameOverScreen);
 }
 
-// Timer functies
+// Timer functions
 function startTimer() {
     clearInterval(GameState.timerInterval);
     GameState.remainingTime = GameState.TIMER_DURATION;
@@ -420,15 +317,15 @@ async function handleTimeOut() {
     
     updateProgressCounter();
     
-    await showSplashScreen('Tijd Op!', [
-        'Je was te langzaam!',
-        'Volgende keer wat sneller...',
-        `Score blijft: ${GameState.currentScore}`
+    await showSplashScreen('Time Out!', [
+        'You were too slow!',
+        'Try again next time...',
+        `Score remains: ${GameState.currentScore}`
     ]);
     
     if (GameState.currentRound === 1) {
         if (GameState.correctAnswers + GameState.incorrectMovies.length >= GameState.totalMovies) {
-            // Ronde 1 is klaar, ga naar ronde 2 met alle foute films
+            // Round 1 is done, go to round 2 with all wrong movies
             GameState.nextRoundMovies = [...GameState.incorrectMovies];
             GameState.incorrectMovies = [];
             GameState.currentRound++;
@@ -437,10 +334,10 @@ async function handleTimeOut() {
             await startNewRound();
         }
     } else if (GameState.incorrectMovies.length > 0) {
-        // Er zijn nog films te raden in deze ronde
+        // There are still movies to guess in this round
         await startNextRound();
     } else {
-        // Start nieuwe ronde met de verzamelde foute films
+        // Start new round with the collected wrong movies
         GameState.incorrectMovies = [...GameState.nextRoundMovies];
         GameState.nextRoundMovies = [];
         GameState.currentRound++;
@@ -464,15 +361,15 @@ async function handleGuess(guessedMovie) {
             GameState.currentScore += points + timeBonus;
             
             await showSplashScreen('Correct!', [
-                `+${points} punten (Ronde ${GameState.currentRound})`,
-                `+${timeBonus} punten tijdsbonus`,
-                `Totale score: ${GameState.currentScore}`
+                `+${points} points (Round ${GameState.currentRound})`,
+                `+${timeBonus} points time bonus`,
+                `Total score: ${GameState.currentScore}`
             ], timeBonus > 0 ? `Bonus: +${timeBonus}` : '');
         } else {
-            // Geen punten en geen tijdbonus in ronde 6
+            // No points and no time bonus in round 6
             await showSplashScreen('Correct!', [
-                'Laatste kans goed benut!',
-                `Totale score blijft: ${GameState.currentScore}`
+                'Last chance used!',
+                `Total score remains: ${GameState.currentScore}`
             ]);
         }
         
@@ -484,7 +381,7 @@ async function handleGuess(guessedMovie) {
 
         if (GameState.currentRound === 1) {
             if (GameState.correctAnswers + GameState.incorrectMovies.length >= GameState.totalMovies) {
-                // Ronde 1 is klaar, ga naar ronde 2 met alle foute films
+                // Round 1 is done, go to round 2 with all wrong movies
                 if (GameState.incorrectMovies.length > 0) {
                     GameState.currentRound++;
                     await startNextRound();
@@ -495,26 +392,26 @@ async function handleGuess(guessedMovie) {
                 await startNewRound();
             }
         } else {
-            // In andere rondes
+            // In other rounds
             if (GameState.incorrectMovies.length === 0) {
-                // Alle films uit deze ronde zijn behandeld
+                // All movies in this round have been handled
                 if (GameState.nextRoundMovies.length === 0) {
-                    // Geen foute films meer, spel is klaar
+                    // No wrong movies left, game is done
                     showGameOver();
                 } else {
-                    // Start nieuwe ronde met de verzamelde foute films
+                    // Start new round with the collected wrong movies
                     GameState.incorrectMovies = [...GameState.nextRoundMovies];
                     GameState.nextRoundMovies = [];
                     GameState.currentRound++;
                     await startNextRound();
                 }
             } else {
-                // Er zijn nog films te raden in deze ronde
+                // There are still movies to guess in this round
                 await startNextRound();
             }
         }
     } else {
-        // Fout antwoord
+        // Wrong answer
         if (GameState.currentRound === 1) {
             GameState.incorrectMovies.push(currentMovie);
         } else {
@@ -525,13 +422,13 @@ async function handleGuess(guessedMovie) {
         updateProgressCounter();
         
         await showSplashScreen('Incorrect!', [
-            'Probeer het opnieuw in de volgende ronde',
-            `Score blijft: ${GameState.currentScore}`
+            'Try again in the next round',
+            `Score remains: ${GameState.currentScore}`
         ]);
 
         if (GameState.currentRound === 1) {
             if (GameState.correctAnswers + GameState.incorrectMovies.length >= GameState.totalMovies) {
-                // Ronde 1 is klaar, ga naar ronde 2 met alle foute films
+                // Round 1 is done, go to round 2 with all wrong movies
                 if (GameState.incorrectMovies.length > 0) {
                     GameState.currentRound++;
                     await startNextRound();
@@ -542,10 +439,10 @@ async function handleGuess(guessedMovie) {
                 await startNewRound();
             }
         } else if (GameState.incorrectMovies.length > 0) {
-            // Er zijn nog films te raden in deze ronde
+            // There are still movies to guess in this round
             await startNextRound();
         } else {
-            // Start nieuwe ronde met de verzamelde foute films
+            // Start new round with the collected wrong movies
             GameState.incorrectMovies = [...GameState.nextRoundMovies];
             GameState.nextRoundMovies = [];
             GameState.currentRound++;
@@ -561,7 +458,7 @@ async function startNewRound() {
     let movies;
 
     if (GameState.currentRound === 1) {
-        // In ronde 1: gebruik de sessiepool in volgorde
+        // In round 1: use the session pool in order
         const unusedMovies = movieDb.sessionPool.filter(
             movie => !GameState.playedMovies.has(movie.id)
         );
@@ -577,26 +474,26 @@ async function startNewRound() {
             return;
         }
 
-        // Neem de eerste ongebruikte film als huidige film
+        // Take the first unused film as the current film
         const currentMovie = unusedMovies[0];
         console.log('Selected current movie:', currentMovie.title);
         
-        // Haal 5 random andere films op voor de opties
+        // Get 5 random other films for the options
         const otherMovies = movieDb.sessionPool
             .filter(m => m.id !== currentMovie.id) // Exclude current movie
             .sort(() => 0.5 - Math.random()) // Shuffle
             .slice(0, 5); // Take 5
         
-        // Combineer en shuffle de opties
+        // Combine and shuffle the options
         movies = [currentMovie, ...otherMovies];
         movies.sort(() => 0.5 - Math.random());
         
-        // Stel de huidige film in
+        // Set the current film
         movieDb.setCurrentMovie(currentMovie);
         
         console.log('Final movies for options:', movies.map(m => m.title));
     } else {
-        // In andere rondes: gebruik getRandomMovies zoals voorheen
+        // In other rounds: use getRandomMovies as before
         movies = movieDb.getRandomMovies(6);
         if (!movies || movies.length < 6) {
             console.error('Not enough movies available');
@@ -608,7 +505,7 @@ async function startNewRound() {
             return;
         }
         
-        // Kies een willekeurige film als correct antwoord
+        // Choose a random film as the correct answer
         const correctIndex = Math.floor(Math.random() * movies.length);
         const correctMovie = movies[correctIndex];
         movieDb.setCurrentMovie(correctMovie);
@@ -634,14 +531,14 @@ async function startNewRound() {
                 const fullPath = CONFIG.MOVIES_DIR + stillPath;
                 console.log('Loading image:', fullPath);
                 
-                // Gebruik ImageManager voor laden en caching
+                // Use ImageManager for loading and caching
                 await window.imageManager.loadImage(fullPath);
                 movieImage.src = fullPath;
                 movieImage.alt = `Scene from ${currentMovie.title}`;
                 
-                // Preload afbeeldingen voor volgende ronde
+                // Preload images for next round
                 if (GameState.currentRound === 1) {
-                    // In ronde 1: preload de volgende ongebruikte film
+                    // In round 1: preload the next unused film
                     const nextUnused = movieDb.sessionPool.find(
                         movie => !GameState.playedMovies.has(movie.id) && movie.id !== currentMovie.id
                     );
@@ -652,7 +549,7 @@ async function startNewRound() {
                         }
                     }
                 } else {
-                    // In andere rondes: preload zoals voorheen
+                    // In other rounds: preload as before
                     const nextMovies = movieDb.getRandomMovies(6);
                     if (nextMovies && nextMovies.length > 0) {
                         const nextStills = nextMovies
@@ -667,7 +564,7 @@ async function startNewRound() {
                 loadingDiv.style.display = 'none';
                 movieImage.style.display = 'block';
                 
-                // Update background en toon opties
+                // Update background and show options
                 updateBackgroundImage(fullPath);
                 if (optionsContainer) {
                     optionsContainer.style.display = 'flex';
@@ -679,7 +576,7 @@ async function startNewRound() {
             } catch (error) {
                 console.error('Failed to load movie image:', error);
                 loadingDiv.textContent = 'Failed to load movie image. Retrying...';
-                // Probeer opnieuw met een andere afbeelding
+                // Try again with a different image
                 const newStillPath = movieDb.getRandomStillForMovie(currentMovie, true);
                 if (newStillPath) {
                     const newFullPath = CONFIG.MOVIES_DIR + newStillPath;
@@ -713,7 +610,7 @@ async function startNextRound() {
         return;
     }
     
-    // Als er geen foute films zijn om te behandelen
+    // If there are no wrong movies to handle
     if (GameState.incorrectMovies.length === 0 && GameState.nextRoundMovies.length === 0) {
         showGameOver();
         return;
@@ -724,22 +621,22 @@ async function startNextRound() {
     
     updateProgressCounter();
     
-    // Kies een willekeurige film uit de incorrecte films
+    // Choose a random movie from the wrong movies
     const currentIndex = Math.floor(Math.random() * GameState.incorrectMovies.length);
     const currentMovie = GameState.incorrectMovies[currentIndex];
     GameState.incorrectMovies.splice(currentIndex, 1);
     
-    // Genereer opties voor deze ronde
+    // Generate options for this round
     const options = [currentMovie];
     
-    // Haal unieke films op voor de opties
+    // Get unique movies for the options
     const otherMovies = movieDb.getRandomMovies(choices - 1)
         .filter(movie => movie.id !== currentMovie.id)
         .filter((movie, index, self) => 
             index === self.findIndex((m) => m.id === movie.id)
         );
     
-    // Als we niet genoeg unieke films hebben, probeer het nog een keer
+    // If we don't have enough unique movies, try again
     if (otherMovies.length < choices - 1) {
         const remainingCount = choices - 1 - otherMovies.length;
         const moreMovies = movieDb.getRandomMovies(remainingCount * 2)
@@ -754,7 +651,7 @@ async function startNextRound() {
     
     options.push(...otherMovies);
     
-    // Shuffle de opties
+    // Shuffle the options
     for (let i = options.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
         [options[i], options[j]] = [options[j], options[i]];
@@ -767,7 +664,7 @@ async function startNextRound() {
     const loadingDiv = document.querySelector('.loading');
     const optionsContainer = document.querySelector('.options-container');
     
-    // Verberg opties tijdens het laden
+    // Hide options while loading
     if (optionsContainer) {
         optionsContainer.style.display = 'none';
     }
@@ -776,7 +673,7 @@ async function startNextRound() {
         const stillPath = movieDb.getRandomStillForMovie(currentMovie);
         if (stillPath) {
             try {
-                // Wacht tot de afbeelding is geladen
+                // Wait for the image to load
                 await new Promise((resolve, reject) => {
                     movieImage.onload = resolve;
                     movieImage.onerror = reject;
@@ -790,7 +687,7 @@ async function startNextRound() {
                 loadingDiv.style.display = 'none';
                 movieImage.style.display = 'block';
                 
-                // Toon opties en start timer alleen na laden van afbeelding
+                // Show options and start timer only after image loaded
                 if (optionsContainer) {
                     optionsContainer.style.display = 'flex';
                     optionsContainer.style.flexDirection = 'column';
@@ -817,7 +714,7 @@ function updateTimer() {
         timerBar.style.width = `${percentage}%`;
         
         if (GameState.currentRound >= 6) {
-            // Grijze timer in ronde 6 (geen tijdbonus)
+            // Gray timer in round 6 (no time bonus)
             timerBar.style.background = '#6c757d';
             timerBar.style.boxShadow = 'none';
         } else if (percentage > 60) {

@@ -1,18 +1,18 @@
-// ImageManager voor het optimaliseren van afbeeldingslaadtijd
+// ImageManager for optimizing image loading time
 const ImageManager = (function() {
-    // Cache voor geladen afbeeldingen
+    // Cache for loaded images
     const imageCache = new Map();
     
-    // Queue voor preloading
+    // Queue for preloading
     const preloadQueue = [];
     let isPreloading = false;
     
-    // Configuratie
+    // Configuration
     const config = {
-        maxCacheSize: 20, // Maximum aantal afbeeldingen in cache
-        preloadBatchSize: 3, // Aantal afbeeldingen om vooraf te laden
-        retryAttempts: 2, // Aantal pogingen voor laden van een afbeelding
-        retryDelay: 1000 // Vertraging tussen pogingen in ms
+        maxCacheSize: 20, // Maximum number of images in cache
+        preloadBatchSize: 3, // Number of images to preload
+        retryAttempts: 2, // Number of attempts for loading an image
+        retryDelay: 1000 // Delay between attempts in ms
     };
 
     class ImageManagerClass {
@@ -20,7 +20,7 @@ const ImageManager = (function() {
             this.initializeIntersectionObserver();
         }
 
-        // Initialiseer Intersection Observer voor lazy loading
+        // Initialize Intersection Observer for lazy loading
         initializeIntersectionObserver() {
             this.observer = new IntersectionObserver(
                 (entries) => {
@@ -46,9 +46,9 @@ const ImageManager = (function() {
             );
         }
 
-        // Laad een afbeelding met retry mechanisme
+        // Load an image with retry mechanism
         async loadImage(src, attempts = 0) {
-            // Check cache eerst
+            // Check cache first
             if (imageCache.has(src)) {
                 return imageCache.get(src);
             }
@@ -63,7 +63,7 @@ const ImageManager = (function() {
                 img.src = src;
                 await loadPromise;
 
-                // Voeg toe aan cache
+                // Add to cache
                 this.addToCache(src, img);
                 return src;
             } catch (error) {
@@ -75,9 +75,9 @@ const ImageManager = (function() {
             }
         }
 
-        // Voeg afbeelding toe aan cache
+        // Add image to cache
         addToCache(src, img) {
-            // Verwijder oude items als cache vol is
+            // Remove old items if cache is full
             if (imageCache.size >= config.maxCacheSize) {
                 const oldestKey = imageCache.keys().next().value;
                 imageCache.delete(oldestKey);
@@ -85,18 +85,18 @@ const ImageManager = (function() {
             imageCache.set(src, img.src);
         }
 
-        // Preload een batch afbeeldingen
+        // Preload a batch of images
         async preloadImages(srcs) {
-            // Voeg nieuwe URLs toe aan de queue
+            // Add new URLs to the queue
             preloadQueue.push(...srcs);
 
-            // Start preloading als nog niet bezig
+            // Start preloading if not already in progress
             if (!isPreloading) {
                 await this.processPreloadQueue();
             }
         }
 
-        // Verwerk de preload queue
+        // Process the preload queue
         async processPreloadQueue() {
             isPreloading = true;
 
@@ -110,18 +110,18 @@ const ImageManager = (function() {
             isPreloading = false;
         }
 
-        // Setup lazy loading voor een afbeeldingselement
+        // Setup lazy loading for an image element
         setupLazyLoading(imgElement, src) {
             imgElement.dataset.src = src;
             this.observer.observe(imgElement);
         }
 
-        // Clear de cache
+        // Clear the cache
         clearCache() {
             imageCache.clear();
         }
 
-        // Get cache statistieken
+        // Get cache statistics
         getCacheStats() {
             return {
                 size: imageCache.size,
@@ -134,6 +134,6 @@ const ImageManager = (function() {
     return new ImageManagerClass();
 })();
 
-// Exporteer de singleton instantie
+// Export the singleton instance
 console.log('Exporting ImageManager instance');
 window.imageManager = ImageManager; 

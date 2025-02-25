@@ -33,14 +33,6 @@
       "backdrop_path": "data/movies/gm38f3fe84.jpg"
     },
     {
-      "id": "gm7b2c904e",
-      "title": "After Death",
-      "year": "2023",
-      "category": "Young_Adults_PG-13",
-      "rating": "PG-13",
-      "backdrop_path": "data/movies/gm7b2c904e.jpg"
-    },
-    {
       "id": "gm56c63be4",
       "title": "Alien Romulus",
       "year": "2024",
@@ -978,7 +970,7 @@
     },
     {
       "id": "gm5c236f1d",
-      "title": "Joker Folie à Deux",
+      "title": "Joker Folie \u00e0 Deux",
       "year": "2024",
       "category": "Adults_R_and_NC-17",
       "rating": "R",
@@ -1522,7 +1514,7 @@
     },
     {
       "id": "gmc4a09711",
-      "title": "Protégé, The",
+      "title": "Prot\u00e9g\u00e9, The",
       "year": "2021",
       "category": "Adults_R_and_NC-17",
       "rating": "R",
@@ -1546,7 +1538,7 @@
     },
     {
       "id": "gm5204bd42",
-      "title": "Quiet Place Day One, A",
+      "title": "Quiet Place\u00a0Day One, A",
       "year": "2024",
       "category": "Young_Adults_PG-13",
       "rating": "PG-13",
