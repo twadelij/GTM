@@ -1,7 +1,7 @@
 ---
 title: Guess The Movie Game
 created: 2024-01-09
-updated: 2024-02-24
+updated: 2025-02-28
 tags: [game, movies, project]
 aliases: [GTM, Movie Game]
 ---
@@ -9,6 +9,14 @@ aliases: [GTM, Movie Game]
 # 🎬 Guess The Movie Game
 
 An interactive game where players guess movies based on screenshots.
+
+## 📋 Current Status
+
+The game is currently in active development. The core gameplay functionality is working, but there are some known issues:
+
+- **Admin Login Issue**: The admin authentication works on the server side, but there's a UI issue preventing proper redirection after login. This will be fixed in a future update.
+- **Database Integration**: The game now uses PostgreSQL for data storage instead of JSON files.
+- **Multi-user Support**: Basic user authentication and session management are implemented.
 
 ## 📁 Project Structure
 
@@ -18,102 +26,71 @@ An interactive game where players guess movies based on screenshots.
     - `css/` - Styling
   - `server/` - Backend server code
 - `tools/` - Utility programs and scripts
-- `data/` - Data files and resources
-- `docs/` - Project documentation
-- `templates/` - HTML templates
-- `static/` - Static files (CSS, JS, images)
-- `uploads/` - User uploads and temporary files
+- `logs/` - Server and application logs
 
-## 🎮 Gameplay
+## 🚀 Getting Started
 
-- Start with 20 random movies
-- 6 rounds to guess all movies
-- Points per round:
-  - Round 1: 5 points + time bonus
-  - Round 2: 4 points + time bonus
-  - Round 3: 3 points + time bonus
-  - Round 4: 2 points + time bonus
-  - Round 5: 1 point + time bonus
-  - Round 6: Last chance (no points/time bonus)
-- Time bonus: 1 point per second remaining (not in round 6)
-- Wrong answers move to the next round
-- Fewer choices per round (6 -> 5 -> 4 -> 3 -> 2 -> 1)
+### Prerequisites
 
-## 🛠️ Technical Stack
+- Python 3.9+
+- PostgreSQL
+- Node.js (for development)
 
-- Frontend: React.js with TypeScript
-- Backend: Python with FastAPI
-- Database: PostgreSQL with Prisma
-- Testing: Jest and Pytest
-- CI/CD: GitHub Actions
-- Image Management: Custom ImageManager with caching and preloading
-
-## 🆕 Latest Updates
-
-- Optimized image loading time with caching
-- Preloading of next round images
-- Improved error handling
-- Lazy loading implementation
-- Test mode added
-
-## 📥 Installation
+### Installation
 
 1. Clone the repository:
+   ```bash
+   git clone https://github.com/yourusername/GTM.git
+   cd GTM
+   ```
+
+2. Install Python dependencies:
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+3. Set up the database:
+   ```bash
+   python src/server/setup_db.py
+   ```
+
+4. Create an admin user:
+   ```bash
+   python tools/create_admin.py
+   ```
+
+5. Start the server:
+   ```bash
+   ./start_server.sh
+   ```
+
+6. Access the game at http://localhost:5000
+
+## 🔧 Development
+
+### Running Tests
+
 ```bash
-git clone https://github.com/twadelij/GTM.git
-cd GTM
+python -m pytest tests/
 ```
 
-2. Install dependencies:
-```bash
-pip install -r requirements.txt
-```
+### Adding New Movies
 
-3. Start the server:
-```bash
-python src/server/server.py
-```
+Movies can be added through the admin interface once logged in as an admin user.
 
-## 👩‍💻 Development
+## 📝 Future Plans
 
-1. Create a new branch for your feature:
-```bash
-git checkout -b feature/new-feature
-```
+- Containerization for easy deployment
+- Enhanced user experience with animations and sound effects
+- Integration with TMDB API for additional movie data
+- Multiplayer functionality
 
-2. Start the development server:
-```bash
-python src/server/server.py --dev
-```
-
-3. Run the tests:
-```bash
-pytest tests/
-```
-
-## 🧪 Test Mode
-
-To test the game without manual play:
-
-1. Open the browser console (F12)
-2. Execute the following command:
-```javascript
-runGameTest(5); // Test with 5 wrong answers in round 1
-```
-
-Parameters:
-- `forcedWrongAnswers`: Number of wrong answers in round 1 (default: 5)
-
-## 📝 Links
-
-- [[TODO]] - Project TODO list
-- [[CHANGELOG]] - Version history
-- [[CONTRIBUTING]] - Contribution guidelines
+See the [TODO.md](TODO.md) file for a complete list of planned features and improvements.
 
 ## 🤝 Contributing
 
-Contributions are welcome! See [[CONTRIBUTING]] for details.
+Contributions are welcome! Please feel free to submit a Pull Request.
 
 ## 📄 License
 
-This project is licensed under the MIT License - see the [[LICENSE]] file for details.
+This project is licensed under the MIT License - see the LICENSE file for details.

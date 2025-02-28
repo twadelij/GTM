@@ -1,12 +1,17 @@
 ---
 title: Project TODOs
 created: 2024-01-09
-updated: 2024-02-24
+updated: 2025-02-28
 tags: [todo, planning, tasks]
 aliases: [Tasks, Planning]
 ---
 
 # 📋 Project TODOs
+
+## 🚧 In Progress
+
+- [ ] Fix admin login issue - Authentication works but UI doesn't update correctly
+- [ ] Make the game deployable via containers (Docker)
 
 ## ✅ Recently Completed
 
@@ -32,55 +37,78 @@ aliases: [Tasks, Planning]
 
 ## 🔥 High Priority
 
-### Phase 1: Game Mechanics & UX
-- [ ] Implement weekly game limit:
-  - [ ] Add timestamp for last played game
-  - [ ] Store user progress in localStorage
-  - [ ] Show countdown to next available game
-  - [ ] Add server-side validation
-  - [ ] Implement weekly reset logic
-- [ ] Enhance Game Over screen:
-  - [ ] Show statistics for current game
-  - [ ] Display personal best scores
-  - [ ] Add share button for results
-  - [ ] Show countdown to next game
-- [ ] Improve feedback messages:
-  - [ ] Add more varied success messages
-  - [ ] Create engaging failure messages
-  - [ ] Implement progressive difficulty hints
+### Phase 1: Database & Content Management
+- [x] Migrate movies to PostgreSQL database
+- [x] Create `movies` table with film metadata schema
+- [x] Create `movie_images` table for image paths
+- [x] Write migration script to transfer data from JSON to database
+- [x] Update server code to retrieve movies from database
+- [x] Add admin endpoints for film management
+- [x] Implement soft-delete functionality for films
+- [x] Add tags and categories
+- [ ] Create backup strategy
 
-### Phase 2: User Authentication & Admin System
-- [ ] Implement user authentication system:
-  - [ ] User registration with email verification
-  - [ ] Login/logout functionality
-  - [ ] Password reset system
-  - [ ] OAuth integration (Google, GitHub)
-  - [ ] Session management
-  - [ ] User profiles with statistics
-  - [ ] Test all authentication flows
-- [ ] Create admin dashboard:
-  - [ ] Secure admin login system
-  - [ ] Image management interface
-  - [ ] Bulk image upload functionality
-  - [ ] Movie metadata editor
-  - [ ] Test mode activation button
-  - [ ] User management tools
-  - [ ] System statistics overview
-  - [ ] Activity logging
-  - [ ] Test all admin features
+### Phase 2: Multi-user Authentication & Sessions
+- [x] Create login system
+- [x] Add email verification
+- [x] Add admin users
+- [x] Implement rate limiting
+- [x] Add session management
+- [ ] Fix admin login UI issues
+- [ ] Add user profiles
+- [ ] Add user settings
+- [ ] Add password reset functionality
+- [ ] Add social login options
+- [ ] Add user roles and permissions
+- [ ] Add user statistics
+- [ ] Add user achievements
+- [ ] Add user leaderboard
 
-### Phase 3: TMDB API Integration
-- [ ] Implement TMDB API for images:
-  - [ ] Configure API key management
-  - [ ] Add fallback mechanism for local images
-  - [ ] Implement caching for TMDB images
-  - [ ] Add rate limiting for API requests
-  - [ ] Create script for fetching new movie stills
-  - [ ] Implement error handling for API requests
-  - [ ] Add logging for API usage
-  - [ ] Create configuration file for API settings
-  - [ ] Add tool for refreshing outdated images
-  - [ ] Implement queue system for bulk downloads
+### Phase 3: Game Mechanics & UX
+- [ ] Add animations for correct/incorrect answers
+- [ ] Add sound effects
+- [ ] Add different game modes
+- [ ] Create tutorial for new players
+- [ ] Add difficulty levels
+- [ ] Add hints system
+- [ ] Add bonus rounds
+- [ ] Add multiplayer mode
+- [ ] Add chat system
+- [ ] Add friend system
+- [ ] Add achievements
+- [ ] Add leaderboards
+- [ ] Add daily challenges
+- [ ] Add weekly tournaments
+- [ ] Add seasonal events
+
+### Phase 4: TMDB API Integration
+- [ ] Implement poster and backdrop downloads
+- [ ] Add movie details from TMDB
+- [ ] Add movie trailers
+- [ ] Add movie cast information
+- [ ] Add movie reviews
+- [ ] Add movie recommendations
+- [ ] Add movie watchlist
+- [ ] Add movie favorites
+- [ ] Add movie ratings
+- [ ] Add movie comments
+- [ ] Add movie search
+- [ ] Add movie filters
+- [ ] Add movie sorting
+- [ ] Add movie categories
+- [ ] Add movie tags
+
+### Deployment & Distribution
+- [ ] Create Docker container for easy deployment
+- [ ] Set up CI/CD pipeline
+- [ ] Create installation documentation
+- [ ] Implement automated testing
+- [ ] Create backup and restore procedures
+- [ ] Add monitoring and logging
+- [ ] Create scaling strategy
+- [ ] Implement load balancing
+- [ ] Set up production environment
+- [ ] Create deployment scripts
 
 ### Personality & User Experience
 - [ ] Implement rotating game feedback (30+ variations):
@@ -92,6 +120,11 @@ aliases: [Tasks, Planning]
   - [ ] Easter eggs for special achievements
 
 ### Critical Bug Fixes
+- [ ] Fix admin login UI issues:
+  - [ ] Debug client-side authentication flow
+  - [ ] Fix session handling
+  - [ ] Ensure proper redirection after login
+  - [ ] Add better error handling for login failures
 - [ ] Fix startup error "Failed to load game: Cannot read properties of undefined (reading 'title')":
   - [ ] Debug script initialization order
   - [ ] Verify all required files are loaded correctly
@@ -167,6 +200,18 @@ aliases: [Tasks, Planning]
   ├── README.md            # Project documentation
   └── TODO.md              # Project planning
   ```
+- [ ] Move files to new structure:
+  - [ ] Create new `logs/` directory
+  - [ ] Move all `.log` files to `logs/`
+  - [ ] Remove duplicate `server/` directory in root
+  - [ ] Remove unused directories (`static/`, `templates/`, `uploads/`)
+  - [ ] Remove duplicate `images/` directory
+  - [ ] Create new `tests/` directory
+- [ ] Update all file references:
+  - [ ] Update imports in Python files
+  - [ ] Update path references in JavaScript
+  - [ ] Update configuration files
+  - [ ] Test all functionality after moving
 
 ## 📝 Notes
 
@@ -176,46 +221,43 @@ aliases: [Tasks, Planning]
 - Schedule regular code reviews
 - Collect user feedback for new features
 
-### Bestandsstructuur Reorganisatie
-- [ ] Implementeer nieuwe mappenstructuur:
-  ```
-  GTM/
-  ├── src/                    # Broncode
-  │   ├── client/            # Frontend code
-  │   │   ├── js/           # JavaScript bestanden
-  │   │   ├── css/          # Stylesheets
-  │   │   └── index.html    # Hoofdpagina
-  │   └── server/           # Backend code
-  │       └── server.py     # Server implementatie
-  ├── data/                  # Data bestanden
-  │   ├── movies/           # Film afbeeldingen
-  │   ├── movies.json       # Film metadata
-  │   └── users.json        # Gebruikersdata
-  ├── tools/                 # Hulpprogramma's
-  │   ├── clean_images.py   # Image cleanup tool
-  │   └── thumbnail_viewer.py # Thumbnail viewer
-  ├── logs/                  # Log bestanden
-  │   ├── server.log        # Server logs
-  │   └── app.log          # Applicatie logs
-  ├── tests/                 # Test bestanden
-  │   ├── unit/            # Unit tests
-  │   └── integration/     # Integratietests
-  ├── docs/                  # Documentatie
-  │   └── api/             # API documentatie
-  ├── start_server.sh       # Server startup script
-  ├── requirements.txt      # Python dependencies
-  ├── README.md            # Project documentatie
-  └── TODO.md              # Project planning
-  ```
-- [ ] Verplaats bestanden naar nieuwe structuur:
-  - [ ] Maak nieuwe `logs/` directory
-  - [ ] Verplaats alle `.log` bestanden naar `logs/`
-  - [ ] Verwijder dubbele `server/` directory in root
-  - [ ] Verwijder ongebruikte directories (`static/`, `templates/`, `uploads/`)
-  - [ ] Verwijder dubbele `images/` directory
-  - [ ] Maak nieuwe `tests/` directory
-- [ ] Update alle bestandsverwijzingen:
-  - [ ] Update imports in Python bestanden
-  - [ ] Update pad verwijzingen in JavaScript
-  - [ ] Update configuratie bestanden
-  - [ ] Test alle functionaliteit na verplaatsing 
+### Database Schema
+```sql
+-- Users table
+CREATE TABLE users (
+    id SERIAL PRIMARY KEY,
+    username VARCHAR(50) UNIQUE NOT NULL,
+    email VARCHAR(255) UNIQUE NOT NULL,
+    password_hash VARCHAR(255) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    last_login TIMESTAMP,
+    is_admin BOOLEAN DEFAULT FALSE
+);
+
+-- Sessions table
+CREATE TABLE sessions (
+    id SERIAL PRIMARY KEY,
+    user_id INTEGER REFERENCES users(id),
+    token VARCHAR(255) UNIQUE NOT NULL,
+    expires_at TIMESTAMP NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Games table
+CREATE TABLE games (
+    id SERIAL PRIMARY KEY,
+    user_id INTEGER REFERENCES users(id),
+    score INTEGER NOT NULL,
+    completed_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    movies_played JSONB,
+    wrong_guesses INTEGER
+);
+```
+
+### Security Considerations
+- Implement rate limiting
+- Use secure password hashing (bcrypt)
+- Set secure session cookies
+- Implement CSRF protection
+- Add input validation
+- Set up proper CORS policies 
