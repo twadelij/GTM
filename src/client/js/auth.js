@@ -2,27 +2,39 @@ let currentUser = null;
 
 // Check admin status and display admin link if appropriate
 async function checkAdminStatus() {
+    console.log('Checking admin status...');
     try {
-        const response = await fetch('/api/auth/current-user');
+        const response = await fetch(getApiUrl('api/auth/current-user'));
+        console.log('Current user response status:', response.status);
+        
         if (response.ok) {
             const userData = await response.json();
-            currentUser = userData;
+            console.log('Current user data:', userData);
             
-            // Update UI based on login status
-            document.getElementById('login-button').style.display = currentUser ? 'none' : 'inline-block';
-            document.getElementById('logout-button').style.display = currentUser ? 'inline-block' : 'none';
-            
-            // Show admin link if admin
-            if (currentUser && currentUser.is_admin) {
-                document.querySelector('.admin-link').style.display = 'inline-block';
+            if (userData && userData.is_admin) {
+                console.log('Admin user detected, showing admin link');
+                document.getElementById('admin-link').style.display = 'inline-block';
             } else {
-                document.querySelector('.admin-link').style.display = 'none';
+                console.log('Non-admin user, hiding admin link');
+                document.getElementById('admin-link').style.display = 'none';
             }
+            
+            // Show logout button, hide login button
+            document.getElementById('logout-button').style.display = 'inline-block';
+            document.getElementById('login-button').style.display = 'none';
+            
+            // Hide login section, show game info
+            document.getElementById('login-section').classList.remove('active');
+            document.getElementById('game-info').classList.add('active');
         } else {
-            // Not logged in
-            document.querySelector('.admin-link').style.display = 'none';
-            document.getElementById('login-button').style.display = 'inline-block';
+            console.log('User not logged in, showing login UI');
+            // User not logged in, show login UI
+            document.getElementById('admin-link').style.display = 'none';
             document.getElementById('logout-button').style.display = 'none';
+            document.getElementById('login-button').style.display = 'inline-block';
+            
+            document.getElementById('login-section').classList.add('active');
+            document.getElementById('game-info').classList.remove('active');
         }
     } catch (error) {
         console.error('Error checking admin status:', error);
@@ -32,7 +44,8 @@ async function checkAdminStatus() {
 // Handle login
 async function loginUser(username, password) {
     try {
-        const response = await fetch('/api/auth/login', {
+        console.log('Login poging voor gebruiker:', username);
+        const response = await fetch(getApiUrl('api/auth/login'), {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -40,19 +53,30 @@ async function loginUser(username, password) {
             body: JSON.stringify({ username, password })
         });
 
+        console.log('Login response status:', response.status);
+        
         if (response.ok) {
             const data = await response.json();
+            console.log('Login response data:', data);
             currentUser = data;
             
             // Update UI based on login
             document.getElementById('login-button').style.display = 'none';
             document.getElementById('logout-button').style.display = 'inline-block';
             
+            console.log('Is admin?', currentUser.is_admin);
             if (currentUser.is_admin) {
+                console.log('Admin gebruiker gedetecteerd, admin link tonen en doorsturen naar /admin');
                 document.querySelector('.admin-link').style.display = 'inline-block';
-                window.location.href = '/admin';
+                
+                // Voeg een kleine vertraging toe voordat we doorsturen
+                setTimeout(() => {
+                    console.log('Doorsturen naar admin pagina...');
+                    window.location.href = getApiUrl('admin');
+                }, 500);
             } else {
                 // Voor normale gebruikers, toon de game info section
+                console.log('Normale gebruiker gedetecteerd, game info section tonen');
                 if (typeof checkLoginStatus === 'function') {
                     checkLoginStatus();
                 } else {
@@ -69,6 +93,7 @@ async function loginUser(username, password) {
             return true;
         } else {
             // Failed login
+            console.log('Login mislukt, status:', response.status);
             document.getElementById('login-error').style.display = 'block';
             return false;
         }
@@ -82,7 +107,7 @@ async function loginUser(username, password) {
 // Handle logout
 async function logoutUser() {
     try {
-        const response = await fetch('/api/auth/logout', {
+        const response = await fetch(getApiUrl('api/auth/logout'), {
             method: 'POST'
         });
 

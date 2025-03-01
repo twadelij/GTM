@@ -1,7 +1,7 @@
 ---
 title: Guess The Movie Game
 created: 2024-01-09
-updated: 2025-02-28
+updated: 2025-03-01
 tags: [game, movies, project]
 aliases: [GTM, Movie Game]
 ---
@@ -12,11 +12,12 @@ An interactive game where players guess movies based on screenshots.
 
 ## 📋 Current Status
 
-The game is currently in active development. The core gameplay functionality is working, but there are some known issues:
+The game is currently in active development. The core gameplay functionality is working, and recent updates include:
 
-- **Admin Login Issue**: The admin authentication works on the server side, but there's a UI issue preventing proper redirection after login. This will be fixed in a future update.
-- **Database Integration**: The game now uses PostgreSQL for data storage instead of JSON files.
-- **Multi-user Support**: Basic user authentication and session management are implemented.
+- **Admin Login Fixed**: The admin authentication now works correctly with proper redirection after login.
+- **Server Configuration**: Added a config.js file for flexible server URL configuration.
+- **API Requests**: Updated all client-side code to use the configuration for API requests.
+- **Port Configuration**: The server now runs on port 5000 by default.
 
 ## 📁 Project Structure
 
@@ -85,7 +86,7 @@ Movies can be added through the admin interface once logged in as an admin user.
 - Integration with TMDB API for additional movie data
 - Multiplayer functionality
 
-See the [TODO.md](TODO.md) file for a complete list of planned features and improvements.
+See the [ToDo.md](ToDo.md) file for a complete list of planned features and improvements.
 
 ## 🤝 Contributing
 
