@@ -1,63 +1,79 @@
-# GTM Project Continuation Prompt
+# GTM Project Continuation Prompt - Linux Server Implementation
 
-## What Has Been Done So Far
+## Current Project Status
 
-1. **Admin Login Fix Implementation**:
-   - Created a simplified admin login system that bypasses the server-side authentication issues
-   - Implemented client-side validation for "admin" username and "admin123" password
-   - Created a basic admin dashboard with 4 buttons (admin-dashboard.html)
-   - Used localStorage for maintaining login state
+1. **Backend Implementation**:
+   - Created Flask-based backend with PostgreSQL integration
+   - Implemented user authentication and session management
+   - Set up API endpoints for admin dashboard
+   - Database models defined for users, sessions, and games
 
-2. **Rules File Creation**:
-   - Created a .rules file in the project root
-   - Added rules for project development and workflow
-   - Configured it to be updated whenever "add rule:" is typed
-   - Ensured it will not be added to git or uploaded to GitHub
+2. **Frontend Development**:
+   - New admin dashboard implementation (admin.html)
+   - Separate admin dashboard JavaScript (admin-dashboard.js)
+   - API integration with backend services
+   - Enhanced UI with user management, movie management, and statistics
 
-3. **Changes to auth.js**:
-   - Modified authentication flow to handle direct admin login
-   - Added localStorage for session persistence
-   - Improved error handling with null checks
-   - Added support for Enter key in login form
+3. **Project Structure**:
+   - Main branch established as primary branch
+   - Feature branch: feature/admin-dashboard-backend
+   - Project rules implemented (.rules file)
+   - Cross-platform compatibility added to roadmap
 
-## What Needs to Be Done
+## Next Steps on Linux Server
 
-1. **Enhanced Admin Dashboard**:
-   - Improve styling with movie images in the background with proper opacity
-   - Implement more relevant admin functions based on the TODO list
-   - Functions should include movie management, user management, statistics, settings, etc.
-   - Make buttons visually appealing and representative of their functions
+1. **Environment Setup**:
+   ```bash
+   # Install required packages
+   sudo apt-get update
+   sudo apt-get install python3-pip postgresql postgresql-contrib
+   
+   # Create virtual environment
+   python3 -m venv venv
+   source venv/bin/activate
+   
+   # Install dependencies
+   pip install -r requirements.txt
+   ```
 
-2. **Working Logout Functionality**:
-   - Complete the logout button functionality to clear localStorage
-   - Add proper redirection after logout
-   - Ensure all session data is properly cleared
+2. **Database Setup**:
+   ```sql
+   -- Create database and user
+   CREATE DATABASE gtm;
+   CREATE USER gtm_admin WITH PASSWORD 'your_password';
+   GRANT ALL PRIVILEGES ON DATABASE gtm TO gtm_admin;
+   
+   -- Connect to database and create tables
+   \c gtm
+   
+   -- Tables will be created automatically by SQLAlchemy
+   ```
 
-3. **User Management Implementation**:
-   - Create a user management interface
-   - Allow viewing, adding, editing, and deleting users
-   - Include fields for username, email, admin status, etc.
-   - Implement proper validation and error handling
+3. **Configuration**:
+   - Create .env file with database credentials
+   - Update config.js with correct server URL
+   - Set up proper file permissions
 
-4. **Movie Management Implementation**:
-   - Allow admins to add, edit, and delete movies
-   - Include fields for movie title, release year, description, images, etc.
-   - Implement image uploading or linking
-   - Add proper validation and error handling
+## Implementation Tasks
 
-5. **Authentication Improvement (Future)**:
-   - Replace the temporary client-side authentication with proper server-side authentication
-   - Use secure HTTP-only cookies for session management
-   - Implement proper password hashing and security measures
+1. **Database Integration**:
+   - Test database connection
+   - Run initial migrations
+   - Create admin user
+   - Verify user authentication
 
-## Implementation Notes
+2. **Admin Dashboard Testing**:
+   - Test user management functionality
+   - Implement movie management features
+   - Set up statistics tracking
+   - Verify all API endpoints
 
-- The current authentication method is temporary and NOT suitable for production
-- The admin dashboard should follow the visual style of the main game
-- All admin functions should have proper error handling
-- Code should be well-documented for future maintenance
+3. **Cross-Platform Compatibility**:
+   - Document OS-specific differences
+   - Create installation guides
+   - Test deployment process
 
-## Database Schema Reference
+## Database Schema (Unchanged)
 
 ```sql
 -- Users table
@@ -91,13 +107,25 @@ CREATE TABLE games (
 );
 ```
 
-## Project Status
+## Project Rules
 
-Currently on branch: `fix/admin-login-and-docs`
+1. Only work on one branch at a time
+2. Push to main after successful test
+3. Update TODO.md after successful test
+4. Don't work on main, always create a branch first
+5. .rules file should be maintained but not pushed to GitHub
 
-Priority issues from TODO.md:
-- Fix admin login issues (in progress)
-- Implement proper session management
-- Add user management features
-- Implement movie management features
-- Enhance admin dashboard UI
+## Current Branch
+Currently on branch: `feature/admin-dashboard-backend`
+
+## Remote Repository
+Origin: https://github.com/twadelij/GTM.git
+
+## Next Actions
+1. Clone repository on Linux server
+2. Set up development environment
+3. Configure PostgreSQL database
+4. Test admin dashboard implementation
+5. Update documentation with Linux-specific instructions
+
+Remember to follow the project rules and update TODO.md after successful testing.
