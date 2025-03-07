@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - Guess The Movie</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="icon" type="image/png" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAGASURBVFhH7ZY9TsNAEIXXQUgUFJQUFJScgYKGM1BQcgYKGs5AQckZKGg4AwUNZ6Cg4QwUFGHezOyPHa+dxFYaKZ80Wu/svO/t2t6N0mg0Go3G/8KyrFvoAroKx7yGxuE0H1g8g35C39BvS99Qzhf0BF2Ea3Nh0R7kB99YgBvoHVRr36EHaBiuXw8LrKFP6GQVLMc5dAzVhg/oOoRWw8QBpBrXFWBsF3qFat0JtBPC82HCGfQeolUYO4Q+oFp7H8LzYcIWpA3kIkTKMNaDnqFa+xLC82HCBvQcoqsxxwPqPEQWw4QN6DVEyzBWOxFz9KFZiCyGCSuQNhBvKPcgWoaxbegFqrVXITwfJuxD3kB0A8bHkK5/rbsL4fkwYQjpW1A7EXN0jPUtaO1RCK+GBbuQNhBvKGO4iXQt6DwYhfBqWNCH9C2kDSWFOXXm6xDWNZ+GcD4s1LegHUUbyiI4Vxc7gXTm6/+GvNp/AYu1E2lDSWHOxk6j0Wg0/gxF8QNkrMuY4QhV5QAAAABJRU5ErkJggg==">
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f5f5f5;
+            margin: 0;
+            padding: 0;
+        }
+        
+        .header-area {
+            background-color: #0078d7;
+            color: white;
+            padding: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .header-area h1 {
+            margin: 0;
+        }
+        
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            margin-left: 1rem;
+        }
+        
+        .dashboard-container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 2rem;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .dashboard-header {
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+        
+        .dashboard-header h2 {
+            color: #333;
+            margin-bottom: 0.5rem;
+        }
+        
+        .dashboard-content {
+            margin-top: 2rem;
+        }
+        
+        .button-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+        
+        .dashboard-button {
+            padding: 2rem 1rem;
+            background-color: #0078d7;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .dashboard-button:hover {
+            background-color: #005a9e;
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+        }
+        
+        .dashboard-button i {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+        
+        .dashboard-button span {
+            display: block;
+        }
+
+        /* User Management Table Styles */
+        .user-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+
+        .user-table th,
+        .user-table td {
+            padding: 0.75rem;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .user-table th {
+            background-color: #f8f9fa;
+            font-weight: 600;
+        }
+
+        /* Movie Grid Styles */
+        .movie-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1rem;
+        }
+
+        .movie-card {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            overflow: hidden;
+            transition: transform 0.2s;
+        }
+
+        .movie-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .movie-card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .movie-card h4 {
+            margin: 0.5rem;
+            font-size: 1rem;
+        }
+
+        /* Statistics Grid Styles */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1rem;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+
+        .stat-card h4 {
+            margin: 0;
+            color: #666;
+            font-size: 1rem;
+        }
+
+        .stat-card p {
+            margin: 0.5rem 0 0;
+            font-size: 2rem;
+            font-weight: bold;
+            color: #0078d7;
+        }
+        
+        @media (max-width: 768px) {
+            .button-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header-area">
+        <h1>Admin Dashboard</h1>
+        <div class="nav-links">
+            <a href="/" class="nav-link">Home</a>
+            <a href="#" id="logout-button" class="nav-link">Logout</a>
+        </div>
+    </div>
+    
+    <div class="dashboard-container">
+        <div class="dashboard-header">
+            <h2>Welcome, Admin</h2>
+            <p>Manage your Guess The Movie content from this dashboard</p>
+        </div>
+        
+        <div class="dashboard-content">
+            <div class="button-grid">
+                <button class="dashboard-button" id="manage-movies">
+                    <span class="button-icon">🎬</span>
+                    <span>Manage Movies</span>
+                </button>
+                <button class="dashboard-button" id="manage-users">
+                    <span class="button-icon">👥</span>
+                    <span>Manage Users</span>
+                </button>
+                <button class="dashboard-button" id="view-statistics">
+                    <span class="button-icon">📊</span>
+                    <span>View Statistics</span>
+                </button>
+                <button class="dashboard-button" id="system-settings">
+                    <span class="button-icon">⚙️</span>
+                    <span>System Settings</span>
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <script src="js/config.js"></script>
+    <script src="js/admin-dashboard.js"></script>
+</body>
+</html>
