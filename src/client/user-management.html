@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Management - GTM Admin</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/admin-dashboard.css">
+    <link rel="stylesheet" href="css/user-management.css">
+</head>
+<body>
+    <div class="header-area">
+        <h1>User Management</h1>
+        <div class="nav-links">
+            <a href="admin-dashboard.html">Dashboard</a>
+            <a href="/" class="nav-link">Home</a>
+            <a href="#" id="logout-button" class="nav-link">Logout</a>
+        </div>
+    </div>
+
+    <div class="dashboard-container">
+        <div class="user-management-content">
+            <div class="user-controls">
+                <button id="add-user-btn" class="primary-button">Add New User</button>
+                <input type="text" id="user-search" placeholder="Search users...">
+            </div>
+
+            <div class="users-table-container">
+                <table id="users-table">
+                    <thead>
+                        <tr>
+                            <th>Username</th>
+                            <th>Email</th>
+                            <th>Created</th>
+                            <th>Last Login</th>
+                            <th>Admin</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="users-list">
+                        <!-- User rows will be populated here -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add/Edit User Modal -->
+    <div id="user-modal" class="modal">
+        <div class="modal-content">
+            <h2 id="modal-title">Add New User</h2>
+            <form id="user-form">
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input type="text" id="username" required>
+                </div>
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password">
+                    <small>Leave empty to keep existing password when editing</small>
+                </div>
+                <div class="form-group">
+                    <label>
+                        <input type="checkbox" id="is-admin">
+                        Admin User
+                    </label>
+                </div>
+                <div class="form-actions">
+                    <button type="button" id="cancel-btn">Cancel</button>
+                    <button type="submit" id="save-btn" class="primary-button">Save</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="js/config.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/user-management.js"></script>
+    <script>
+        // Add authentication check
+        document.addEventListener('DOMContentLoaded', () => {
+            if (!localStorage.getItem('isLoggedIn') || localStorage.getItem('isAdmin') !== 'true') {
+                window.location.href = '/';
+                return;
+            }
+        });
+    </script>
+</body>
+</html>
