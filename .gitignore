@@ -1,0 +1,11 @@
+# Project specific
+.rules
+
+# Common ignores
+*.log
+node_modules/
+__pycache__/
+*.pyc
+.env
+.venv/
+venv/
