@@ -24,11 +24,6 @@
 - [ ] Enhance admin dashboard UI
 - [ ] Add user management features
 - [ ] Implement movie management features
-- [ ] Make application cross-platform compatible
-  - [ ] Abstract OS-specific operations
-  - [ ] Create platform-specific installation guides
-  - [ ] Test on Windows, Linux, and macOS
-  - [ ] Document system requirements for each platform
 
 ## Future Projects
 - [ ] Create a new project template with proper structure
