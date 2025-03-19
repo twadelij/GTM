@@ -1,2 +1,9 @@
+# Core dependencies
 watchdog==3.0.0
-langdetect==1.0.9 
+langdetect==1.0.9
+
+# Web server
+gunicorn==21.2.0
+
+# For development
+python-dotenv==1.0.0

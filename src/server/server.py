@@ -4,11 +4,23 @@ import socketserver
 import json
 import os
 import logging
+import sys
 from urllib.parse import urlparse, parse_qs
+from pathlib import Path
+
+# Load environment variables from .env file
+try:
+    from dotenv import load_dotenv
+    # Load environment variables from .env file
+    env_path = Path(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))).joinpath('.env')
+    load_dotenv(dotenv_path=env_path)
+except ImportError:
+    print("python-dotenv not installed, using default environment variables")
 
 # Logging configuratie
+log_level = logging.DEBUG if os.getenv('DEBUG', 'False').lower() == 'true' else logging.INFO
 logging.basicConfig(
-    level=logging.DEBUG,
+    level=log_level,
     format='%(asctime)s - %(levelname)s - %(message)s',
     handlers=[
         logging.FileHandler('server.log'),
@@ -17,9 +29,9 @@ logging.basicConfig(
 )
 
 # Basis directory configuratie
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-CLIENT_DIR = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'client')
-DATA_DIR = os.path.join(BASE_DIR, 'data')
+BASE_DIR = os.getenv('BASE_DIR', os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
+CLIENT_DIR = os.getenv('CLIENT_DIR', os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'client'))
+DATA_DIR = os.getenv('DATA_DIR', os.path.join(BASE_DIR, 'data'))
 
 class MovieGameHandler(http.server.SimpleHTTPRequestHandler):
     def __init__(self, *args, **kwargs):
@@ -75,22 +87,30 @@ class MovieGameHandler(http.server.SimpleHTTPRequestHandler):
             logging.error(f"Error serving data file: {str(e)}")
             self.send_error(500, f"Internal Server Error: {str(e)}")
 
-def run_server(port=8888):
+def run_server(host=None, port=None):
     try:
-        logging.debug(f"Starting server on port {port}")
+        # Get host and port from environment variables if not provided
+        if host is None:
+            host = os.getenv('HOST', '0.0.0.0')
+        if port is None:
+            port = int(os.getenv('PORT', '8888'))
+            
+        logging.debug(f"Starting server on {host}:{port}")
         logging.debug(f"Current working directory: {os.getcwd()}")
         logging.debug(f"Client directory: {CLIENT_DIR}")
         logging.debug(f"Data directory: {DATA_DIR}")
+        logging.debug(f"Debug mode: {os.getenv('DEBUG', 'False')}")
         
         # Maak socket met SO_REUSEADDR optie
         socketserver.TCPServer.allow_reuse_address = True
         
-        with socketserver.TCPServer(("0.0.0.0", port), MovieGameHandler) as httpd:
-            logging.info(f"Server running on 0.0.0.0:{port}")
+        with socketserver.TCPServer((host, port), MovieGameHandler) as httpd:
+            domain = os.getenv('DOMAIN', 'localhost')
+            logging.info(f"Server running on {host}:{port}")
             logging.info(f"Try accessing via:")
+            logging.info(f"- http://{domain}:{port if port != 80 else ''}")
             logging.info(f"- http://localhost:{port}")
             logging.info(f"- http://127.0.0.1:{port}")
-            logging.info(f"- http://[your-ip]:{port}")
             httpd.serve_forever()
     except OSError as e:
         if e.errno == 98:  # Address already in use

@@ -1,0 +1,15 @@
+[Unit]
+Description=Guess The Movie Game
+After=network.target
+
+[Service]
+User=admtadj@cbsp.nl
+Group=domain users@cbsp.nl
+WorkingDirectory=/home/admtadj@cbsp.nl/Documents/GTM
+ExecStart=/usr/local/bin/gunicorn --workers 3 --bind 127.0.0.1:8888 wsgi:create_app
+Restart=on-failure
+Environment="PATH=/home/admtadj@cbsp.nl/.local/bin:/usr/local/bin:/usr/bin:/bin"
+Environment="PYTHONPATH=/home/admtadj@cbsp.nl/Documents/GTM"
+
+[Install]
+WantedBy=multi-user.target
