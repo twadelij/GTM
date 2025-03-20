@@ -39,34 +39,34 @@
    - Detailed analysis of browser console logs
    - Network tab analysis for request/response cycle
 
-### Volgende Stappen:
-1. **Data Structuur**:
-   - movies.json format valideren
-   - Data transformatie logica controleren
+### Next Steps:
+1. **Data Structure**:
+   - Validate movies.json format
+   - Check data transformation logic
 
 2. **Script Loading**:
-   - Script dependencies opnieuw evalueren
-   - Laadvolgorde optimaliseren
+   - Re-evaluate script dependencies
+   - Optimize loading order
 
 3. **Code Clean-up**:
-   - Resterende TMDB referenties verwijderen
-   - Code vereenvoudigen waar mogelijk
+   - Remove remaining TMDB references
+   - Simplify code where possible
 
-### Hoe Je Kunt Helpen:
+### How You Can Help:
 1. **Code Review**:
-   - Extra ogen op de data transformatie logica
-   - Review van de script laadvolgorde
+   - Extra eyes on the data transformation logic
+   - Review of the script loading order
 
 2. **Testing**:
-   - Verschillende browsers testen
-   - Network requests monitoren
-   - Console output analyseren
+   - Test on different browsers
+   - Monitor network requests
+   - Analyze console output
 
-3. **Documentatie**:
-   - Validatie van de data structuur
-   - Beschrijving van de verwachte game flow
+3. **Documentation**:
+   - Validation of the data structure
+   - Description of the expected game flow
 
-## Project Structuur
+## Project Structure
 ```
 GTM/
 ├── src/
@@ -78,11 +78,11 @@ GTM/
 │   │   ├── css/
 │   │   └── index.html
 │   └── server/          # Backend code
-├── data/               # Film data & afbeeldingen
-└── docs/              # Documentatie
+├── data/               # Movie data & images
+└── docs/              # Documentation
 ```
 
-## Volgende Sessie
-- Focus op data flow debugging
-- Browser console analyse
-- Stap-voor-stap validatie van de game initialisatie
+## Next Session
+- Focus on data flow debugging
+- Browser console analysis
+- Step-by-step validation of the game initialization
