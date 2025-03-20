@@ -36,3 +36,10 @@ backups/
 # IDE
 .idea/
 .vscode/
+
+# Server configuration
+nginx.conf
+
+# Utility scripts
+tools/run_health_check.sh
+tools/setup_cron.sh
