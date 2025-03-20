@@ -1,0 +1,1714 @@
+[2025-03-19 17:57:01 +0100] [1536257] [DEBUG] Current configuration:
+  config: ./gunicorn.conf.py
+  wsgi_app: None
+  bind: ['127.0.0.1:8888']
+  backlog: 2048
+  workers: 3
+  worker_class: sync
+  threads: 1
+  worker_connections: 1000
+  max_requests: 0
+  max_requests_jitter: 0
+  timeout: 30
+  graceful_timeout: 30
+  keepalive: 2
+  limit_request_line: 4094
+  limit_request_fields: 100
+  limit_request_field_size: 8190
+  reload: False
+  reload_engine: auto
+  reload_extra_files: []
+  spew: False
+  check_config: False
+  print_config: False
+  preload_app: False
+  sendfile: None
+  reuse_port: False
+  chdir: /home/admtadj@cbsp.nl/Documents/GTM
+  daemon: False
+  raw_env: []
+  pidfile: None
+  worker_tmp_dir: None
+  user: 1006767367
+  group: 1006600513
+  umask: 0
+  initgroups: False
+  tmp_upload_dir: None
+  secure_scheme_headers: {'X-FORWARDED-PROTOCOL': 'ssl', 'X-FORWARDED-PROTO': 'https', 'X-FORWARDED-SSL': 'on'}
+  forwarded_allow_ips: ['127.0.0.1']
+  accesslog: None
+  disable_redirect_access_to_syslog: False
+  access_log_format: %(h)s %(l)s %(u)s %(t)s "%(r)s" %(s)s %(b)s "%(f)s" "%(a)s"
+  errorlog: /home/admtadj@cbsp.nl/Documents/GTM/logs/gunicorn.log
+  loglevel: debug
+  capture_output: False
+  logger_class: gunicorn.glogging.Logger
+  logconfig: None
+  logconfig_dict: {}
+  logconfig_json: None
+  syslog_addr: udp://localhost:514
+  syslog: False
+  syslog_prefix: None
+  syslog_facility: user
+  enable_stdio_inheritance: False
+  statsd_host: None
+  dogstatsd_tags: 
+  statsd_prefix: 
+  proc_name: None
+  default_proc_name: wsgi:create_app
+  pythonpath: None
+  paste: None
+  on_starting: <function OnStarting.on_starting at 0x7f4002931f70>
+  on_reload: <function OnReload.on_reload at 0x7f40033d80d0>
+  when_ready: <function WhenReady.when_ready at 0x7f40033d81f0>
+  pre_fork: <function Prefork.pre_fork at 0x7f40033d8310>
+  post_fork: <function Postfork.post_fork at 0x7f40033d8430>
+  post_worker_init: <function PostWorkerInit.post_worker_init at 0x7f40033d8550>
+  worker_int: <function WorkerInt.worker_int at 0x7f40033d8670>
+  worker_abort: <function WorkerAbort.worker_abort at 0x7f40033d8790>
+  pre_exec: <function PreExec.pre_exec at 0x7f40033d88b0>
+  pre_request: <function PreRequest.pre_request at 0x7f40033d89d0>
+  post_request: <function PostRequest.post_request at 0x7f40033d8a60>
+  child_exit: <function ChildExit.child_exit at 0x7f40033d8b80>
+  worker_exit: <function WorkerExit.worker_exit at 0x7f40033d8ca0>
+  nworkers_changed: <function NumWorkersChanged.nworkers_changed at 0x7f40033d8dc0>
+  on_exit: <function OnExit.on_exit at 0x7f40033d8ee0>
+  ssl_context: <function NewSSLContext.ssl_context at 0x7f40033dd040>
+  proxy_protocol: False
+  proxy_allow_ips: ['127.0.0.1']
+  keyfile: None
+  certfile: None
+  ssl_version: 2
+  cert_reqs: 0
+  ca_certs: None
+  suppress_ragged_eofs: True
+  do_handshake_on_connect: False
+  ciphers: None
+  raw_paste_global_conf: []
+  strip_header_spaces: False
+[2025-03-19 17:57:01 +0100] [1536257] [INFO] Starting gunicorn 21.2.0
+[2025-03-19 17:57:01 +0100] [1536257] [DEBUG] Arbiter booted
+[2025-03-19 17:57:01 +0100] [1536257] [INFO] Listening at: http://127.0.0.1:8888 (1536257)
+[2025-03-19 17:57:01 +0100] [1536257] [INFO] Using worker: sync
+[2025-03-19 17:57:01 +0100] [1536259] [INFO] Booting worker with pid: 1536259
+[2025-03-19 17:57:01 +0100] [1536260] [INFO] Booting worker with pid: 1536260
+[2025-03-19 17:57:01 +0100] [1536261] [INFO] Booting worker with pid: 1536261
+[2025-03-19 17:57:01 +0100] [1536257] [DEBUG] 3 workers
+[2025-03-19 17:57:06 +0100] [1536260] [DEBUG] GET /
+[2025-03-19 17:57:06 +0100] [1536260] [ERROR] Error handling request /
+Traceback (most recent call last):
+  File "/home/admtadj@cbsp.nl/Documents/GTM/venv/lib64/python3.9/site-packages/gunicorn/workers/sync.py", line 135, in handle
+    self.handle_request(listener, req, client, addr)
+  File "/home/admtadj@cbsp.nl/Documents/GTM/venv/lib64/python3.9/site-packages/gunicorn/workers/sync.py", line 178, in handle_request
+    respiter = self.wsgi(environ, resp.start_response)
+TypeError: create_app() takes 0 positional arguments but 2 were given
+[2025-03-19 17:57:06 +0100] [1536261] [DEBUG] GET /favicon.ico
+[2025-03-19 17:57:06 +0100] [1536261] [ERROR] Error handling request /favicon.ico
+Traceback (most recent call last):
+  File "/home/admtadj@cbsp.nl/Documents/GTM/venv/lib64/python3.9/site-packages/gunicorn/workers/sync.py", line 135, in handle
+    self.handle_request(listener, req, client, addr)
+  File "/home/admtadj@cbsp.nl/Documents/GTM/venv/lib64/python3.9/site-packages/gunicorn/workers/sync.py", line 178, in handle_request
+    respiter = self.wsgi(environ, resp.start_response)
+TypeError: create_app() takes 0 positional arguments but 2 were given
+[2025-03-19 18:00:32 +0100] [1536260] [INFO] Worker exiting (pid: 1536260)
+[2025-03-19 18:00:32 +0100] [1536257] [INFO] Handling signal: term
+[2025-03-19 18:00:32 +0100] [1536261] [INFO] Worker exiting (pid: 1536261)
+[2025-03-19 18:00:32 +0100] [1536259] [INFO] Worker exiting (pid: 1536259)
+[2025-03-19 18:00:32 +0100] [1536257] [INFO] Shutting down: Master
+[2025-03-19 18:00:32 +0100] [1537592] [DEBUG] Current configuration:
+  config: ./gunicorn.conf.py
+  wsgi_app: None
+  bind: ['127.0.0.1:8888']
+  backlog: 2048
+  workers: 3
+  worker_class: sync
+  threads: 1
+  worker_connections: 1000
+  max_requests: 0
+  max_requests_jitter: 0
+  timeout: 30
+  graceful_timeout: 30
+  keepalive: 2
+  limit_request_line: 4094
+  limit_request_fields: 100
+  limit_request_field_size: 8190
+  reload: False
+  reload_engine: auto
+  reload_extra_files: []
+  spew: False
+  check_config: False
+  print_config: False
+  preload_app: False
+  sendfile: None
+  reuse_port: False
+  chdir: /home/admtadj@cbsp.nl/Documents/GTM
+  daemon: False
+  raw_env: []
+  pidfile: None
+  worker_tmp_dir: None
+  user: 1006767367
+  group: 1006600513
+  umask: 0
+  initgroups: False
+  tmp_upload_dir: None
+  secure_scheme_headers: {'X-FORWARDED-PROTOCOL': 'ssl', 'X-FORWARDED-PROTO': 'https', 'X-FORWARDED-SSL': 'on'}
+  forwarded_allow_ips: ['127.0.0.1']
+  accesslog: None
+  disable_redirect_access_to_syslog: False
+  access_log_format: %(h)s %(l)s %(u)s %(t)s "%(r)s" %(s)s %(b)s "%(f)s" "%(a)s"
+  errorlog: /home/admtadj@cbsp.nl/Documents/GTM/logs/gunicorn.log
+  loglevel: debug
+  capture_output: False
+  logger_class: gunicorn.glogging.Logger
+  logconfig: None
+  logconfig_dict: {}
+  logconfig_json: None
+  syslog_addr: udp://localhost:514
+  syslog: False
+  syslog_prefix: None
+  syslog_facility: user
+  enable_stdio_inheritance: False
+  statsd_host: None
+  dogstatsd_tags: 
+  statsd_prefix: 
+  proc_name: None
+  default_proc_name: wsgi:create_app
+  pythonpath: None
+  paste: None
+  on_starting: <function OnStarting.on_starting at 0x7f22c7ae8f70>
+  on_reload: <function OnReload.on_reload at 0x7f22c85870d0>
+  when_ready: <function WhenReady.when_ready at 0x7f22c85871f0>
+  pre_fork: <function Prefork.pre_fork at 0x7f22c8587310>
+  post_fork: <function Postfork.post_fork at 0x7f22c8587430>
+  post_worker_init: <function PostWorkerInit.post_worker_init at 0x7f22c8587550>
+  worker_int: <function WorkerInt.worker_int at 0x7f22c8587670>
+  worker_abort: <function WorkerAbort.worker_abort at 0x7f22c8587790>
+  pre_exec: <function PreExec.pre_exec at 0x7f22c85878b0>
+  pre_request: <function PreRequest.pre_request at 0x7f22c85879d0>
+  post_request: <function PostRequest.post_request at 0x7f22c8587a60>
+  child_exit: <function ChildExit.child_exit at 0x7f22c8587b80>
+  worker_exit: <function WorkerExit.worker_exit at 0x7f22c8587ca0>
+  nworkers_changed: <function NumWorkersChanged.nworkers_changed at 0x7f22c8587dc0>
+  on_exit: <function OnExit.on_exit at 0x7f22c8587ee0>
+  ssl_context: <function NewSSLContext.ssl_context at 0x7f22c858c040>
+  proxy_protocol: False
+  proxy_allow_ips: ['127.0.0.1']
+  keyfile: None
+  certfile: None
+  ssl_version: 2
+  cert_reqs: 0
+  ca_certs: None
+  suppress_ragged_eofs: True
+  do_handshake_on_connect: False
+  ciphers: None
+  raw_paste_global_conf: []
+  strip_header_spaces: False
+[2025-03-19 18:00:32 +0100] [1537592] [INFO] Starting gunicorn 21.2.0
+[2025-03-19 18:00:32 +0100] [1537592] [DEBUG] Arbiter booted
+[2025-03-19 18:00:32 +0100] [1537592] [INFO] Listening at: http://127.0.0.1:8888 (1537592)
+[2025-03-19 18:00:32 +0100] [1537592] [INFO] Using worker: sync
+[2025-03-19 18:00:32 +0100] [1537595] [INFO] Booting worker with pid: 1537595
+[2025-03-19 18:00:32 +0100] [1537596] [INFO] Booting worker with pid: 1537596
+[2025-03-19 18:00:32 +0100] [1537603] [INFO] Booting worker with pid: 1537603
+[2025-03-19 18:00:32 +0100] [1537592] [DEBUG] 3 workers
+[2025-03-19 18:00:48 +0100] [1537596] [DEBUG] HEAD /
+[2025-03-19 18:00:48 +0100] [1537596] [ERROR] Error handling request /
+Traceback (most recent call last):
+  File "/home/admtadj@cbsp.nl/Documents/GTM/venv/lib64/python3.9/site-packages/gunicorn/workers/sync.py", line 135, in handle
+    self.handle_request(listener, req, client, addr)
+  File "/home/admtadj@cbsp.nl/Documents/GTM/venv/lib64/python3.9/site-packages/gunicorn/workers/sync.py", line 178, in handle_request
+    respiter = self.wsgi(environ, resp.start_response)
+TypeError: create_app() takes 0 positional arguments but 2 were given
+[2025-03-19 18:01:15 +0100] [1537595] [INFO] Worker exiting (pid: 1537595)
+[2025-03-19 18:01:15 +0100] [1537592] [INFO] Handling signal: term
+[2025-03-19 18:01:15 +0100] [1537596] [INFO] Worker exiting (pid: 1537596)
+[2025-03-19 18:01:15 +0100] [1537603] [INFO] Worker exiting (pid: 1537603)
+[2025-03-19 18:01:15 +0100] [1537592] [INFO] Shutting down: Master
+[2025-03-19 18:01:16 +0100] [1537967] [DEBUG] Current configuration:
+  config: ./gunicorn.conf.py
+  wsgi_app: None
+  bind: ['127.0.0.1:8888']
+  backlog: 2048
+  workers: 3
+  worker_class: sync
+  threads: 1
+  worker_connections: 1000
+  max_requests: 0
+  max_requests_jitter: 0
+  timeout: 30
+  graceful_timeout: 30
+  keepalive: 2
+  limit_request_line: 4094
+  limit_request_fields: 100
+  limit_request_field_size: 8190
+  reload: False
+  reload_engine: auto
+  reload_extra_files: []
+  spew: False
+  check_config: False
+  print_config: False
+  preload_app: False
+  sendfile: None
+  reuse_port: False
+  chdir: /home/admtadj@cbsp.nl/Documents/GTM
+  daemon: False
+  raw_env: []
+  pidfile: None
+  worker_tmp_dir: None
+  user: 1006767367
+  group: 1006600513
+  umask: 0
+  initgroups: False
+  tmp_upload_dir: None
+  secure_scheme_headers: {'X-FORWARDED-PROTOCOL': 'ssl', 'X-FORWARDED-PROTO': 'https', 'X-FORWARDED-SSL': 'on'}
+  forwarded_allow_ips: ['127.0.0.1']
+  accesslog: None
+  disable_redirect_access_to_syslog: False
+  access_log_format: %(h)s %(l)s %(u)s %(t)s "%(r)s" %(s)s %(b)s "%(f)s" "%(a)s"
+  errorlog: /home/admtadj@cbsp.nl/Documents/GTM/logs/gunicorn.log
+  loglevel: debug
+  capture_output: False
+  logger_class: gunicorn.glogging.Logger
+  logconfig: None
+  logconfig_dict: {}
+  logconfig_json: None
+  syslog_addr: udp://localhost:514
+  syslog: False
+  syslog_prefix: None
+  syslog_facility: user
+  enable_stdio_inheritance: False
+  statsd_host: None
+  dogstatsd_tags: 
+  statsd_prefix: 
+  proc_name: None
+  default_proc_name: wsgi:create_app
+  pythonpath: None
+  paste: None
+  on_starting: <function OnStarting.on_starting at 0x7f4aaa51cf70>
+  on_reload: <function OnReload.on_reload at 0x7f4aaafd70d0>
+  when_ready: <function WhenReady.when_ready at 0x7f4aaafd71f0>
+  pre_fork: <function Prefork.pre_fork at 0x7f4aaafd7310>
+  post_fork: <function Postfork.post_fork at 0x7f4aaafd7430>
+  post_worker_init: <function PostWorkerInit.post_worker_init at 0x7f4aaafd7550>
+  worker_int: <function WorkerInt.worker_int at 0x7f4aaafd7670>
+  worker_abort: <function WorkerAbort.worker_abort at 0x7f4aaafd7790>
+  pre_exec: <function PreExec.pre_exec at 0x7f4aaafd78b0>
+  pre_request: <function PreRequest.pre_request at 0x7f4aaafd79d0>
+  post_request: <function PostRequest.post_request at 0x7f4aaafd7a60>
+  child_exit: <function ChildExit.child_exit at 0x7f4aaafd7b80>
+  worker_exit: <function WorkerExit.worker_exit at 0x7f4aaafd7ca0>
+  nworkers_changed: <function NumWorkersChanged.nworkers_changed at 0x7f4aaafd7dc0>
+  on_exit: <function OnExit.on_exit at 0x7f4aaafd7ee0>
+  ssl_context: <function NewSSLContext.ssl_context at 0x7f4aaafdd040>
+  proxy_protocol: False
+  proxy_allow_ips: ['127.0.0.1']
+  keyfile: None
+  certfile: None
+  ssl_version: 2
+  cert_reqs: 0
+  ca_certs: None
+  suppress_ragged_eofs: True
+  do_handshake_on_connect: False
+  ciphers: None
+  raw_paste_global_conf: []
+  strip_header_spaces: False
+[2025-03-19 18:01:16 +0100] [1537967] [INFO] Starting gunicorn 21.2.0
+[2025-03-19 18:01:16 +0100] [1537967] [DEBUG] Arbiter booted
+[2025-03-19 18:01:16 +0100] [1537967] [INFO] Listening at: http://127.0.0.1:8888 (1537967)
+[2025-03-19 18:01:16 +0100] [1537967] [INFO] Using worker: sync
+[2025-03-19 18:01:16 +0100] [1537969] [INFO] Booting worker with pid: 1537969
+[2025-03-19 18:01:16 +0100] [1537969] [DEBUG] Exception while loading the application
+Traceback (most recent call last):
+  File "/home/admtadj@cbsp.nl/Documents/GTM/venv/lib64/python3.9/site-packages/gunicorn/util.py", line 414, in import_app
+    app = getattr(mod, name)
+AttributeError: module 'wsgi' has no attribute 'create_app'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/admtadj@cbsp.nl/Documents/GTM/venv/lib64/python3.9/site-packages/gunicorn/arbiter.py", line 609, in spawn_worker
+    worker.init_process()
+  File "/home/admtadj@cbsp.nl/Documents/GTM/venv/lib64/python3.9/site-packages/gunicorn/workers/base.py", line 134, in init_process
+    self.load_wsgi()
+  File "/home/admtadj@cbsp.nl/Documents/GTM/venv/lib64/python3.9/site-packages/gunicorn/workers/base.py", line 146, in load_wsgi
+    self.wsgi = self.app.wsgi()
+  File "/home/admtadj@cbsp.nl/Documents/GTM/venv/lib64/python3.9/site-packages/gunicorn/app/base.py", line 67, in wsgi
+    self.callable = self.load()
+  File "/home/admtadj@cbsp.nl/Documents/GTM/venv/lib64/python3.9/site-packages/gunicorn/app/wsgiapp.py", line 58, in load
+    return self.load_wsgiapp()
+  File "/home/admtadj@cbsp.nl/Documents/GTM/venv/lib64/python3.9/site-packages/gunicorn/app/wsgiapp.py", line 48, in load_wsgiapp
+    return util.import_app(self.app_uri)
+  File "/home/admtadj@cbsp.nl/Documents/GTM/venv/lib64/python3.9/site-packages/gunicorn/util.py", line 418, in import_app
+    raise AppImportError("Failed to find attribute %r in %r." % (name, module))
+gunicorn.errors.AppImportError: Failed to find attribute 'create_app' in 'wsgi'.
+[2025-03-19 18:01:16 +0100] [1537969] [INFO] Worker exiting (pid: 1537969)
+[2025-03-19 18:01:16 +0100] [1537967] [ERROR] Worker (pid:1537969) exited with code 4
+[2025-03-19 18:01:16 +0100] [1537967] [ERROR] Shutting down: Master
+[2025-03-19 18:01:16 +0100] [1537967] [ERROR] Reason: App failed to load.
+[2025-03-19 18:01:16 +0100] [1537973] [DEBUG] Current configuration:
+  config: ./gunicorn.conf.py
+  wsgi_app: None
+  bind: ['127.0.0.1:8888']
+  backlog: 2048
+  workers: 3
+  worker_class: sync
+  threads: 1
+  worker_connections: 1000
+  max_requests: 0
+  max_requests_jitter: 0
+  timeout: 30
+  graceful_timeout: 30
+  keepalive: 2
+  limit_request_line: 4094
+  limit_request_fields: 100
+  limit_request_field_size: 8190
+  reload: False
+  reload_engine: auto
+  reload_extra_files: []
+  spew: False
+  check_config: False
+  print_config: False
+  preload_app: False
+  sendfile: None
+  reuse_port: False
+  chdir: /home/admtadj@cbsp.nl/Documents/GTM
+  daemon: False
+  raw_env: []
+  pidfile: None
+  worker_tmp_dir: None
+  user: 1006767367
+  group: 1006600513
+  umask: 0
+  initgroups: False
+  tmp_upload_dir: None
+  secure_scheme_headers: {'X-FORWARDED-PROTOCOL': 'ssl', 'X-FORWARDED-PROTO': 'https', 'X-FORWARDED-SSL': 'on'}
+  forwarded_allow_ips: ['127.0.0.1']
+  accesslog: None
+  disable_redirect_access_to_syslog: False
+  access_log_format: %(h)s %(l)s %(u)s %(t)s "%(r)s" %(s)s %(b)s "%(f)s" "%(a)s"
+  errorlog: /home/admtadj@cbsp.nl/Documents/GTM/logs/gunicorn.log
+  loglevel: debug
+  capture_output: False
+  logger_class: gunicorn.glogging.Logger
+  logconfig: None
+  logconfig_dict: {}
+  logconfig_json: None
+  syslog_addr: udp://localhost:514
+  syslog: False
+  syslog_prefix: None
+  syslog_facility: user
+  enable_stdio_inheritance: False
+  statsd_host: None
+  dogstatsd_tags: 
+  statsd_prefix: 
+  proc_name: None
+  default_proc_name: wsgi:create_app
+  pythonpath: None
+  paste: None
+  on_starting: <function OnStarting.on_starting at 0x7f6bbb711f70>
+  on_reload: <function OnReload.on_reload at 0x7f6bbc1980d0>
+  when_ready: <function WhenReady.when_ready at 0x7f6bbc1981f0>
+  pre_fork: <function Prefork.pre_fork at 0x7f6bbc198310>
+  post_fork: <function Postfork.post_fork at 0x7f6bbc198430>
+  post_worker_init: <function PostWorkerInit.post_worker_init at 0x7f6bbc198550>
+  worker_int: <function WorkerInt.worker_int at 0x7f6bbc198670>
+  worker_abort: <function WorkerAbort.worker_abort at 0x7f6bbc198790>
+  pre_exec: <function PreExec.pre_exec at 0x7f6bbc1988b0>
+  pre_request: <function PreRequest.pre_request at 0x7f6bbc1989d0>
+  post_request: <function PostRequest.post_request at 0x7f6bbc198a60>
+  child_exit: <function ChildExit.child_exit at 0x7f6bbc198b80>
+  worker_exit: <function WorkerExit.worker_exit at 0x7f6bbc198ca0>
+  nworkers_changed: <function NumWorkersChanged.nworkers_changed at 0x7f6bbc198dc0>
+  on_exit: <function OnExit.on_exit at 0x7f6bbc198ee0>
+  ssl_context: <function NewSSLContext.ssl_context at 0x7f6bbc19d040>
+  proxy_protocol: False
+  proxy_allow_ips: ['127.0.0.1']
+  keyfile: None
+  certfile: None
+  ssl_version: 2
+  cert_reqs: 0
+  ca_certs: None
+  suppress_ragged_eofs: True
+  do_handshake_on_connect: False
+  ciphers: None
+  raw_paste_global_conf: []
+  strip_header_spaces: False
+[2025-03-19 18:01:16 +0100] [1537973] [INFO] Starting gunicorn 21.2.0
+[2025-03-19 18:01:16 +0100] [1537973] [DEBUG] Arbiter booted
+[2025-03-19 18:01:16 +0100] [1537973] [INFO] Listening at: http://127.0.0.1:8888 (1537973)
+[2025-03-19 18:01:16 +0100] [1537973] [INFO] Using worker: sync
+[2025-03-19 18:01:16 +0100] [1537977] [INFO] Booting worker with pid: 1537977
+[2025-03-19 18:01:16 +0100] [1537977] [DEBUG] Exception while loading the application
+Traceback (most recent call last):
+  File "/home/admtadj@cbsp.nl/Documents/GTM/venv/lib64/python3.9/site-packages/gunicorn/util.py", line 414, in import_app
+    app = getattr(mod, name)
+AttributeError: module 'wsgi' has no attribute 'create_app'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/admtadj@cbsp.nl/Documents/GTM/venv/lib64/python3.9/site-packages/gunicorn/arbiter.py", line 609, in spawn_worker
+    worker.init_process()
+  File "/home/admtadj@cbsp.nl/Documents/GTM/venv/lib64/python3.9/site-packages/gunicorn/workers/base.py", line 134, in init_process
+    self.load_wsgi()
+  File "/home/admtadj@cbsp.nl/Documents/GTM/venv/lib64/python3.9/site-packages/gunicorn/workers/base.py", line 146, in load_wsgi
+    self.wsgi = self.app.wsgi()
+  File "/home/admtadj@cbsp.nl/Documents/GTM/venv/lib64/python3.9/site-packages/gunicorn/app/base.py", line 67, in wsgi
+    self.callable = self.load()
+  File "/home/admtadj@cbsp.nl/Documents/GTM/venv/lib64/python3.9/site-packages/gunicorn/app/wsgiapp.py", line 58, in load
+    return self.load_wsgiapp()
+  File "/home/admtadj@cbsp.nl/Documents/GTM/venv/lib64/python3.9/site-packages/gunicorn/app/wsgiapp.py", line 48, in load_wsgiapp
+    return util.import_app(self.app_uri)
+  File "/home/admtadj@cbsp.nl/Documents/GTM/venv/lib64/python3.9/site-packages/gunicorn/util.py", line 418, in import_app
+    raise AppImportError("Failed to find attribute %r in %r." % (name, module))
+gunicorn.errors.AppImportError: Failed to find attribute 'create_app' in 'wsgi'.
+[2025-03-19 18:01:16 +0100] [1537977] [INFO] Worker exiting (pid: 1537977)
+[2025-03-19 18:01:16 +0100] [1537978] [INFO] Booting worker with pid: 1537978
+[2025-03-19 18:01:16 +0100] [1537979] [INFO] Booting worker with pid: 1537979
+[2025-03-19 18:01:16 +0100] [1537973] [ERROR] Worker (pid:1537977) exited with code 4
+[2025-03-19 18:01:16 +0100] [1537978] [DEBUG] Exception while loading the application
+Traceback (most recent call last):
+  File "/home/admtadj@cbsp.nl/Documents/GTM/venv/lib64/python3.9/site-packages/gunicorn/util.py", line 414, in import_app
+    app = getattr(mod, name)
+AttributeError: module 'wsgi' has no attribute 'create_app'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/admtadj@cbsp.nl/Documents/GTM/venv/lib64/python3.9/site-packages/gunicorn/arbiter.py", line 609, in spawn_worker
+    worker.init_process()
+  File "/home/admtadj@cbsp.nl/Documents/GTM/venv/lib64/python3.9/site-packages/gunicorn/workers/base.py", line 134, in init_process
+    self.load_wsgi()
+  File "/home/admtadj@cbsp.nl/Documents/GTM/venv/lib64/python3.9/site-packages/gunicorn/workers/base.py", line 146, in load_wsgi
+    self.wsgi = self.app.wsgi()
+  File "/home/admtadj@cbsp.nl/Documents/GTM/venv/lib64/python3.9/site-packages/gunicorn/app/base.py", line 67, in wsgi
+    self.callable = self.load()
+  File "/home/admtadj@cbsp.nl/Documents/GTM/venv/lib64/python3.9/site-packages/gunicorn/app/wsgiapp.py", line 58, in load
+    return self.load_wsgiapp()
+  File "/home/admtadj@cbsp.nl/Documents/GTM/venv/lib64/python3.9/site-packages/gunicorn/app/wsgiapp.py", line 48, in load_wsgiapp
+    return util.import_app(self.app_uri)
+  File "/home/admtadj@cbsp.nl/Documents/GTM/venv/lib64/python3.9/site-packages/gunicorn/util.py", line 418, in import_app
+    raise AppImportError("Failed to find attribute %r in %r." % (name, module))
+gunicorn.errors.AppImportError: Failed to find attribute 'create_app' in 'wsgi'.
+[2025-03-19 18:01:16 +0100] [1537978] [INFO] Worker exiting (pid: 1537978)
+[2025-03-19 18:01:16 +0100] [1537979] [DEBUG] Exception while loading the application
+Traceback (most recent call last):
+  File "/home/admtadj@cbsp.nl/Documents/GTM/venv/lib64/python3.9/site-packages/gunicorn/util.py", line 414, in import_app
+    app = getattr(mod, name)
+AttributeError: module 'wsgi' has no attribute 'create_app'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/admtadj@cbsp.nl/Documents/GTM/venv/lib64/python3.9/site-packages/gunicorn/arbiter.py", line 609, in spawn_worker
+    worker.init_process()
+  File "/home/admtadj@cbsp.nl/Documents/GTM/venv/lib64/python3.9/site-packages/gunicorn/workers/base.py", line 134, in init_process
+    self.load_wsgi()
+  File "/home/admtadj@cbsp.nl/Documents/GTM/venv/lib64/python3.9/site-packages/gunicorn/workers/base.py", line 146, in load_wsgi
+    self.wsgi = self.app.wsgi()
+  File "/home/admtadj@cbsp.nl/Documents/GTM/venv/lib64/python3.9/site-packages/gunicorn/app/base.py", line 67, in wsgi
+    self.callable = self.load()
+  File "/home/admtadj@cbsp.nl/Documents/GTM/venv/lib64/python3.9/site-packages/gunicorn/app/wsgiapp.py", line 58, in load
+    return self.load_wsgiapp()
+  File "/home/admtadj@cbsp.nl/Documents/GTM/venv/lib64/python3.9/site-packages/gunicorn/app/wsgiapp.py", line 48, in load_wsgiapp
+    return util.import_app(self.app_uri)
+  File "/home/admtadj@cbsp.nl/Documents/GTM/venv/lib64/python3.9/site-packages/gunicorn/util.py", line 418, in import_app
+    raise AppImportError("Failed to find attribute %r in %r." % (name, module))
+gunicorn.errors.AppImportError: Failed to find attribute 'create_app' in 'wsgi'.
+[2025-03-19 18:01:16 +0100] [1537979] [INFO] Worker exiting (pid: 1537979)
+[2025-03-19 18:01:16 +0100] [1537973] [ERROR] Worker (pid:1537978) exited with code 4
+[2025-03-19 18:01:16 +0100] [1537973] [ERROR] Worker (pid:1537979) exited with code 4
+[2025-03-19 18:01:16 +0100] [1537980] [DEBUG] Current configuration:
+  config: ./gunicorn.conf.py
+  wsgi_app: None
+  bind: ['127.0.0.1:8888']
+  backlog: 2048
+  workers: 3
+  worker_class: sync
+  threads: 1
+  worker_connections: 1000
+  max_requests: 0
+  max_requests_jitter: 0
+  timeout: 30
+  graceful_timeout: 30
+  keepalive: 2
+  limit_request_line: 4094
+  limit_request_fields: 100
+  limit_request_field_size: 8190
+  reload: False
+  reload_engine: auto
+  reload_extra_files: []
+  spew: False
+  check_config: False
+  print_config: False
+  preload_app: False
+  sendfile: None
+  reuse_port: False
+  chdir: /home/admtadj@cbsp.nl/Documents/GTM
+  daemon: False
+  raw_env: []
+  pidfile: None
+  worker_tmp_dir: None
+  user: 1006767367
+  group: 1006600513
+  umask: 0
+  initgroups: False
+  tmp_upload_dir: None
+  secure_scheme_headers: {'X-FORWARDED-PROTOCOL': 'ssl', 'X-FORWARDED-PROTO': 'https', 'X-FORWARDED-SSL': 'on'}
+  forwarded_allow_ips: ['127.0.0.1']
+  accesslog: None
+  disable_redirect_access_to_syslog: False
+  access_log_format: %(h)s %(l)s %(u)s %(t)s "%(r)s" %(s)s %(b)s "%(f)s" "%(a)s"
+  errorlog: /home/admtadj@cbsp.nl/Documents/GTM/logs/gunicorn.log
+  loglevel: debug
+  capture_output: False
+  logger_class: gunicorn.glogging.Logger
+  logconfig: None
+  logconfig_dict: {}
+  logconfig_json: None
+  syslog_addr: udp://localhost:514
+  syslog: False
+  syslog_prefix: None
+  syslog_facility: user
+  enable_stdio_inheritance: False
+  statsd_host: None
+  dogstatsd_tags: 
+  statsd_prefix: 
+  proc_name: None
+  default_proc_name: wsgi:create_app
+  pythonpath: None
+  paste: None
+  on_starting: <function OnStarting.on_starting at 0x7f02d82f1f70>
+  on_reload: <function OnReload.on_reload at 0x7f02d8d970d0>
+  when_ready: <function WhenReady.when_ready at 0x7f02d8d971f0>
+  pre_fork: <function Prefork.pre_fork at 0x7f02d8d97310>
+  post_fork: <function Postfork.post_fork at 0x7f02d8d97430>
+  post_worker_init: <function PostWorkerInit.post_worker_init at 0x7f02d8d97550>
+  worker_int: <function WorkerInt.worker_int at 0x7f02d8d97670>
+  worker_abort: <function WorkerAbort.worker_abort at 0x7f02d8d97790>
+  pre_exec: <function PreExec.pre_exec at 0x7f02d8d978b0>
+  pre_request: <function PreRequest.pre_request at 0x7f02d8d979d0>
+  post_request: <function PostRequest.post_request at 0x7f02d8d97a60>
+  child_exit: <function ChildExit.child_exit at 0x7f02d8d97b80>
+  worker_exit: <function WorkerExit.worker_exit at 0x7f02d8d97ca0>
+  nworkers_changed: <function NumWorkersChanged.nworkers_changed at 0x7f02d8d97dc0>
+  on_exit: <function OnExit.on_exit at 0x7f02d8d97ee0>
+  ssl_context: <function NewSSLContext.ssl_context at 0x7f02d8d9d040>
+  proxy_protocol: False
+  proxy_allow_ips: ['127.0.0.1']
+  keyfile: None
+  certfile: None
+  ssl_version: 2
+  cert_reqs: 0
+  ca_certs: None
+  suppress_ragged_eofs: True
+  do_handshake_on_connect: False
+  ciphers: None
+  raw_paste_global_conf: []
+  strip_header_spaces: False
+[2025-03-19 18:01:16 +0100] [1537980] [INFO] Starting gunicorn 21.2.0
+[2025-03-19 18:01:16 +0100] [1537980] [DEBUG] Arbiter booted
+[2025-03-19 18:01:16 +0100] [1537980] [INFO] Listening at: http://127.0.0.1:8888 (1537980)
+[2025-03-19 18:01:16 +0100] [1537980] [INFO] Using worker: sync
+[2025-03-19 18:01:16 +0100] [1537989] [INFO] Booting worker with pid: 1537989
+[2025-03-19 18:01:16 +0100] [1537989] [DEBUG] Exception while loading the application
+Traceback (most recent call last):
+  File "/home/admtadj@cbsp.nl/Documents/GTM/venv/lib64/python3.9/site-packages/gunicorn/util.py", line 414, in import_app
+    app = getattr(mod, name)
+AttributeError: module 'wsgi' has no attribute 'create_app'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/admtadj@cbsp.nl/Documents/GTM/venv/lib64/python3.9/site-packages/gunicorn/arbiter.py", line 609, in spawn_worker
+    worker.init_process()
+  File "/home/admtadj@cbsp.nl/Documents/GTM/venv/lib64/python3.9/site-packages/gunicorn/workers/base.py", line 134, in init_process
+    self.load_wsgi()
+  File "/home/admtadj@cbsp.nl/Documents/GTM/venv/lib64/python3.9/site-packages/gunicorn/workers/base.py", line 146, in load_wsgi
+    self.wsgi = self.app.wsgi()
+  File "/home/admtadj@cbsp.nl/Documents/GTM/venv/lib64/python3.9/site-packages/gunicorn/app/base.py", line 67, in wsgi
+    self.callable = self.load()
+  File "/home/admtadj@cbsp.nl/Documents/GTM/venv/lib64/python3.9/site-packages/gunicorn/app/wsgiapp.py", line 58, in load
+    return self.load_wsgiapp()
+  File "/home/admtadj@cbsp.nl/Documents/GTM/venv/lib64/python3.9/site-packages/gunicorn/app/wsgiapp.py", line 48, in load_wsgiapp
+    return util.import_app(self.app_uri)
+  File "/home/admtadj@cbsp.nl/Documents/GTM/venv/lib64/python3.9/site-packages/gunicorn/util.py", line 418, in import_app
+    raise AppImportError("Failed to find attribute %r in %r." % (name, module))
+gunicorn.errors.AppImportError: Failed to find attribute 'create_app' in 'wsgi'.
+[2025-03-19 18:01:16 +0100] [1537989] [INFO] Worker exiting (pid: 1537989)
+[2025-03-19 18:01:16 +0100] [1537980] [ERROR] Worker (pid:1537989) exited with code 4
+[2025-03-19 18:01:16 +0100] [1537980] [ERROR] Shutting down: Master
+[2025-03-19 18:01:16 +0100] [1537980] [ERROR] Reason: App failed to load.
+[2025-03-19 18:01:17 +0100] [1537990] [DEBUG] Current configuration:
+  config: ./gunicorn.conf.py
+  wsgi_app: None
+  bind: ['127.0.0.1:8888']
+  backlog: 2048
+  workers: 3
+  worker_class: sync
+  threads: 1
+  worker_connections: 1000
+  max_requests: 0
+  max_requests_jitter: 0
+  timeout: 30
+  graceful_timeout: 30
+  keepalive: 2
+  limit_request_line: 4094
+  limit_request_fields: 100
+  limit_request_field_size: 8190
+  reload: False
+  reload_engine: auto
+  reload_extra_files: []
+  spew: False
+  check_config: False
+  print_config: False
+  preload_app: False
+  sendfile: None
+  reuse_port: False
+  chdir: /home/admtadj@cbsp.nl/Documents/GTM
+  daemon: False
+  raw_env: []
+  pidfile: None
+  worker_tmp_dir: None
+  user: 1006767367
+  group: 1006600513
+  umask: 0
+  initgroups: False
+  tmp_upload_dir: None
+  secure_scheme_headers: {'X-FORWARDED-PROTOCOL': 'ssl', 'X-FORWARDED-PROTO': 'https', 'X-FORWARDED-SSL': 'on'}
+  forwarded_allow_ips: ['127.0.0.1']
+  accesslog: None
+  disable_redirect_access_to_syslog: False
+  access_log_format: %(h)s %(l)s %(u)s %(t)s "%(r)s" %(s)s %(b)s "%(f)s" "%(a)s"
+  errorlog: /home/admtadj@cbsp.nl/Documents/GTM/logs/gunicorn.log
+  loglevel: debug
+  capture_output: False
+  logger_class: gunicorn.glogging.Logger
+  logconfig: None
+  logconfig_dict: {}
+  logconfig_json: None
+  syslog_addr: udp://localhost:514
+  syslog: False
+  syslog_prefix: None
+  syslog_facility: user
+  enable_stdio_inheritance: False
+  statsd_host: None
+  dogstatsd_tags: 
+  statsd_prefix: 
+  proc_name: None
+  default_proc_name: wsgi:create_app
+  pythonpath: None
+  paste: None
+  on_starting: <function OnStarting.on_starting at 0x7f73106ebf70>
+  on_reload: <function OnReload.on_reload at 0x7f73111980d0>
+  when_ready: <function WhenReady.when_ready at 0x7f73111981f0>
+  pre_fork: <function Prefork.pre_fork at 0x7f7311198310>
+  post_fork: <function Postfork.post_fork at 0x7f7311198430>
+  post_worker_init: <function PostWorkerInit.post_worker_init at 0x7f7311198550>
+  worker_int: <function WorkerInt.worker_int at 0x7f7311198670>
+  worker_abort: <function WorkerAbort.worker_abort at 0x7f7311198790>
+  pre_exec: <function PreExec.pre_exec at 0x7f73111988b0>
+  pre_request: <function PreRequest.pre_request at 0x7f73111989d0>
+  post_request: <function PostRequest.post_request at 0x7f7311198a60>
+  child_exit: <function ChildExit.child_exit at 0x7f7311198b80>
+  worker_exit: <function WorkerExit.worker_exit at 0x7f7311198ca0>
+  nworkers_changed: <function NumWorkersChanged.nworkers_changed at 0x7f7311198dc0>
+  on_exit: <function OnExit.on_exit at 0x7f7311198ee0>
+  ssl_context: <function NewSSLContext.ssl_context at 0x7f731119d040>
+  proxy_protocol: False
+  proxy_allow_ips: ['127.0.0.1']
+  keyfile: None
+  certfile: None
+  ssl_version: 2
+  cert_reqs: 0
+  ca_certs: None
+  suppress_ragged_eofs: True
+  do_handshake_on_connect: False
+  ciphers: None
+  raw_paste_global_conf: []
+  strip_header_spaces: False
+[2025-03-19 18:01:17 +0100] [1537990] [INFO] Starting gunicorn 21.2.0
+[2025-03-19 18:01:17 +0100] [1537990] [DEBUG] Arbiter booted
+[2025-03-19 18:01:17 +0100] [1537990] [INFO] Listening at: http://127.0.0.1:8888 (1537990)
+[2025-03-19 18:01:17 +0100] [1537990] [INFO] Using worker: sync
+[2025-03-19 18:01:17 +0100] [1537991] [INFO] Booting worker with pid: 1537991
+[2025-03-19 18:01:17 +0100] [1537991] [DEBUG] Exception while loading the application
+Traceback (most recent call last):
+  File "/home/admtadj@cbsp.nl/Documents/GTM/venv/lib64/python3.9/site-packages/gunicorn/util.py", line 414, in import_app
+    app = getattr(mod, name)
+AttributeError: module 'wsgi' has no attribute 'create_app'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/admtadj@cbsp.nl/Documents/GTM/venv/lib64/python3.9/site-packages/gunicorn/arbiter.py", line 609, in spawn_worker
+    worker.init_process()
+  File "/home/admtadj@cbsp.nl/Documents/GTM/venv/lib64/python3.9/site-packages/gunicorn/workers/base.py", line 134, in init_process
+    self.load_wsgi()
+  File "/home/admtadj@cbsp.nl/Documents/GTM/venv/lib64/python3.9/site-packages/gunicorn/workers/base.py", line 146, in load_wsgi
+    self.wsgi = self.app.wsgi()
+  File "/home/admtadj@cbsp.nl/Documents/GTM/venv/lib64/python3.9/site-packages/gunicorn/app/base.py", line 67, in wsgi
+    self.callable = self.load()
+  File "/home/admtadj@cbsp.nl/Documents/GTM/venv/lib64/python3.9/site-packages/gunicorn/app/wsgiapp.py", line 58, in load
+    return self.load_wsgiapp()
+  File "/home/admtadj@cbsp.nl/Documents/GTM/venv/lib64/python3.9/site-packages/gunicorn/app/wsgiapp.py", line 48, in load_wsgiapp
+    return util.import_app(self.app_uri)
+  File "/home/admtadj@cbsp.nl/Documents/GTM/venv/lib64/python3.9/site-packages/gunicorn/util.py", line 418, in import_app
+    raise AppImportError("Failed to find attribute %r in %r." % (name, module))
+gunicorn.errors.AppImportError: Failed to find attribute 'create_app' in 'wsgi'.
+[2025-03-19 18:01:17 +0100] [1537991] [INFO] Worker exiting (pid: 1537991)
+[2025-03-19 18:01:17 +0100] [1537990] [ERROR] Worker (pid:1537991) exited with code 4
+[2025-03-19 18:01:17 +0100] [1537990] [ERROR] Shutting down: Master
+[2025-03-19 18:01:17 +0100] [1537990] [ERROR] Reason: App failed to load.
+[2025-03-19 18:01:17 +0100] [1537992] [DEBUG] Current configuration:
+  config: ./gunicorn.conf.py
+  wsgi_app: None
+  bind: ['127.0.0.1:8888']
+  backlog: 2048
+  workers: 3
+  worker_class: sync
+  threads: 1
+  worker_connections: 1000
+  max_requests: 0
+  max_requests_jitter: 0
+  timeout: 30
+  graceful_timeout: 30
+  keepalive: 2
+  limit_request_line: 4094
+  limit_request_fields: 100
+  limit_request_field_size: 8190
+  reload: False
+  reload_engine: auto
+  reload_extra_files: []
+  spew: False
+  check_config: False
+  print_config: False
+  preload_app: False
+  sendfile: None
+  reuse_port: False
+  chdir: /home/admtadj@cbsp.nl/Documents/GTM
+  daemon: False
+  raw_env: []
+  pidfile: None
+  worker_tmp_dir: None
+  user: 1006767367
+  group: 1006600513
+  umask: 0
+  initgroups: False
+  tmp_upload_dir: None
+  secure_scheme_headers: {'X-FORWARDED-PROTOCOL': 'ssl', 'X-FORWARDED-PROTO': 'https', 'X-FORWARDED-SSL': 'on'}
+  forwarded_allow_ips: ['127.0.0.1']
+  accesslog: None
+  disable_redirect_access_to_syslog: False
+  access_log_format: %(h)s %(l)s %(u)s %(t)s "%(r)s" %(s)s %(b)s "%(f)s" "%(a)s"
+  errorlog: /home/admtadj@cbsp.nl/Documents/GTM/logs/gunicorn.log
+  loglevel: debug
+  capture_output: False
+  logger_class: gunicorn.glogging.Logger
+  logconfig: None
+  logconfig_dict: {}
+  logconfig_json: None
+  syslog_addr: udp://localhost:514
+  syslog: False
+  syslog_prefix: None
+  syslog_facility: user
+  enable_stdio_inheritance: False
+  statsd_host: None
+  dogstatsd_tags: 
+  statsd_prefix: 
+  proc_name: None
+  default_proc_name: wsgi:create_app
+  pythonpath: None
+  paste: None
+  on_starting: <function OnStarting.on_starting at 0x7fcf45cb2f70>
+  on_reload: <function OnReload.on_reload at 0x7fcf467570d0>
+  when_ready: <function WhenReady.when_ready at 0x7fcf467571f0>
+  pre_fork: <function Prefork.pre_fork at 0x7fcf46757310>
+  post_fork: <function Postfork.post_fork at 0x7fcf46757430>
+  post_worker_init: <function PostWorkerInit.post_worker_init at 0x7fcf46757550>
+  worker_int: <function WorkerInt.worker_int at 0x7fcf46757670>
+  worker_abort: <function WorkerAbort.worker_abort at 0x7fcf46757790>
+  pre_exec: <function PreExec.pre_exec at 0x7fcf467578b0>
+  pre_request: <function PreRequest.pre_request at 0x7fcf467579d0>
+  post_request: <function PostRequest.post_request at 0x7fcf46757a60>
+  child_exit: <function ChildExit.child_exit at 0x7fcf46757b80>
+  worker_exit: <function WorkerExit.worker_exit at 0x7fcf46757ca0>
+  nworkers_changed: <function NumWorkersChanged.nworkers_changed at 0x7fcf46757dc0>
+  on_exit: <function OnExit.on_exit at 0x7fcf46757ee0>
+  ssl_context: <function NewSSLContext.ssl_context at 0x7fcf4675d040>
+  proxy_protocol: False
+  proxy_allow_ips: ['127.0.0.1']
+  keyfile: None
+  certfile: None
+  ssl_version: 2
+  cert_reqs: 0
+  ca_certs: None
+  suppress_ragged_eofs: True
+  do_handshake_on_connect: False
+  ciphers: None
+  raw_paste_global_conf: []
+  strip_header_spaces: False
+[2025-03-19 18:01:17 +0100] [1537992] [INFO] Starting gunicorn 21.2.0
+[2025-03-19 18:01:17 +0100] [1537992] [DEBUG] Arbiter booted
+[2025-03-19 18:01:17 +0100] [1537992] [INFO] Listening at: http://127.0.0.1:8888 (1537992)
+[2025-03-19 18:01:17 +0100] [1537992] [INFO] Using worker: sync
+[2025-03-19 18:01:17 +0100] [1537994] [INFO] Booting worker with pid: 1537994
+[2025-03-19 18:01:17 +0100] [1537994] [DEBUG] Exception while loading the application
+Traceback (most recent call last):
+  File "/home/admtadj@cbsp.nl/Documents/GTM/venv/lib64/python3.9/site-packages/gunicorn/util.py", line 414, in import_app
+    app = getattr(mod, name)
+AttributeError: module 'wsgi' has no attribute 'create_app'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/admtadj@cbsp.nl/Documents/GTM/venv/lib64/python3.9/site-packages/gunicorn/arbiter.py", line 609, in spawn_worker
+    worker.init_process()
+  File "/home/admtadj@cbsp.nl/Documents/GTM/venv/lib64/python3.9/site-packages/gunicorn/workers/base.py", line 134, in init_process
+    self.load_wsgi()
+  File "/home/admtadj@cbsp.nl/Documents/GTM/venv/lib64/python3.9/site-packages/gunicorn/workers/base.py", line 146, in load_wsgi
+    self.wsgi = self.app.wsgi()
+  File "/home/admtadj@cbsp.nl/Documents/GTM/venv/lib64/python3.9/site-packages/gunicorn/app/base.py", line 67, in wsgi
+    self.callable = self.load()
+  File "/home/admtadj@cbsp.nl/Documents/GTM/venv/lib64/python3.9/site-packages/gunicorn/app/wsgiapp.py", line 58, in load
+    return self.load_wsgiapp()
+  File "/home/admtadj@cbsp.nl/Documents/GTM/venv/lib64/python3.9/site-packages/gunicorn/app/wsgiapp.py", line 48, in load_wsgiapp
+    return util.import_app(self.app_uri)
+  File "/home/admtadj@cbsp.nl/Documents/GTM/venv/lib64/python3.9/site-packages/gunicorn/util.py", line 418, in import_app
+    raise AppImportError("Failed to find attribute %r in %r." % (name, module))
+gunicorn.errors.AppImportError: Failed to find attribute 'create_app' in 'wsgi'.
+[2025-03-19 18:01:17 +0100] [1537994] [INFO] Worker exiting (pid: 1537994)
+[2025-03-19 18:01:17 +0100] [1537997] [INFO] Booting worker with pid: 1537997
+[2025-03-19 18:01:17 +0100] [1537992] [ERROR] Worker (pid:1537994) exited with code 4
+[2025-03-19 18:01:17 +0100] [1537997] [DEBUG] Exception while loading the application
+Traceback (most recent call last):
+  File "/home/admtadj@cbsp.nl/Documents/GTM/venv/lib64/python3.9/site-packages/gunicorn/util.py", line 414, in import_app
+    app = getattr(mod, name)
+AttributeError: module 'wsgi' has no attribute 'create_app'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/admtadj@cbsp.nl/Documents/GTM/venv/lib64/python3.9/site-packages/gunicorn/arbiter.py", line 609, in spawn_worker
+    worker.init_process()
+  File "/home/admtadj@cbsp.nl/Documents/GTM/venv/lib64/python3.9/site-packages/gunicorn/workers/base.py", line 134, in init_process
+    self.load_wsgi()
+  File "/home/admtadj@cbsp.nl/Documents/GTM/venv/lib64/python3.9/site-packages/gunicorn/workers/base.py", line 146, in load_wsgi
+    self.wsgi = self.app.wsgi()
+  File "/home/admtadj@cbsp.nl/Documents/GTM/venv/lib64/python3.9/site-packages/gunicorn/app/base.py", line 67, in wsgi
+    self.callable = self.load()
+  File "/home/admtadj@cbsp.nl/Documents/GTM/venv/lib64/python3.9/site-packages/gunicorn/app/wsgiapp.py", line 58, in load
+    return self.load_wsgiapp()
+  File "/home/admtadj@cbsp.nl/Documents/GTM/venv/lib64/python3.9/site-packages/gunicorn/app/wsgiapp.py", line 48, in load_wsgiapp
+    return util.import_app(self.app_uri)
+  File "/home/admtadj@cbsp.nl/Documents/GTM/venv/lib64/python3.9/site-packages/gunicorn/util.py", line 418, in import_app
+    raise AppImportError("Failed to find attribute %r in %r." % (name, module))
+gunicorn.errors.AppImportError: Failed to find attribute 'create_app' in 'wsgi'.
+[2025-03-19 18:01:17 +0100] [1537997] [INFO] Worker exiting (pid: 1537997)
+[2025-03-19 18:01:17 +0100] [1537992] [ERROR] Worker (pid:1537997) exited with code 4
+[2025-03-19 18:01:46 +0100] [1538213] [DEBUG] Current configuration:
+  config: ./gunicorn.conf.py
+  wsgi_app: None
+  bind: ['127.0.0.1:8888']
+  backlog: 2048
+  workers: 3
+  worker_class: sync
+  threads: 1
+  worker_connections: 1000
+  max_requests: 0
+  max_requests_jitter: 0
+  timeout: 30
+  graceful_timeout: 30
+  keepalive: 2
+  limit_request_line: 4094
+  limit_request_fields: 100
+  limit_request_field_size: 8190
+  reload: False
+  reload_engine: auto
+  reload_extra_files: []
+  spew: False
+  check_config: False
+  print_config: False
+  preload_app: False
+  sendfile: None
+  reuse_port: False
+  chdir: /home/admtadj@cbsp.nl/Documents/GTM
+  daemon: False
+  raw_env: []
+  pidfile: None
+  worker_tmp_dir: None
+  user: 1006767367
+  group: 1006600513
+  umask: 0
+  initgroups: False
+  tmp_upload_dir: None
+  secure_scheme_headers: {'X-FORWARDED-PROTOCOL': 'ssl', 'X-FORWARDED-PROTO': 'https', 'X-FORWARDED-SSL': 'on'}
+  forwarded_allow_ips: ['127.0.0.1']
+  accesslog: None
+  disable_redirect_access_to_syslog: False
+  access_log_format: %(h)s %(l)s %(u)s %(t)s "%(r)s" %(s)s %(b)s "%(f)s" "%(a)s"
+  errorlog: /home/admtadj@cbsp.nl/Documents/GTM/logs/gunicorn.log
+  loglevel: debug
+  capture_output: False
+  logger_class: gunicorn.glogging.Logger
+  logconfig: None
+  logconfig_dict: {}
+  logconfig_json: None
+  syslog_addr: udp://localhost:514
+  syslog: False
+  syslog_prefix: None
+  syslog_facility: user
+  enable_stdio_inheritance: False
+  statsd_host: None
+  dogstatsd_tags: 
+  statsd_prefix: 
+  proc_name: None
+  default_proc_name: wsgi:application
+  pythonpath: None
+  paste: None
+  on_starting: <function OnStarting.on_starting at 0x7fb89eec1f70>
+  on_reload: <function OnReload.on_reload at 0x7fb89f9580d0>
+  when_ready: <function WhenReady.when_ready at 0x7fb89f9581f0>
+  pre_fork: <function Prefork.pre_fork at 0x7fb89f958310>
+  post_fork: <function Postfork.post_fork at 0x7fb89f958430>
+  post_worker_init: <function PostWorkerInit.post_worker_init at 0x7fb89f958550>
+  worker_int: <function WorkerInt.worker_int at 0x7fb89f958670>
+  worker_abort: <function WorkerAbort.worker_abort at 0x7fb89f958790>
+  pre_exec: <function PreExec.pre_exec at 0x7fb89f9588b0>
+  pre_request: <function PreRequest.pre_request at 0x7fb89f9589d0>
+  post_request: <function PostRequest.post_request at 0x7fb89f958a60>
+  child_exit: <function ChildExit.child_exit at 0x7fb89f958b80>
+  worker_exit: <function WorkerExit.worker_exit at 0x7fb89f958ca0>
+  nworkers_changed: <function NumWorkersChanged.nworkers_changed at 0x7fb89f958dc0>
+  on_exit: <function OnExit.on_exit at 0x7fb89f958ee0>
+  ssl_context: <function NewSSLContext.ssl_context at 0x7fb89f95d040>
+  proxy_protocol: False
+  proxy_allow_ips: ['127.0.0.1']
+  keyfile: None
+  certfile: None
+  ssl_version: 2
+  cert_reqs: 0
+  ca_certs: None
+  suppress_ragged_eofs: True
+  do_handshake_on_connect: False
+  ciphers: None
+  raw_paste_global_conf: []
+  strip_header_spaces: False
+[2025-03-19 18:01:46 +0100] [1538213] [INFO] Starting gunicorn 21.2.0
+[2025-03-19 18:01:46 +0100] [1538213] [DEBUG] Arbiter booted
+[2025-03-19 18:01:46 +0100] [1538213] [INFO] Listening at: http://127.0.0.1:8888 (1538213)
+[2025-03-19 18:01:46 +0100] [1538213] [INFO] Using worker: sync
+[2025-03-19 18:01:46 +0100] [1538215] [INFO] Booting worker with pid: 1538215
+[2025-03-19 18:01:46 +0100] [1538215] [DEBUG] Exception while loading the application
+Traceback (most recent call last):
+  File "/home/admtadj@cbsp.nl/Documents/GTM/venv/lib64/python3.9/site-packages/gunicorn/arbiter.py", line 609, in spawn_worker
+    worker.init_process()
+  File "/home/admtadj@cbsp.nl/Documents/GTM/venv/lib64/python3.9/site-packages/gunicorn/workers/base.py", line 134, in init_process
+    self.load_wsgi()
+  File "/home/admtadj@cbsp.nl/Documents/GTM/venv/lib64/python3.9/site-packages/gunicorn/workers/base.py", line 146, in load_wsgi
+    self.wsgi = self.app.wsgi()
+  File "/home/admtadj@cbsp.nl/Documents/GTM/venv/lib64/python3.9/site-packages/gunicorn/app/base.py", line 67, in wsgi
+    self.callable = self.load()
+  File "/home/admtadj@cbsp.nl/Documents/GTM/venv/lib64/python3.9/site-packages/gunicorn/app/wsgiapp.py", line 58, in load
+    return self.load_wsgiapp()
+  File "/home/admtadj@cbsp.nl/Documents/GTM/venv/lib64/python3.9/site-packages/gunicorn/app/wsgiapp.py", line 48, in load_wsgiapp
+    return util.import_app(self.app_uri)
+  File "/home/admtadj@cbsp.nl/Documents/GTM/venv/lib64/python3.9/site-packages/gunicorn/util.py", line 442, in import_app
+    raise AppImportError("Application object must be callable.")
+gunicorn.errors.AppImportError: Application object must be callable.
+[2025-03-19 18:01:46 +0100] [1538215] [INFO] Worker exiting (pid: 1538215)
+[2025-03-19 18:01:46 +0100] [1538213] [ERROR] Worker (pid:1538215) exited with code 4
+[2025-03-19 18:01:46 +0100] [1538213] [ERROR] Shutting down: Master
+[2025-03-19 18:01:46 +0100] [1538213] [ERROR] Reason: App failed to load.
+[2025-03-19 18:01:46 +0100] [1538216] [DEBUG] Current configuration:
+  config: ./gunicorn.conf.py
+  wsgi_app: None
+  bind: ['127.0.0.1:8888']
+  backlog: 2048
+  workers: 3
+  worker_class: sync
+  threads: 1
+  worker_connections: 1000
+  max_requests: 0
+  max_requests_jitter: 0
+  timeout: 30
+  graceful_timeout: 30
+  keepalive: 2
+  limit_request_line: 4094
+  limit_request_fields: 100
+  limit_request_field_size: 8190
+  reload: False
+  reload_engine: auto
+  reload_extra_files: []
+  spew: False
+  check_config: False
+  print_config: False
+  preload_app: False
+  sendfile: None
+  reuse_port: False
+  chdir: /home/admtadj@cbsp.nl/Documents/GTM
+  daemon: False
+  raw_env: []
+  pidfile: None
+  worker_tmp_dir: None
+  user: 1006767367
+  group: 1006600513
+  umask: 0
+  initgroups: False
+  tmp_upload_dir: None
+  secure_scheme_headers: {'X-FORWARDED-PROTOCOL': 'ssl', 'X-FORWARDED-PROTO': 'https', 'X-FORWARDED-SSL': 'on'}
+  forwarded_allow_ips: ['127.0.0.1']
+  accesslog: None
+  disable_redirect_access_to_syslog: False
+  access_log_format: %(h)s %(l)s %(u)s %(t)s "%(r)s" %(s)s %(b)s "%(f)s" "%(a)s"
+  errorlog: /home/admtadj@cbsp.nl/Documents/GTM/logs/gunicorn.log
+  loglevel: debug
+  capture_output: False
+  logger_class: gunicorn.glogging.Logger
+  logconfig: None
+  logconfig_dict: {}
+  logconfig_json: None
+  syslog_addr: udp://localhost:514
+  syslog: False
+  syslog_prefix: None
+  syslog_facility: user
+  enable_stdio_inheritance: False
+  statsd_host: None
+  dogstatsd_tags: 
+  statsd_prefix: 
+  proc_name: None
+  default_proc_name: wsgi:application
+  pythonpath: None
+  paste: None
+  on_starting: <function OnStarting.on_starting at 0x7f332d77bf70>
+  on_reload: <function OnReload.on_reload at 0x7f333b7570d0>
+  when_ready: <function WhenReady.when_ready at 0x7f333b7571f0>
+  pre_fork: <function Prefork.pre_fork at 0x7f333b757310>
+  post_fork: <function Postfork.post_fork at 0x7f333b757430>
+  post_worker_init: <function PostWorkerInit.post_worker_init at 0x7f333b757550>
+  worker_int: <function WorkerInt.worker_int at 0x7f333b757670>
+  worker_abort: <function WorkerAbort.worker_abort at 0x7f333b757790>
+  pre_exec: <function PreExec.pre_exec at 0x7f333b7578b0>
+  pre_request: <function PreRequest.pre_request at 0x7f333b7579d0>
+  post_request: <function PostRequest.post_request at 0x7f333b757a60>
+  child_exit: <function ChildExit.child_exit at 0x7f333b757b80>
+  worker_exit: <function WorkerExit.worker_exit at 0x7f333b757ca0>
+  nworkers_changed: <function NumWorkersChanged.nworkers_changed at 0x7f333b757dc0>
+  on_exit: <function OnExit.on_exit at 0x7f333b757ee0>
+  ssl_context: <function NewSSLContext.ssl_context at 0x7f333b75d040>
+  proxy_protocol: False
+  proxy_allow_ips: ['127.0.0.1']
+  keyfile: None
+  certfile: None
+  ssl_version: 2
+  cert_reqs: 0
+  ca_certs: None
+  suppress_ragged_eofs: True
+  do_handshake_on_connect: False
+  ciphers: None
+  raw_paste_global_conf: []
+  strip_header_spaces: False
+[2025-03-19 18:01:46 +0100] [1538216] [INFO] Starting gunicorn 21.2.0
+[2025-03-19 18:01:46 +0100] [1538216] [DEBUG] Arbiter booted
+[2025-03-19 18:01:46 +0100] [1538216] [INFO] Listening at: http://127.0.0.1:8888 (1538216)
+[2025-03-19 18:01:46 +0100] [1538216] [INFO] Using worker: sync
+[2025-03-19 18:01:46 +0100] [1538218] [INFO] Booting worker with pid: 1538218
+[2025-03-19 18:01:46 +0100] [1538219] [INFO] Booting worker with pid: 1538219
+[2025-03-19 18:01:46 +0100] [1538218] [DEBUG] Exception while loading the application
+Traceback (most recent call last):
+  File "/home/admtadj@cbsp.nl/Documents/GTM/venv/lib64/python3.9/site-packages/gunicorn/arbiter.py", line 609, in spawn_worker
+    worker.init_process()
+  File "/home/admtadj@cbsp.nl/Documents/GTM/venv/lib64/python3.9/site-packages/gunicorn/workers/base.py", line 134, in init_process
+    self.load_wsgi()
+  File "/home/admtadj@cbsp.nl/Documents/GTM/venv/lib64/python3.9/site-packages/gunicorn/workers/base.py", line 146, in load_wsgi
+    self.wsgi = self.app.wsgi()
+  File "/home/admtadj@cbsp.nl/Documents/GTM/venv/lib64/python3.9/site-packages/gunicorn/app/base.py", line 67, in wsgi
+    self.callable = self.load()
+  File "/home/admtadj@cbsp.nl/Documents/GTM/venv/lib64/python3.9/site-packages/gunicorn/app/wsgiapp.py", line 58, in load
+    return self.load_wsgiapp()
+  File "/home/admtadj@cbsp.nl/Documents/GTM/venv/lib64/python3.9/site-packages/gunicorn/app/wsgiapp.py", line 48, in load_wsgiapp
+    return util.import_app(self.app_uri)
+  File "/home/admtadj@cbsp.nl/Documents/GTM/venv/lib64/python3.9/site-packages/gunicorn/util.py", line 442, in import_app
+    raise AppImportError("Application object must be callable.")
+gunicorn.errors.AppImportError: Application object must be callable.
+[2025-03-19 18:01:46 +0100] [1538218] [INFO] Worker exiting (pid: 1538218)
+[2025-03-19 18:01:46 +0100] [1538219] [DEBUG] Exception while loading the application
+Traceback (most recent call last):
+  File "/home/admtadj@cbsp.nl/Documents/GTM/venv/lib64/python3.9/site-packages/gunicorn/arbiter.py", line 609, in spawn_worker
+    worker.init_process()
+  File "/home/admtadj@cbsp.nl/Documents/GTM/venv/lib64/python3.9/site-packages/gunicorn/workers/base.py", line 134, in init_process
+    self.load_wsgi()
+  File "/home/admtadj@cbsp.nl/Documents/GTM/venv/lib64/python3.9/site-packages/gunicorn/workers/base.py", line 146, in load_wsgi
+    self.wsgi = self.app.wsgi()
+  File "/home/admtadj@cbsp.nl/Documents/GTM/venv/lib64/python3.9/site-packages/gunicorn/app/base.py", line 67, in wsgi
+    self.callable = self.load()
+  File "/home/admtadj@cbsp.nl/Documents/GTM/venv/lib64/python3.9/site-packages/gunicorn/app/wsgiapp.py", line 58, in load
+    return self.load_wsgiapp()
+  File "/home/admtadj@cbsp.nl/Documents/GTM/venv/lib64/python3.9/site-packages/gunicorn/app/wsgiapp.py", line 48, in load_wsgiapp
+    return util.import_app(self.app_uri)
+  File "/home/admtadj@cbsp.nl/Documents/GTM/venv/lib64/python3.9/site-packages/gunicorn/util.py", line 442, in import_app
+    raise AppImportError("Application object must be callable.")
+gunicorn.errors.AppImportError: Application object must be callable.
+[2025-03-19 18:01:46 +0100] [1538219] [INFO] Worker exiting (pid: 1538219)
+[2025-03-19 18:01:46 +0100] [1538216] [ERROR] Worker (pid:1538218) exited with code 4
+[2025-03-19 18:01:46 +0100] [1538216] [ERROR] Worker (pid:1538219) was sent SIGTERM!
+[2025-03-19 18:01:46 +0100] [1538216] [ERROR] Shutting down: Master
+[2025-03-19 18:01:46 +0100] [1538216] [ERROR] Reason: App failed to load.
+[2025-03-19 18:01:47 +0100] [1538220] [DEBUG] Current configuration:
+  config: ./gunicorn.conf.py
+  wsgi_app: None
+  bind: ['127.0.0.1:8888']
+  backlog: 2048
+  workers: 3
+  worker_class: sync
+  threads: 1
+  worker_connections: 1000
+  max_requests: 0
+  max_requests_jitter: 0
+  timeout: 30
+  graceful_timeout: 30
+  keepalive: 2
+  limit_request_line: 4094
+  limit_request_fields: 100
+  limit_request_field_size: 8190
+  reload: False
+  reload_engine: auto
+  reload_extra_files: []
+  spew: False
+  check_config: False
+  print_config: False
+  preload_app: False
+  sendfile: None
+  reuse_port: False
+  chdir: /home/admtadj@cbsp.nl/Documents/GTM
+  daemon: False
+  raw_env: []
+  pidfile: None
+  worker_tmp_dir: None
+  user: 1006767367
+  group: 1006600513
+  umask: 0
+  initgroups: False
+  tmp_upload_dir: None
+  secure_scheme_headers: {'X-FORWARDED-PROTOCOL': 'ssl', 'X-FORWARDED-PROTO': 'https', 'X-FORWARDED-SSL': 'on'}
+  forwarded_allow_ips: ['127.0.0.1']
+  accesslog: None
+  disable_redirect_access_to_syslog: False
+  access_log_format: %(h)s %(l)s %(u)s %(t)s "%(r)s" %(s)s %(b)s "%(f)s" "%(a)s"
+  errorlog: /home/admtadj@cbsp.nl/Documents/GTM/logs/gunicorn.log
+  loglevel: debug
+  capture_output: False
+  logger_class: gunicorn.glogging.Logger
+  logconfig: None
+  logconfig_dict: {}
+  logconfig_json: None
+  syslog_addr: udp://localhost:514
+  syslog: False
+  syslog_prefix: None
+  syslog_facility: user
+  enable_stdio_inheritance: False
+  statsd_host: None
+  dogstatsd_tags: 
+  statsd_prefix: 
+  proc_name: None
+  default_proc_name: wsgi:application
+  pythonpath: None
+  paste: None
+  on_starting: <function OnStarting.on_starting at 0x7fb502140f70>
+  on_reload: <function OnReload.on_reload at 0x7fb502bd80d0>
+  when_ready: <function WhenReady.when_ready at 0x7fb502bd81f0>
+  pre_fork: <function Prefork.pre_fork at 0x7fb502bd8310>
+  post_fork: <function Postfork.post_fork at 0x7fb502bd8430>
+  post_worker_init: <function PostWorkerInit.post_worker_init at 0x7fb502bd8550>
+  worker_int: <function WorkerInt.worker_int at 0x7fb502bd8670>
+  worker_abort: <function WorkerAbort.worker_abort at 0x7fb502bd8790>
+  pre_exec: <function PreExec.pre_exec at 0x7fb502bd88b0>
+  pre_request: <function PreRequest.pre_request at 0x7fb502bd89d0>
+  post_request: <function PostRequest.post_request at 0x7fb502bd8a60>
+  child_exit: <function ChildExit.child_exit at 0x7fb502bd8b80>
+  worker_exit: <function WorkerExit.worker_exit at 0x7fb502bd8ca0>
+  nworkers_changed: <function NumWorkersChanged.nworkers_changed at 0x7fb502bd8dc0>
+  on_exit: <function OnExit.on_exit at 0x7fb502bd8ee0>
+  ssl_context: <function NewSSLContext.ssl_context at 0x7fb502bdd040>
+  proxy_protocol: False
+  proxy_allow_ips: ['127.0.0.1']
+  keyfile: None
+  certfile: None
+  ssl_version: 2
+  cert_reqs: 0
+  ca_certs: None
+  suppress_ragged_eofs: True
+  do_handshake_on_connect: False
+  ciphers: None
+  raw_paste_global_conf: []
+  strip_header_spaces: False
+[2025-03-19 18:01:47 +0100] [1538220] [INFO] Starting gunicorn 21.2.0
+[2025-03-19 18:01:47 +0100] [1538220] [DEBUG] Arbiter booted
+[2025-03-19 18:01:47 +0100] [1538220] [INFO] Listening at: http://127.0.0.1:8888 (1538220)
+[2025-03-19 18:01:47 +0100] [1538220] [INFO] Using worker: sync
+[2025-03-19 18:01:47 +0100] [1538225] [INFO] Booting worker with pid: 1538225
+[2025-03-19 18:01:47 +0100] [1538225] [DEBUG] Exception while loading the application
+Traceback (most recent call last):
+  File "/home/admtadj@cbsp.nl/Documents/GTM/venv/lib64/python3.9/site-packages/gunicorn/arbiter.py", line 609, in spawn_worker
+    worker.init_process()
+  File "/home/admtadj@cbsp.nl/Documents/GTM/venv/lib64/python3.9/site-packages/gunicorn/workers/base.py", line 134, in init_process
+    self.load_wsgi()
+  File "/home/admtadj@cbsp.nl/Documents/GTM/venv/lib64/python3.9/site-packages/gunicorn/workers/base.py", line 146, in load_wsgi
+    self.wsgi = self.app.wsgi()
+  File "/home/admtadj@cbsp.nl/Documents/GTM/venv/lib64/python3.9/site-packages/gunicorn/app/base.py", line 67, in wsgi
+    self.callable = self.load()
+  File "/home/admtadj@cbsp.nl/Documents/GTM/venv/lib64/python3.9/site-packages/gunicorn/app/wsgiapp.py", line 58, in load
+    return self.load_wsgiapp()
+  File "/home/admtadj@cbsp.nl/Documents/GTM/venv/lib64/python3.9/site-packages/gunicorn/app/wsgiapp.py", line 48, in load_wsgiapp
+    return util.import_app(self.app_uri)
+  File "/home/admtadj@cbsp.nl/Documents/GTM/venv/lib64/python3.9/site-packages/gunicorn/util.py", line 442, in import_app
+    raise AppImportError("Application object must be callable.")
+gunicorn.errors.AppImportError: Application object must be callable.
+[2025-03-19 18:01:47 +0100] [1538225] [INFO] Worker exiting (pid: 1538225)
+[2025-03-19 18:01:47 +0100] [1538230] [INFO] Booting worker with pid: 1538230
+[2025-03-19 18:01:47 +0100] [1538220] [ERROR] Worker (pid:1538225) exited with code 4
+[2025-03-19 18:01:47 +0100] [1538230] [DEBUG] Exception while loading the application
+Traceback (most recent call last):
+  File "/home/admtadj@cbsp.nl/Documents/GTM/venv/lib64/python3.9/site-packages/gunicorn/arbiter.py", line 609, in spawn_worker
+    worker.init_process()
+  File "/home/admtadj@cbsp.nl/Documents/GTM/venv/lib64/python3.9/site-packages/gunicorn/workers/base.py", line 134, in init_process
+    self.load_wsgi()
+  File "/home/admtadj@cbsp.nl/Documents/GTM/venv/lib64/python3.9/site-packages/gunicorn/workers/base.py", line 146, in load_wsgi
+    self.wsgi = self.app.wsgi()
+  File "/home/admtadj@cbsp.nl/Documents/GTM/venv/lib64/python3.9/site-packages/gunicorn/app/base.py", line 67, in wsgi
+    self.callable = self.load()
+  File "/home/admtadj@cbsp.nl/Documents/GTM/venv/lib64/python3.9/site-packages/gunicorn/app/wsgiapp.py", line 58, in load
+    return self.load_wsgiapp()
+  File "/home/admtadj@cbsp.nl/Documents/GTM/venv/lib64/python3.9/site-packages/gunicorn/app/wsgiapp.py", line 48, in load_wsgiapp
+    return util.import_app(self.app_uri)
+  File "/home/admtadj@cbsp.nl/Documents/GTM/venv/lib64/python3.9/site-packages/gunicorn/util.py", line 442, in import_app
+    raise AppImportError("Application object must be callable.")
+gunicorn.errors.AppImportError: Application object must be callable.
+[2025-03-19 18:01:47 +0100] [1538230] [INFO] Worker exiting (pid: 1538230)
+[2025-03-19 18:01:47 +0100] [1538220] [ERROR] Worker (pid:1538230) exited with code 4
+[2025-03-19 18:01:47 +0100] [1538231] [DEBUG] Current configuration:
+  config: ./gunicorn.conf.py
+  wsgi_app: None
+  bind: ['127.0.0.1:8888']
+  backlog: 2048
+  workers: 3
+  worker_class: sync
+  threads: 1
+  worker_connections: 1000
+  max_requests: 0
+  max_requests_jitter: 0
+  timeout: 30
+  graceful_timeout: 30
+  keepalive: 2
+  limit_request_line: 4094
+  limit_request_fields: 100
+  limit_request_field_size: 8190
+  reload: False
+  reload_engine: auto
+  reload_extra_files: []
+  spew: False
+  check_config: False
+  print_config: False
+  preload_app: False
+  sendfile: None
+  reuse_port: False
+  chdir: /home/admtadj@cbsp.nl/Documents/GTM
+  daemon: False
+  raw_env: []
+  pidfile: None
+  worker_tmp_dir: None
+  user: 1006767367
+  group: 1006600513
+  umask: 0
+  initgroups: False
+  tmp_upload_dir: None
+  secure_scheme_headers: {'X-FORWARDED-PROTOCOL': 'ssl', 'X-FORWARDED-PROTO': 'https', 'X-FORWARDED-SSL': 'on'}
+  forwarded_allow_ips: ['127.0.0.1']
+  accesslog: None
+  disable_redirect_access_to_syslog: False
+  access_log_format: %(h)s %(l)s %(u)s %(t)s "%(r)s" %(s)s %(b)s "%(f)s" "%(a)s"
+  errorlog: /home/admtadj@cbsp.nl/Documents/GTM/logs/gunicorn.log
+  loglevel: debug
+  capture_output: False
+  logger_class: gunicorn.glogging.Logger
+  logconfig: None
+  logconfig_dict: {}
+  logconfig_json: None
+  syslog_addr: udp://localhost:514
+  syslog: False
+  syslog_prefix: None
+  syslog_facility: user
+  enable_stdio_inheritance: False
+  statsd_host: None
+  dogstatsd_tags: 
+  statsd_prefix: 
+  proc_name: None
+  default_proc_name: wsgi:application
+  pythonpath: None
+  paste: None
+  on_starting: <function OnStarting.on_starting at 0x7f5ac50abf70>
+  on_reload: <function OnReload.on_reload at 0x7f5ac5b180d0>
+  when_ready: <function WhenReady.when_ready at 0x7f5ac5b181f0>
+  pre_fork: <function Prefork.pre_fork at 0x7f5ac5b18310>
+  post_fork: <function Postfork.post_fork at 0x7f5ac5b18430>
+  post_worker_init: <function PostWorkerInit.post_worker_init at 0x7f5ac5b18550>
+  worker_int: <function WorkerInt.worker_int at 0x7f5ac5b18670>
+  worker_abort: <function WorkerAbort.worker_abort at 0x7f5ac5b18790>
+  pre_exec: <function PreExec.pre_exec at 0x7f5ac5b188b0>
+  pre_request: <function PreRequest.pre_request at 0x7f5ac5b189d0>
+  post_request: <function PostRequest.post_request at 0x7f5ac5b18a60>
+  child_exit: <function ChildExit.child_exit at 0x7f5ac5b18b80>
+  worker_exit: <function WorkerExit.worker_exit at 0x7f5ac5b18ca0>
+  nworkers_changed: <function NumWorkersChanged.nworkers_changed at 0x7f5ac5b18dc0>
+  on_exit: <function OnExit.on_exit at 0x7f5ac5b18ee0>
+  ssl_context: <function NewSSLContext.ssl_context at 0x7f5ac5b1d040>
+  proxy_protocol: False
+  proxy_allow_ips: ['127.0.0.1']
+  keyfile: None
+  certfile: None
+  ssl_version: 2
+  cert_reqs: 0
+  ca_certs: None
+  suppress_ragged_eofs: True
+  do_handshake_on_connect: False
+  ciphers: None
+  raw_paste_global_conf: []
+  strip_header_spaces: False
+[2025-03-19 18:01:47 +0100] [1538231] [INFO] Starting gunicorn 21.2.0
+[2025-03-19 18:01:47 +0100] [1538231] [DEBUG] Arbiter booted
+[2025-03-19 18:01:47 +0100] [1538231] [INFO] Listening at: http://127.0.0.1:8888 (1538231)
+[2025-03-19 18:01:47 +0100] [1538231] [INFO] Using worker: sync
+[2025-03-19 18:01:47 +0100] [1538242] [INFO] Booting worker with pid: 1538242
+[2025-03-19 18:01:47 +0100] [1538242] [DEBUG] Exception while loading the application
+Traceback (most recent call last):
+  File "/home/admtadj@cbsp.nl/Documents/GTM/venv/lib64/python3.9/site-packages/gunicorn/arbiter.py", line 609, in spawn_worker
+    worker.init_process()
+  File "/home/admtadj@cbsp.nl/Documents/GTM/venv/lib64/python3.9/site-packages/gunicorn/workers/base.py", line 134, in init_process
+    self.load_wsgi()
+  File "/home/admtadj@cbsp.nl/Documents/GTM/venv/lib64/python3.9/site-packages/gunicorn/workers/base.py", line 146, in load_wsgi
+    self.wsgi = self.app.wsgi()
+  File "/home/admtadj@cbsp.nl/Documents/GTM/venv/lib64/python3.9/site-packages/gunicorn/app/base.py", line 67, in wsgi
+    self.callable = self.load()
+  File "/home/admtadj@cbsp.nl/Documents/GTM/venv/lib64/python3.9/site-packages/gunicorn/app/wsgiapp.py", line 58, in load
+    return self.load_wsgiapp()
+  File "/home/admtadj@cbsp.nl/Documents/GTM/venv/lib64/python3.9/site-packages/gunicorn/app/wsgiapp.py", line 48, in load_wsgiapp
+    return util.import_app(self.app_uri)
+  File "/home/admtadj@cbsp.nl/Documents/GTM/venv/lib64/python3.9/site-packages/gunicorn/util.py", line 442, in import_app
+    raise AppImportError("Application object must be callable.")
+gunicorn.errors.AppImportError: Application object must be callable.
+[2025-03-19 18:01:47 +0100] [1538242] [INFO] Worker exiting (pid: 1538242)
+[2025-03-19 18:01:47 +0100] [1538231] [ERROR] Worker (pid:1538242) exited with code 4
+[2025-03-19 18:01:47 +0100] [1538231] [ERROR] Shutting down: Master
+[2025-03-19 18:01:47 +0100] [1538231] [ERROR] Reason: App failed to load.
+[2025-03-19 18:01:48 +0100] [1538245] [DEBUG] Current configuration:
+  config: ./gunicorn.conf.py
+  wsgi_app: None
+  bind: ['127.0.0.1:8888']
+  backlog: 2048
+  workers: 3
+  worker_class: sync
+  threads: 1
+  worker_connections: 1000
+  max_requests: 0
+  max_requests_jitter: 0
+  timeout: 30
+  graceful_timeout: 30
+  keepalive: 2
+  limit_request_line: 4094
+  limit_request_fields: 100
+  limit_request_field_size: 8190
+  reload: False
+  reload_engine: auto
+  reload_extra_files: []
+  spew: False
+  check_config: False
+  print_config: False
+  preload_app: False
+  sendfile: None
+  reuse_port: False
+  chdir: /home/admtadj@cbsp.nl/Documents/GTM
+  daemon: False
+  raw_env: []
+  pidfile: None
+  worker_tmp_dir: None
+  user: 1006767367
+  group: 1006600513
+  umask: 0
+  initgroups: False
+  tmp_upload_dir: None
+  secure_scheme_headers: {'X-FORWARDED-PROTOCOL': 'ssl', 'X-FORWARDED-PROTO': 'https', 'X-FORWARDED-SSL': 'on'}
+  forwarded_allow_ips: ['127.0.0.1']
+  accesslog: None
+  disable_redirect_access_to_syslog: False
+  access_log_format: %(h)s %(l)s %(u)s %(t)s "%(r)s" %(s)s %(b)s "%(f)s" "%(a)s"
+  errorlog: /home/admtadj@cbsp.nl/Documents/GTM/logs/gunicorn.log
+  loglevel: debug
+  capture_output: False
+  logger_class: gunicorn.glogging.Logger
+  logconfig: None
+  logconfig_dict: {}
+  logconfig_json: None
+  syslog_addr: udp://localhost:514
+  syslog: False
+  syslog_prefix: None
+  syslog_facility: user
+  enable_stdio_inheritance: False
+  statsd_host: None
+  dogstatsd_tags: 
+  statsd_prefix: 
+  proc_name: None
+  default_proc_name: wsgi:application
+  pythonpath: None
+  paste: None
+  on_starting: <function OnStarting.on_starting at 0x7f478f549f70>
+  on_reload: <function OnReload.on_reload at 0x7f478ffd80d0>
+  when_ready: <function WhenReady.when_ready at 0x7f478ffd81f0>
+  pre_fork: <function Prefork.pre_fork at 0x7f478ffd8310>
+  post_fork: <function Postfork.post_fork at 0x7f478ffd8430>
+  post_worker_init: <function PostWorkerInit.post_worker_init at 0x7f478ffd8550>
+  worker_int: <function WorkerInt.worker_int at 0x7f478ffd8670>
+  worker_abort: <function WorkerAbort.worker_abort at 0x7f478ffd8790>
+  pre_exec: <function PreExec.pre_exec at 0x7f478ffd88b0>
+  pre_request: <function PreRequest.pre_request at 0x7f478ffd89d0>
+  post_request: <function PostRequest.post_request at 0x7f478ffd8a60>
+  child_exit: <function ChildExit.child_exit at 0x7f478ffd8b80>
+  worker_exit: <function WorkerExit.worker_exit at 0x7f478ffd8ca0>
+  nworkers_changed: <function NumWorkersChanged.nworkers_changed at 0x7f478ffd8dc0>
+  on_exit: <function OnExit.on_exit at 0x7f478ffd8ee0>
+  ssl_context: <function NewSSLContext.ssl_context at 0x7f478ffdd040>
+  proxy_protocol: False
+  proxy_allow_ips: ['127.0.0.1']
+  keyfile: None
+  certfile: None
+  ssl_version: 2
+  cert_reqs: 0
+  ca_certs: None
+  suppress_ragged_eofs: True
+  do_handshake_on_connect: False
+  ciphers: None
+  raw_paste_global_conf: []
+  strip_header_spaces: False
+[2025-03-19 18:01:48 +0100] [1538245] [INFO] Starting gunicorn 21.2.0
+[2025-03-19 18:01:48 +0100] [1538245] [DEBUG] Arbiter booted
+[2025-03-19 18:01:48 +0100] [1538245] [INFO] Listening at: http://127.0.0.1:8888 (1538245)
+[2025-03-19 18:01:48 +0100] [1538245] [INFO] Using worker: sync
+[2025-03-19 18:01:48 +0100] [1538246] [INFO] Booting worker with pid: 1538246
+[2025-03-19 18:01:48 +0100] [1538246] [DEBUG] Exception while loading the application
+Traceback (most recent call last):
+  File "/home/admtadj@cbsp.nl/Documents/GTM/venv/lib64/python3.9/site-packages/gunicorn/arbiter.py", line 609, in spawn_worker
+    worker.init_process()
+  File "/home/admtadj@cbsp.nl/Documents/GTM/venv/lib64/python3.9/site-packages/gunicorn/workers/base.py", line 134, in init_process
+    self.load_wsgi()
+  File "/home/admtadj@cbsp.nl/Documents/GTM/venv/lib64/python3.9/site-packages/gunicorn/workers/base.py", line 146, in load_wsgi
+    self.wsgi = self.app.wsgi()
+  File "/home/admtadj@cbsp.nl/Documents/GTM/venv/lib64/python3.9/site-packages/gunicorn/app/base.py", line 67, in wsgi
+    self.callable = self.load()
+  File "/home/admtadj@cbsp.nl/Documents/GTM/venv/lib64/python3.9/site-packages/gunicorn/app/wsgiapp.py", line 58, in load
+    return self.load_wsgiapp()
+  File "/home/admtadj@cbsp.nl/Documents/GTM/venv/lib64/python3.9/site-packages/gunicorn/app/wsgiapp.py", line 48, in load_wsgiapp
+    return util.import_app(self.app_uri)
+  File "/home/admtadj@cbsp.nl/Documents/GTM/venv/lib64/python3.9/site-packages/gunicorn/util.py", line 442, in import_app
+    raise AppImportError("Application object must be callable.")
+gunicorn.errors.AppImportError: Application object must be callable.
+[2025-03-19 18:01:48 +0100] [1538246] [INFO] Worker exiting (pid: 1538246)
+[2025-03-19 18:01:48 +0100] [1538250] [INFO] Booting worker with pid: 1538250
+[2025-03-19 18:01:48 +0100] [1538250] [DEBUG] Exception while loading the application
+Traceback (most recent call last):
+  File "/home/admtadj@cbsp.nl/Documents/GTM/venv/lib64/python3.9/site-packages/gunicorn/arbiter.py", line 609, in spawn_worker
+    worker.init_process()
+  File "/home/admtadj@cbsp.nl/Documents/GTM/venv/lib64/python3.9/site-packages/gunicorn/workers/base.py", line 134, in init_process
+    self.load_wsgi()
+  File "/home/admtadj@cbsp.nl/Documents/GTM/venv/lib64/python3.9/site-packages/gunicorn/workers/base.py", line 146, in load_wsgi
+    self.wsgi = self.app.wsgi()
+  File "/home/admtadj@cbsp.nl/Documents/GTM/venv/lib64/python3.9/site-packages/gunicorn/app/base.py", line 67, in wsgi
+    self.callable = self.load()
+  File "/home/admtadj@cbsp.nl/Documents/GTM/venv/lib64/python3.9/site-packages/gunicorn/app/wsgiapp.py", line 58, in load
+    return self.load_wsgiapp()
+  File "/home/admtadj@cbsp.nl/Documents/GTM/venv/lib64/python3.9/site-packages/gunicorn/app/wsgiapp.py", line 48, in load_wsgiapp
+    return util.import_app(self.app_uri)
+  File "/home/admtadj@cbsp.nl/Documents/GTM/venv/lib64/python3.9/site-packages/gunicorn/util.py", line 442, in import_app
+    raise AppImportError("Application object must be callable.")
+gunicorn.errors.AppImportError: Application object must be callable.
+[2025-03-19 18:01:48 +0100] [1538250] [INFO] Worker exiting (pid: 1538250)
+[2025-03-19 18:01:48 +0100] [1538245] [ERROR] Worker (pid:1538246) exited with code 4
+[2025-03-19 18:01:48 +0100] [1538245] [ERROR] Worker (pid:1538250) was sent SIGTERM!
+[2025-03-19 18:01:48 +0100] [1538245] [ERROR] Shutting down: Master
+[2025-03-19 18:01:48 +0100] [1538245] [ERROR] Reason: App failed to load.
+[2025-03-19 18:02:10 +0100] [1538434] [DEBUG] Current configuration:
+  config: ./gunicorn.conf.py
+  wsgi_app: None
+  bind: ['127.0.0.1:8888']
+  backlog: 2048
+  workers: 3
+  worker_class: sync
+  threads: 1
+  worker_connections: 1000
+  max_requests: 0
+  max_requests_jitter: 0
+  timeout: 30
+  graceful_timeout: 30
+  keepalive: 2
+  limit_request_line: 4094
+  limit_request_fields: 100
+  limit_request_field_size: 8190
+  reload: False
+  reload_engine: auto
+  reload_extra_files: []
+  spew: False
+  check_config: False
+  print_config: False
+  preload_app: False
+  sendfile: None
+  reuse_port: False
+  chdir: /home/admtadj@cbsp.nl/Documents/GTM
+  daemon: False
+  raw_env: []
+  pidfile: None
+  worker_tmp_dir: None
+  user: 1006767367
+  group: 1006600513
+  umask: 0
+  initgroups: False
+  tmp_upload_dir: None
+  secure_scheme_headers: {'X-FORWARDED-PROTOCOL': 'ssl', 'X-FORWARDED-PROTO': 'https', 'X-FORWARDED-SSL': 'on'}
+  forwarded_allow_ips: ['127.0.0.1']
+  accesslog: None
+  disable_redirect_access_to_syslog: False
+  access_log_format: %(h)s %(l)s %(u)s %(t)s "%(r)s" %(s)s %(b)s "%(f)s" "%(a)s"
+  errorlog: /home/admtadj@cbsp.nl/Documents/GTM/logs/gunicorn.log
+  loglevel: debug
+  capture_output: False
+  logger_class: gunicorn.glogging.Logger
+  logconfig: None
+  logconfig_dict: {}
+  logconfig_json: None
+  syslog_addr: udp://localhost:514
+  syslog: False
+  syslog_prefix: None
+  syslog_facility: user
+  enable_stdio_inheritance: False
+  statsd_host: None
+  dogstatsd_tags: 
+  statsd_prefix: 
+  proc_name: None
+  default_proc_name: wsgi:application
+  pythonpath: None
+  paste: None
+  on_starting: <function OnStarting.on_starting at 0x7f20ac8c1f70>
+  on_reload: <function OnReload.on_reload at 0x7f20ad3580d0>
+  when_ready: <function WhenReady.when_ready at 0x7f20ad3581f0>
+  pre_fork: <function Prefork.pre_fork at 0x7f20ad358310>
+  post_fork: <function Postfork.post_fork at 0x7f20ad358430>
+  post_worker_init: <function PostWorkerInit.post_worker_init at 0x7f20ad358550>
+  worker_int: <function WorkerInt.worker_int at 0x7f20ad358670>
+  worker_abort: <function WorkerAbort.worker_abort at 0x7f20ad358790>
+  pre_exec: <function PreExec.pre_exec at 0x7f20ad3588b0>
+  pre_request: <function PreRequest.pre_request at 0x7f20ad3589d0>
+  post_request: <function PostRequest.post_request at 0x7f20ad358a60>
+  child_exit: <function ChildExit.child_exit at 0x7f20ad358b80>
+  worker_exit: <function WorkerExit.worker_exit at 0x7f20ad358ca0>
+  nworkers_changed: <function NumWorkersChanged.nworkers_changed at 0x7f20ad358dc0>
+  on_exit: <function OnExit.on_exit at 0x7f20ad358ee0>
+  ssl_context: <function NewSSLContext.ssl_context at 0x7f20ad35d040>
+  proxy_protocol: False
+  proxy_allow_ips: ['127.0.0.1']
+  keyfile: None
+  certfile: None
+  ssl_version: 2
+  cert_reqs: 0
+  ca_certs: None
+  suppress_ragged_eofs: True
+  do_handshake_on_connect: False
+  ciphers: None
+  raw_paste_global_conf: []
+  strip_header_spaces: False
+[2025-03-19 18:02:10 +0100] [1538434] [INFO] Starting gunicorn 21.2.0
+[2025-03-19 18:02:10 +0100] [1538434] [DEBUG] Arbiter booted
+[2025-03-19 18:02:10 +0100] [1538434] [INFO] Listening at: http://127.0.0.1:8888 (1538434)
+[2025-03-19 18:02:10 +0100] [1538434] [INFO] Using worker: sync
+[2025-03-19 18:02:10 +0100] [1538443] [INFO] Booting worker with pid: 1538443
+[2025-03-19 18:02:10 +0100] [1538444] [INFO] Booting worker with pid: 1538444
+[2025-03-19 18:02:10 +0100] [1538445] [INFO] Booting worker with pid: 1538445
+[2025-03-19 18:02:10 +0100] [1538434] [DEBUG] 3 workers
+[2025-03-19 18:02:22 +0100] [1538444] [DEBUG] GET /
+[2025-03-19 18:02:22 +0100] [1538443] [DEBUG] GET /css/styles.css
+[2025-03-19 18:02:22 +0100] [1538444] [DEBUG] GET /css/loading-spinner.gif
+[2025-03-19 18:02:22 +0100] [1538444] [DEBUG] GET /js/config.js
+[2025-03-19 18:02:22 +0100] [1538444] [DEBUG] GET /js/imageManager.js
+[2025-03-19 18:02:22 +0100] [1538444] [DEBUG] GET /js/moviedb.js
+[2025-03-19 18:02:22 +0100] [1538443] [DEBUG] GET /js/script.js
+[2025-03-19 18:02:22 +0100] [1538445] [DEBUG] GET /data/movies/Furiosa_A_Mad_Max_Saga_2024.jpg
+[2025-03-19 18:03:05 +0100] [1538445] [DEBUG] HEAD /
+[2025-03-19 18:03:09 +0100] [1538445] [DEBUG] GET /
+[2025-03-19 18:04:02 +0100] [1538444] [DEBUG] HEAD /
+[2025-03-19 18:04:12 +0100] [1538444] [DEBUG] GET /
+[2025-03-19 18:04:25 +0100] [1538443] [DEBUG] GET /
+[2025-03-19 18:04:26 +0100] [1538445] [DEBUG] GET /css/styles.css
+[2025-03-19 18:04:26 +0100] [1538444] [DEBUG] GET /js/config.js
+[2025-03-19 18:04:26 +0100] [1538444] [DEBUG] GET /css/loading-spinner.gif
+[2025-03-19 18:04:26 +0100] [1538443] [DEBUG] GET /js/imageManager.js
+[2025-03-19 18:04:26 +0100] [1538445] [DEBUG] GET /js/moviedb.js
+[2025-03-19 18:04:26 +0100] [1538444] [DEBUG] GET /js/script.js
+[2025-03-19 18:04:26 +0100] [1538444] [DEBUG] GET /data/movies/Furiosa_A_Mad_Max_Saga_2024.jpg
+[2025-03-19 18:07:20 +0100] [1538445] [DEBUG] GET /
+[2025-03-19 18:08:53 +0100] [1538444] [DEBUG] GET /
+[2025-03-19 18:15:49 +0100] [1538445] [DEBUG] GET /
+[2025-03-19 18:15:55 +0100] [1538445] [DEBUG] HEAD /
+[2025-03-19 18:24:41 +0100] [1538445] [DEBUG] GET /
+[2025-03-19 18:40:41 +0100] [1538444] [DEBUG] GET /
+[2025-03-19 18:56:41 +0100] [1538445] [DEBUG] GET /
+[2025-03-19 19:12:41 +0100] [1538444] [DEBUG] GET /
+[2025-03-19 19:28:41 +0100] [1538443] [DEBUG] GET /
+[2025-03-19 19:44:41 +0100] [1538444] [DEBUG] GET /
+[2025-03-19 20:00:41 +0100] [1538445] [DEBUG] GET /
+[2025-03-19 20:16:41 +0100] [1538445] [DEBUG] GET /
+[2025-03-19 20:32:41 +0100] [1538443] [DEBUG] GET /
+[2025-03-19 20:48:41 +0100] [1538445] [DEBUG] GET /
+[2025-03-19 21:04:07 +0100] [1538444] [DEBUG] GET /
+[2025-03-19 21:04:41 +0100] [1538444] [DEBUG] GET /
+[2025-03-19 21:20:41 +0100] [1538445] [DEBUG] GET /
+[2025-03-19 21:36:41 +0100] [1538444] [DEBUG] GET /
+[2025-03-19 21:52:41 +0100] [1538443] [DEBUG] GET /
+[2025-03-19 22:08:41 +0100] [1538444] [DEBUG] GET /
+[2025-03-19 22:23:02 +0100] [1538443] [DEBUG] GET /
+[2025-03-19 22:24:41 +0100] [1538443] [DEBUG] GET /
+[2025-03-19 22:40:41 +0100] [1538445] [DEBUG] GET /
+[2025-03-19 22:56:41 +0100] [1538443] [DEBUG] GET /
+[2025-03-19 23:12:41 +0100] [1538444] [DEBUG] GET /
+[2025-03-19 23:28:41 +0100] [1538443] [DEBUG] GET /
+[2025-03-19 23:44:41 +0100] [1538444] [DEBUG] GET /
+[2025-03-20 00:00:41 +0100] [1538444] [DEBUG] GET /
+[2025-03-20 00:16:41 +0100] [1538443] [DEBUG] GET /
+[2025-03-20 00:32:41 +0100] [1538445] [DEBUG] GET /
+[2025-03-20 00:48:41 +0100] [1538444] [DEBUG] GET /
+[2025-03-20 01:04:41 +0100] [1538445] [DEBUG] GET /
+[2025-03-20 01:20:41 +0100] [1538444] [DEBUG] GET /
+[2025-03-20 01:36:41 +0100] [1538445] [DEBUG] GET /
+[2025-03-20 01:52:41 +0100] [1538443] [DEBUG] GET /
+[2025-03-20 02:08:41 +0100] [1538443] [DEBUG] GET /
+[2025-03-20 02:24:41 +0100] [1538443] [DEBUG] GET /
+[2025-03-20 02:40:41 +0100] [1538443] [DEBUG] GET /
+[2025-03-20 02:56:41 +0100] [1538445] [DEBUG] GET /
+[2025-03-20 03:12:41 +0100] [1538445] [DEBUG] GET /
+[2025-03-20 03:28:41 +0100] [1538443] [DEBUG] GET /
+[2025-03-20 03:36:42 +0100] [1538443] [DEBUG] GET /
+[2025-03-20 03:44:41 +0100] [1538444] [DEBUG] GET /
+[2025-03-20 04:00:41 +0100] [1538443] [DEBUG] GET /
+[2025-03-20 04:16:41 +0100] [1538445] [DEBUG] GET /
+[2025-03-20 04:32:41 +0100] [1538444] [DEBUG] GET /
+[2025-03-20 04:48:41 +0100] [1538444] [DEBUG] GET /
+[2025-03-20 05:04:41 +0100] [1538443] [DEBUG] GET /
+[2025-03-20 05:20:41 +0100] [1538445] [DEBUG] GET /
+[2025-03-20 05:36:41 +0100] [1538444] [DEBUG] GET /
+[2025-03-20 05:52:41 +0100] [1538445] [DEBUG] GET /
+[2025-03-20 06:08:41 +0100] [1538445] [DEBUG] GET /
+[2025-03-20 06:24:41 +0100] [1538445] [DEBUG] GET /
+[2025-03-20 06:40:41 +0100] [1538443] [DEBUG] GET /
+[2025-03-20 06:56:41 +0100] [1538445] [DEBUG] GET /
+[2025-03-20 07:12:41 +0100] [1538445] [DEBUG] GET /
+[2025-03-20 07:28:41 +0100] [1538445] [DEBUG] GET /
+[2025-03-20 07:29:47 +0100] [1538443] [INFO] Worker exiting (pid: 1538443)
+[2025-03-20 07:29:47 +0100] [1538434] [INFO] Handling signal: term
+[2025-03-20 07:29:47 +0100] [1538444] [INFO] Worker exiting (pid: 1538444)
+[2025-03-20 07:29:47 +0100] [1538445] [INFO] Worker exiting (pid: 1538445)
+[2025-03-20 07:29:47 +0100] [1538434] [INFO] Shutting down: Master

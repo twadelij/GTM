@@ -1,43 +1,43 @@
-# Guess The Movie Game - Voortgangsrapport
+# Guess The Movie Game - Progress Report
 
-## Voortgang 8 December 2023
+## Progress December 8, 2023
 
-### Wat is er gedaan:
-1. Project herstructurering:
-   - Code verplaatst naar een duidelijkere mapstructuur
-   - Frontend en backend code gescheiden
-   - Documentatie verbeterd
+### What has been done:
+1. Project restructuring:
+   - Code moved to a clearer directory structure
+   - Frontend and backend code separated
+   - Documentation improved
 
-2. TMDB Verwijdering:
-   - Begonnen met het verwijderen van TMDB referenties
-   - Overgeschakeld naar lokale film database
-   - Lokale afbeeldingen worden nu gebruikt
+2. TMDB Removal:
+   - Started removing TMDB references
+   - Switched to local movie database
+   - Local images are now being used
 
 3. Debugging:
-   - Console logging toegevoegd voor betere foutopsporing
-   - Test pagina gemaakt (test.html) voor geïsoleerd testen
+   - Added console logging for better error detection
+   - Created test page (test.html) for isolated testing
 
-### Huidige Problemen:
-1. **Game Initialisatie Fout**:
+### Current Issues:
+1. **Game Initialization Error**:
    ```javascript
    TypeError: data.map is not a function
    at MovieDatabaseClass.initialize (movieDb.js:40)
    ```
-   - Probleem met het laden van movies.json
-   - Mogelijk probleem met de data structuur
+   - Problem with loading movies.json
+   - Possible issue with the data structure
 
-2. **Dependencies Laden**:
-   - "Failed to load game dependencies" melding
-   - Mogelijk probleem met de volgorde van script laden
+2. **Loading Dependencies**:
+   - "Failed to load game dependencies" message
+   - Possible issue with the order of script loading
 
-### Hulp Nodig Bij:
-1. **Data Flow Analyse**:
-   - Hoe de data van movies.json naar de frontend stroomt
-   - Waar precies de data transformatie faalt
+### Need Help With:
+1. **Data Flow Analysis**:
+   - How the data flows from movies.json to the frontend
+   - Where exactly the data transformation fails
 
 2. **Browser Debugging**:
-   - Gedetailleerde analyse van de browser console logs
-   - Network tab analyse voor request/response cyclus
+   - Detailed analysis of browser console logs
+   - Network tab analysis for request/response cycle
 
 ### Volgende Stappen:
 1. **Data Structuur**:
