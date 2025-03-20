@@ -8,7 +8,13 @@
    - Created a basic admin dashboard with 4 buttons (admin-dashboard.html)
    - Used localStorage for maintaining login state
 
-2. **Rules File Creation**:
+2. **English Translation**:
+   - Translated all Dutch text to English in documentation (README.md, docs/README.md)
+   - Translated Dutch comments and UI text in JavaScript files (script.js, movieDb.js)
+   - Fixed potential initialization error by adding null check for backdrop_path
+   - Created proper .gitignore file to exclude large backup files and system-specific configuration
+
+3. **Rules File Creation**:
    - Created a .rules file in the project root
    - Added rules for project development and workflow
    - Configured it to be updated whenever "add rule:" is typed
@@ -33,16 +39,33 @@
 
 ## What Needs to Be Done
 
-1. **Enhanced Admin Dashboard**:
+1. **Fix Game Initialization Error**:
+   - Test if the null check for backdrop_path resolved the initialization error
+   - Debug any remaining issues with the movie database loading
+   - Verify the structure of movies.json matches what the code expects
+   - Add more robust error handling for movie data processing
+
+2. **Enhanced Admin Dashboard**:
    - Improve styling with movie images in the background with proper opacity
    - Implement more relevant admin functions based on the TODO list
    - Functions should include movie management, user management, statistics, settings, etc.
    - Make buttons visually appealing and representative of their functions
 
-2. **Working Logout Functionality**:
+3. **Working Logout Functionality**:
    - Complete the logout button functionality to clear localStorage
    - Add proper redirection after logout
    - Ensure all session data is properly cleared
+
+## Current Branch and Workflow
+
+- Current work is on the `feature/english-translation-clean` branch
+- All Dutch text has been translated to English
+- The branch has been pushed to GitHub but not yet merged to main
+- Next steps should be done on a new feature branch following the established workflow:
+  1. Create a new branch for each feature or bugfix: `git checkout -b feature/name-of-feature`
+  2. Make code changes and commit regularly
+  3. Test all changes thoroughly before considering them complete
+  4. Push to GitHub and create a pull request when ready
 
 3. **User Management Implementation**:
    - Create a user management interface
