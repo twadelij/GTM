@@ -5,19 +5,23 @@ Handles Gmail OAuth2 authentication
 """
 import logging
 from typing import Dict, Any
-from fastapi import APIRouter, HTTPException, Request, Response
+from sqlalchemy.ext.asyncio import AsyncSession
+from fastapi import APIRouter, HTTPException, Request, Response, Depends
 from fastapi.responses import RedirectResponse
 from pydantic import BaseModel
 
 from src.core.exceptions import AuthenticationError, ValidationError
 from src.services.auth_service import AuthService
+from src.services.user_service import UserService
+from src.core.database import get_db
 from src.config.config import config
 
 logger = logging.getLogger(__name__)
 router = APIRouter()
 
-# Initialize auth service
+# Initialize services
 auth_service = AuthService()
+user_service = UserService()
 
 class AuthCallbackRequest(BaseModel):
     code: str
@@ -40,7 +44,7 @@ async def google_login():
         raise AuthenticationError("Failed to initiate authentication")
 
 @router.get("/google/callback")
-async def google_callback(code: str, state: str = None):
+async def google_callback(code: str, state: str = None, db: AsyncSession = Depends(get_db)):
     """Handle Google OAuth2 callback"""
     try:
         if not config.ENABLE_AUTHENTICATION:
@@ -51,6 +55,9 @@ async def google_callback(code: str, state: str = None):
         
         # Get user info
         user_info = await auth_service.get_user_info(tokens['access_token'])
+        
+        # Get or create user in database
+        user = await user_service.get_or_create_user(db, user_info)
         
         # Create JWT token for our application
         app_token = auth_service.create_app_token(user_info)
