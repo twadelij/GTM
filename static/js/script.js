@@ -58,13 +58,16 @@ class GTMGame {
         try {
             Utils.showLoading('loading-spinner');
             
+            // For original gameplay, always use 20 movies and 6 rounds
+            const actualMovieCount = 20; // Original gameplay uses 20 movies
+            
             const response = await fetch(`${CONFIG.API_BASE_URL}${CONFIG.ENDPOINTS.GAME_START}`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
-                    movie_count: movieCount,
+                    movie_count: actualMovieCount,
                     player_name: playerName
                 })
             });
@@ -76,6 +79,7 @@ class GTMGame {
             this.currentSession = await response.json();
             this.currentRound = 0;
             this.score = 0;
+            this.roundScores = []; // Track scores per round
             
             Utils.hideLoading('loading-spinner');
             this.showSection('game-play');
@@ -89,7 +93,8 @@ class GTMGame {
     }
     
     startRound() {
-        if (!this.currentSession || this.currentRound >= this.currentSession.movies.length) {
+        // Original gameplay: 6 rounds maximum
+        if (!this.currentSession || this.currentRound >= 6) {
             this.endGame();
             return;
         }
@@ -101,36 +106,67 @@ class GTMGame {
     }
     
     displayMovie(movie) {
-        // In a real implementation, you'd show the movie image and generate answer options
-        // For now, we'll show placeholder data
+        // Show the real movie image
         const movieImage = document.getElementById('movie-image');
-        movieImage.src = `/static/images/placeholder-movie.jpg`;
-        movieImage.alt = 'Movie screenshot';
+        const imagePath = movie.image_path || movie.backdrop_path;
         
-        // Generate fake answer options for demo
-        const answers = [
-            movie.title,
-            'Wrong Answer 1',
-            'Wrong Answer 2', 
-            'Wrong Answer 3'
-        ];
+        if (imagePath) {
+            // Convert relative path to absolute URL
+            const imageUrl = imagePath.startsWith('data/') 
+                ? `http://localhost:8888/${imagePath}`
+                : `http://localhost:8888/data/movies/${imagePath}`;
+            
+            movieImage.src = imageUrl;
+            movieImage.alt = `Movie screenshot: ${movie.title}`;
+        } else {
+            // Fallback to placeholder
+            movieImage.src = '/static/images/placeholder-movie.jpg';
+            movieImage.alt = 'Movie screenshot';
+        }
         
-        const shuffledAnswers = Utils.shuffleArray(answers);
+        // Generate answer options based on current round
+        const currentRound = this.currentRound + 1; // 1-based
+        const maxChoices = Math.max(1, 6 - currentRound + 1); // 6 -> 5 -> 4 -> 3 -> 2 -> 1
+        
+        // Get random wrong answers from other movies
+        const wrongAnswers = this.getRandomWrongAnswers(movie.title, maxChoices - 1);
+        
+        // Combine correct answer with wrong answers
+        const allAnswers = [movie.title, ...wrongAnswers];
+        const shuffledAnswers = Utils.shuffleArray(allAnswers);
+        
         const answerButtons = document.querySelectorAll('.answer-btn');
         
+        // Show/hide buttons based on number of choices
         answerButtons.forEach((btn, index) => {
             if (index < shuffledAnswers.length) {
                 btn.textContent = `${String.fromCharCode(65 + index)}. ${shuffledAnswers[index]}`;
                 btn.dataset.answer = shuffledAnswers[index];
                 btn.classList.remove('selected', 'correct', 'incorrect');
                 btn.disabled = false;
+                btn.style.display = 'block';
+            } else {
+                btn.style.display = 'none';
             }
         });
     }
     
+    getRandomWrongAnswers(correctAnswer, count) {
+        if (count <= 0) return [];
+        
+        // Get all movie titles except the correct one
+        const allTitles = this.currentSession.movies
+            .filter(m => m.title !== correctAnswer)
+            .map(m => m.title);
+        
+        // Shuffle and take the required number
+        const shuffled = Utils.shuffleArray(allTitles);
+        return shuffled.slice(0, Math.min(count, shuffled.length));
+    }
+    
     updateGameInfo() {
         document.getElementById('current-round').textContent = 
-            `Round ${this.currentRound + 1} of ${this.currentSession.movies.length}`;
+            `Round ${this.currentRound + 1} of 6`;
         document.getElementById('current-score').textContent = `Score: ${this.score}`;
     }
     
@@ -179,10 +215,29 @@ class GTMGame {
         
         const currentMovie = this.currentSession.movies[this.currentRound];
         const isCorrect = selectedAnswer === currentMovie.title;
+        const currentRound = this.currentRound + 1; // 1-based
+        
+        // Calculate round score (original scoring system)
+        let roundScore = 0;
         
         if (isCorrect) {
-            this.score++;
+            // Base points per round: 5 -> 4 -> 3 -> 2 -> 1 -> 0
+            const basePoints = Math.max(0, 6 - currentRound);
+            
+            // Time bonus: 1 point per second remaining (not in round 6)
+            const timeBonus = (currentRound < 6) ? this.timeLeft : 0;
+            
+            roundScore = basePoints + timeBonus;
+            this.score += roundScore;
         }
+        
+        // Track round score for results
+        this.roundScores.push({
+            round: currentRound,
+            correct: isCorrect,
+            score: roundScore,
+            timeBonus: isCorrect && currentRound < 6 ? this.timeLeft : 0
+        });
         
         // Show correct/incorrect feedback
         document.querySelectorAll('.answer-btn').forEach(btn => {
@@ -234,14 +289,25 @@ class GTMGame {
     endGame() {
         this.stopTimer();
         
-        const totalMovies = this.currentSession.movies.length;
-        const percentage = Utils.calculatePercentage(this.score, totalMovies);
+        const totalRounds = 6;
+        const correctAnswers = this.roundScores.filter(r => r.correct).length;
+        const percentage = Utils.calculatePercentage(correctAnswers, totalRounds);
         
         document.getElementById('final-score-text').textContent = 
-            `Your Score: ${this.score}/${totalMovies}`;
+            `Your Score: ${this.score} points`;
         document.getElementById('final-percentage').textContent = `${percentage}%`;
-        document.getElementById('results-summary').textContent = 
-            `Great job! You got ${this.score} out of ${totalMovies} movies correct.`;
+        
+        // Detailed results summary
+        let summary = `You got ${correctAnswers} out of ${totalRounds} movies correct.\n\n`;
+        summary += `Round breakdown:\n`;
+        
+        this.roundScores.forEach(round => {
+            const status = round.correct ? '✓' : '✗';
+            const bonusText = round.timeBonus > 0 ? ` (+${round.timeBonus}s bonus)` : '';
+            summary += `Round ${round.round}: ${status} ${round.score} points${bonusText}\n`;
+        });
+        
+        document.getElementById('results-summary').textContent = summary;
         
         this.showSection('game-results');
     }
@@ -250,6 +316,7 @@ class GTMGame {
         this.currentSession = null;
         this.currentRound = 0;
         this.score = 0;
+        this.roundScores = [];
         this.showSection('game-menu');
     }
     
@@ -258,6 +325,7 @@ class GTMGame {
         this.currentSession = null;
         this.currentRound = 0;
         this.score = 0;
+        this.roundScores = [];
         this.showSection('game-menu');
     }
     
@@ -308,25 +376,54 @@ class GTMGame {
     
     async showMoviesList() {
         try {
+            Utils.showLoading('loading-spinner');
+            
             const response = await fetch(`${CONFIG.API_BASE_URL}${CONFIG.ENDPOINTS.MOVIES_LIST}`);
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            
             const movies = await response.json();
             
             const container = document.getElementById('movies-container');
             container.innerHTML = '';
             
-            movies.slice(0, 20).forEach(movie => { // Show first 20 movies
+            // Limit to prevent infinite loading
+            const displayCount = Math.min(movies.length, 50);
+            
+            for (let i = 0; i < displayCount; i++) {
+                const movie = movies[i];
                 const movieDiv = document.createElement('div');
                 movieDiv.className = 'movie-item';
+                
+                // Construct image URL
+                const imagePath = movie.image || movie.image_path;
+                const imageUrl = imagePath 
+                    ? (imagePath.startsWith('data/') 
+                        ? `http://localhost:8888/${imagePath}`
+                        : `http://localhost:8888/data/movies/${imagePath}`)
+                    : '/static/images/placeholder-movie.jpg';
+                
                 movieDiv.innerHTML = `
-                    <img src="/static/images/placeholder-movie.jpg" alt="${movie.title}" onerror="this.src='/static/images/no-image.png'">
+                    <img src="${imageUrl}" alt="${movie.title}" onerror="this.src='/static/images/placeholder-movie.jpg'">
                     <h4>${movie.title}</h4>
-                    <p>${movie.year} • ${movie.rating || 'Not Rated'}</p>
+                    <p>${movie.year || 'N/A'} • ${movie.rating || 'Not Rated'}</p>
                 `;
                 container.appendChild(movieDiv);
-            });
+            }
             
+            // Add pagination info if there are more movies
+            if (movies.length > displayCount) {
+                const infoDiv = document.createElement('div');
+                infoDiv.className = 'movies-info';
+                infoDiv.innerHTML = `<p>Showing ${displayCount} of ${movies.length} movies</p>`;
+                container.appendChild(infoDiv);
+            }
+            
+            Utils.hideLoading('loading-spinner');
             this.showSection('movies-list');
         } catch (error) {
+            Utils.hideLoading('loading-spinner');
             Utils.showError(error.message);
         }
     }
