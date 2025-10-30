@@ -15,6 +15,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from src.core.database import get_db
 from src.core.exceptions import NotFoundError, DatabaseError
 from src.config.config import config
+from src.core.database import async_engine
 
 logger = logging.getLogger(__name__)
 router = APIRouter()
@@ -27,19 +28,32 @@ MOVIES_DIR = Path(config.DATA_DIR) / "movies"
 async def get_movies():
     """Get list of all available movies"""
     try:
-        if not MOVIES_JSON_PATH.exists():
-            raise NotFoundError("Movies data file not found")
-            
-        with open(MOVIES_JSON_PATH, 'r', encoding='utf-8') as f:
-            movies_data = json.load(f)
-            
-        return movies_data.get('movies', [])
+        # Try to get from database first
+        from src.core.database import AsyncSession
+        from sqlalchemy import select, text
         
-    except FileNotFoundError:
-        raise NotFoundError("Movies data file not found")
-    except json.JSONDecodeError as e:
-        logger.error(f"Invalid JSON in movies file: {str(e)}")
-        raise DatabaseError("Invalid movies data format")
+        async with AsyncSession(async_engine) as session:
+            result = await session.execute(text("SELECT title, year, rating, image_path FROM movies WHERE is_active = true ORDER BY title LIMIT 50"))
+            movies = []
+            for row in result:
+                movies.append({
+                    "title": row[0],
+                    "year": row[1],
+                    "rating": row[2],
+                    "image": row[3].replace('data/movies/', '') if row[3] else ''
+                })
+            
+            if movies:
+                return movies
+        
+        # Fallback to JSON file
+        if MOVIES_JSON_PATH.exists():
+            with open(MOVIES_JSON_PATH, 'r', encoding='utf-8') as f:
+                movies_data = json.load(f)
+            return movies_data.get('results', [])
+        else:
+            raise NotFoundError("Movies data not found")
+        
     except Exception as e:
         logger.error(f"Error loading movies: {str(e)}")
         raise DatabaseError("Failed to load movies data")

@@ -51,6 +51,10 @@ services:
       - REDIS_URL=redis://redis:6379
       - PORT=8888
       - HOST=0.0.0.0
+      - ENABLE_AUTHENTICATION=false
+      - ENABLE_MONETIZATION=false
+      - JWT_SECRET=test-jwt-secret-for-development-only
+      - SESSION_SECRET=test-session-secret-for-development-only
     volumes:
       - ./src:/app/src
       - ./data:/app/data

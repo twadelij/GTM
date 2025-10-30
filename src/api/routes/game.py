@@ -31,11 +31,11 @@ class GameAnswerRequest(BaseModel):
 
 class GameSession(BaseModel):
     session_id: str
-    player_name: Optional[str]
+    player_name: Optional[str] = None
     movies: List[Dict[str, Any]]
-    current_round: int
-    score: int
-    started_at: datetime
+    current_round: int = 0
+    score: int = 0
+    started_at: Optional[datetime] = None
     current_movie: Optional[Dict[str, Any]] = None
 
 @router.post("/start", response_model=GameSession)

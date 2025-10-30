@@ -9,9 +9,9 @@ from pathlib import Path
 from typing import Dict, Any
 
 from fastapi import FastAPI, HTTPException, Request, Depends
-from fastapi.staticfiles import StaticFiles
-from fastapi.responses import HTMLResponse, JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
+from fastapi.responses import HTMLResponse, JSONResponse, FileResponse
 from fastapi.middleware.trustedhost import TrustedHostMiddleware
 import uvicorn
 
@@ -86,36 +86,17 @@ async def health_check() -> Dict[str, Any]:
     }
 
 # Root endpoint - serve the game
-@app.get("/", response_class=HTMLResponse)
+@app.get("/")
 async def read_root():
     """Serve the main game HTML"""
     try:
-        client_dir = Path(__file__).parent.parent / "client"
-        index_file = client_dir / "index.html"
+        static_dir = Path(__file__).parent.parent.parent / "static"
+        index_file = static_dir / "index.html"
         
         if not index_file.exists():
             raise HTTPException(status_code=404, detail="Game interface not found")
             
-        with open(index_file, 'r', encoding='utf-8') as f:
-            content = f.read()
-            
-        # Inject configuration into HTML
-        config_script = f"""
-        <script>
-            window.CONFIG = {{
-                API_BASE_URL: window.location.origin,
-                ENABLE_AUTHENTICATION: {str(config.ENABLE_AUTHENTICATION).lower()},
-                ENABLE_MONETIZATION: {str(config.ENABLE_MONETIZATION).lower()},
-                ENABLE_ANALYTICS: {str(config.ENABLE_ANALYTICS).lower()},
-                APP_NAME: "{config.APP_NAME}"
-            }};
-        </script>
-        """
-        
-        # Insert config script before closing head tag
-        content = content.replace('</head>', f'{config_script}</head>')
-        
-        return HTMLResponse(content=content)
+        return FileResponse(str(index_file))
         
     except Exception as e:
         logger.error(f"Error serving root endpoint: {str(e)}")
@@ -124,16 +105,16 @@ async def read_root():
 # Include API routers
 app.include_router(movies.router, prefix="/api/v1/movies", tags=["movies"])
 app.include_router(game.router, prefix="/api/v1/game", tags=["game"])
-
-# Include conditional routers based on feature flags
-if config.ENABLE_AUTHENTICATION:
-    app.include_router(auth.router, prefix="/api/v1/auth", tags=["authentication"])
-    app.include_router(user.router, prefix="/api/v1/users", tags=["users"])
+app.include_router(auth.router, prefix="/api/v1/auth", tags=["auth"])
+app.include_router(user.router, prefix="/api/v1/users", tags=["users"])
 
 # Mount static files
 static_dir = Path(__file__).parent.parent.parent / "static"
 if static_dir.exists():
     app.mount("/static", StaticFiles(directory=str(static_dir)), name="static")
+    logger.info(f"Static files mounted from: {static_dir}")
+else:
+    logger.warning(f"Static directory not found: {static_dir}")
 
 # Mount data directory for movies
 data_dir = Path(__file__).parent.parent.parent / "data"
@@ -158,8 +139,9 @@ async def startup_event():
     # Log configuration (without sensitive data)
     logger.info(f"Server will run on {config.HOST}:{config.PORT}")
     logger.info(f"Features enabled: auth={config.ENABLE_AUTHENTICATION}, "
-                f"monetization={config.ENABLE_MONETization}, "
-                f"analytics={config.ENABLE_ANALYTICS}")
+                    f"monetization={config.ENABLE_MONETIZATION}, "
+                    f"analytics={config.ENABLE_ANALYTICS}, "
+                    f"social_features={config.ENABLE_SOCIAL_FEATURES}")
 
 @app.on_event("shutdown")
 async def shutdown_event():

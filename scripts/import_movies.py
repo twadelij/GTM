@@ -15,9 +15,10 @@ from typing import Dict, List, Any
 sys.path.append(os.path.join(os.path.dirname(__file__), '..', 'src'))
 
 from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy import text
 from src.core.database import async_engine
 from src.models.movie import Movie, MovieStats
-from src.models.genre import Genre
+from src.models.movie import Genre
 from src.config.config import config
 
 # Configure logging
@@ -29,7 +30,7 @@ logger = logging.getLogger(__name__)
 
 async def load_genres(session: AsyncSession) -> Dict[str, int]:
     """Load existing genres from database"""
-    result = await session.execute("SELECT id, slug FROM genres WHERE is_active = true")
+    result = await session.execute(text("SELECT id, slug FROM genres WHERE is_active = true"))
     genres = {}
     for row in result:
         genres[row[1]] = row[0]
@@ -49,7 +50,7 @@ async def import_movies_from_json():
         with open(movies_json_path, 'r', encoding='utf-8') as f:
             data = json.load(f)
         
-        movies = data.get('movies', [])
+        movies = data.get('results', [])  # Changed from 'movies' to 'results'
         logger.info(f"Found {len(movies)} movies to import")
         
         async with AsyncSession(async_engine) as session:
@@ -63,7 +64,7 @@ async def import_movies_from_json():
                 try:
                     # Check if movie already exists
                     existing_result = await session.execute(
-                        "SELECT id FROM movies WHERE title = :title",
+                        text("SELECT id FROM movies WHERE title = :title"),
                         {"title": movie_data.get('title', '')}
                     )
                     
@@ -74,20 +75,19 @@ async def import_movies_from_json():
                     # Create movie record
                     movie = Movie(
                         title=movie_data.get('title', ''),
-                        original_title=movie_data.get('original_title'),
-                        year=movie_data.get('year'),
+                        original_title=movie_data.get('title', ''),
+                        year=int(movie_data.get('year', 0)) if movie_data.get('year') else None,
                         rating=movie_data.get('rating'),
-                        runtime=movie_data.get('runtime'),
-                        genres=movie_data.get('genres', []),
+                        genres=movie_data.get('genres', [movie_data.get('category', '')]),
                         overview=movie_data.get('overview'),
                         tagline=movie_data.get('tagline'),
-                        image_path=movie_data.get('image', ''),
-                        poster_path=movie_data.get('poster'),
-                        backdrop_path=movie_data.get('backdrop'),
-                        difficulty_score=movie_data.get('difficulty_score', 5.0),
+                        image_path=movie_data.get('backdrop_path', ''),
+                        poster_path=movie_data.get('poster_path'),
+                        backdrop_path=movie_data.get('backdrop_path'),
+                        difficulty_score=5.0,
                         is_active=True,
                         is_family_friendly=movie_data.get('rating') in ['G', 'PG'],
-                        content_warnings=movie_data.get('content_warnings', [])
+                        content_warnings=[]
                     )
                     
                     session.add(movie)
@@ -125,11 +125,11 @@ async def verify_import():
     try:
         async with AsyncSession(async_engine) as session:
             # Count movies
-            movie_result = await session.execute("SELECT COUNT(*) FROM movies")
+            movie_result = await session.execute(text("SELECT COUNT(*) FROM movies"))
             movie_count = movie_result.scalar()
             
             # Count movie stats
-            stats_result = await session.execute("SELECT COUNT(*) FROM movie_stats")
+            stats_result = await session.execute(text("SELECT COUNT(*) FROM movie_stats"))
             stats_count = stats_result.scalar()
             
             logger.info(f"Database verification:")

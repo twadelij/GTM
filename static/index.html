@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guess The Movie Game</title>
+    <link rel="stylesheet" href="/static/css/styles.css">
+    <link rel="preload" href="/static/css/loading-spinner.gif" as="image">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🎬 Guess The Movie Game</h1>
+            <p>Test your movie knowledge!</p>
+        </header>
+
+        <main>
+            <div id="game-menu" class="game-section active">
+                <div class="menu-card">
+                    <h2>Welcome to GTM Game</h2>
+                    <p>Can you guess the movie from a single screenshot?</p>
+                    
+                    <div class="game-options">
+                        <label for="movie-count">Number of movies:</label>
+                        <select id="movie-count">
+                            <option value="5">5 Movies (Quick)</option>
+                            <option value="10" selected>10 Movies (Standard)</option>
+                            <option value="20">20 Movies (Challenge)</option>
+                        </select>
+                        
+                        <label for="player-name">Your name (optional):</label>
+                        <input type="text" id="player-name" placeholder="Enter your name">
+                    </div>
+                    
+                    <div class="menu-buttons">
+                        <button id="start-game-btn" class="btn btn-primary">Start Game</button>
+                        <button id="test-api-btn" class="btn btn-secondary">Test API</button>
+                        <button id="view-movies-btn" class="btn btn-secondary">View Movies</button>
+                    </div>
+                </div>
+            </div>
+
+            <div id="game-play" class="game-section">
+                <div class="game-header">
+                    <div class="game-info">
+                        <span id="current-round">Round 1 of 10</span>
+                        <span id="current-score">Score: 0</span>
+                        <span id="timer">Time: 30s</span>
+                    </div>
+                </div>
+                
+                <div class="movie-display">
+                    <img id="movie-image" src="" alt="Movie screenshot" class="movie-screenshot">
+                    <div id="loading-spinner" class="spinner">
+                        <img src="/static/css/loading-spinner.gif" alt="Loading...">
+                    </div>
+                </div>
+                
+                <div class="answer-options">
+                    <button class="answer-btn" data-answer="A">A. Movie Title 1</button>
+                    <button class="answer-btn" data-answer="B">B. Movie Title 2</button>
+                    <button class="answer-btn" data-answer="C">C. Movie Title 3</button>
+                    <button class="answer-btn" data-answer="D">D. Movie Title 4</button>
+                </div>
+                
+                <div class="game-controls">
+                    <button id="skip-btn" class="btn btn-warning">Skip</button>
+                    <button id="quit-btn" class="btn btn-danger">Quit Game</button>
+                </div>
+            </div>
+
+            <div id="game-results" class="game-section">
+                <div class="results-card">
+                    <h2>🎉 Game Complete!</h2>
+                    <div class="final-score">
+                        <span id="final-score-text">Your Score: 0/10</span>
+                        <span id="final-percentage">0%</span>
+                    </div>
+                    
+                    <div class="results-details">
+                        <p id="results-summary">Great job! You got X out of Y movies correct.</p>
+                    </div>
+                    
+                    <div class="results-buttons">
+                        <button id="play-again-btn" class="btn btn-primary">Play Again</button>
+                        <button id="back-menu-btn" class="btn btn-secondary">Back to Menu</button>
+                    </div>
+                </div>
+            </div>
+
+            <div id="api-test" class="game-section">
+                <div class="api-card">
+                    <h2>🔧 API Test Panel</h2>
+                    
+                    <div class="test-section">
+                        <h3>Health Check</h3>
+                        <button id="test-health" class="btn btn-info">Test Health</button>
+                        <pre id="health-result" class="api-result"></pre>
+                    </div>
+                    
+                    <div class="test-section">
+                        <h3>Movies List</h3>
+                        <button id="test-movies" class="btn btn-info">Get Movies</button>
+                        <pre id="movies-result" class="api-result"></pre>
+                    </div>
+                    
+                    <div class="test-section">
+                        <h3>Start Game</h3>
+                        <button id="test-game-start" class="btn btn-info">Start Test Game</button>
+                        <pre id="game-result" class="api-result"></pre>
+                    </div>
+                    
+                    <button id="back-from-test" class="btn btn-secondary">Back to Menu</button>
+                </div>
+            </div>
+
+            <div id="movies-list" class="game-section">
+                <div class="movies-card">
+                    <h2>🎬 Available Movies</h2>
+                    <div id="movies-container" class="movies-grid">
+                        <!-- Movies will be loaded here -->
+                    </div>
+                    <button id="back-from-movies" class="btn btn-secondary">Back to Menu</button>
+                </div>
+            </div>
+        </main>
+
+        <footer>
+            <p>&copy; 2025 GTM Game - Powered by FastAPI & PostgreSQL</p>
+        </footer>
+    </div>
+
+    <script src="/static/js/config.js"></script>
+    <script src="/static/js/script.js"></script>
+</body>
+</html>

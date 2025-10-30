@@ -58,7 +58,9 @@ async def create_database():
         
     except Exception as e:
         logger.error(f"Error creating database: {str(e)}")
-        raise
+        # Don't raise error if database already exists
+        if "already exists" not in str(e):
+            raise
 
 async def run_migrations():
     """Run database migrations using Alembic"""
