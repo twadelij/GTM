@@ -58,8 +58,8 @@ class GTMGame {
         try {
             Utils.showLoading('loading-spinner');
             
-            // For original gameplay, always use 20 movies and 6 rounds
-            const actualMovieCount = 20; // Original gameplay uses 20 movies
+            // Always use 20 movies for original gameplay
+            const actualMovieCount = 20;
             
             const response = await fetch(`${CONFIG.API_BASE_URL}${CONFIG.ENDPOINTS.GAME_START}`, {
                 method: 'POST',
@@ -79,7 +79,16 @@ class GTMGame {
             this.currentSession = await response.json();
             this.currentRound = 0;
             this.score = 0;
-            this.roundScores = []; // Track scores per round
+            this.roundScores = [];
+            
+            // Initialize progressive elimination system
+            this.allMovies = [...this.currentSession.movies];
+            this.correctMovies = []; // Movies answered correctly
+            this.wrongMovies = [...this.currentSession.movies]; // Movies to try again
+            this.currentMoviePool = [...this.currentSession.movies]; // Current round movies
+            
+            console.log('🎮 Game started with progressive elimination');
+            console.log(`📊 Total movies: ${this.allMovies.length}`);
             
             Utils.hideLoading('loading-spinner');
             this.showSection('game-play');
@@ -93,33 +102,63 @@ class GTMGame {
     }
     
     startRound() {
-        // Original gameplay: 6 rounds maximum
+        // Progressive elimination: max 6 rounds
         if (!this.currentSession || this.currentRound >= 6) {
             this.endGame();
             return;
         }
         
-        const movie = this.currentSession.movies[this.currentRound];
-        this.displayMovie(movie);
+        const currentRound = this.currentRound + 1; // 1-based
+        
+        console.log(`🔄 Starting round ${currentRound}`);
+        console.log(`📊 Movies in current pool: ${this.currentMoviePool.length}`);
+        console.log(`✅ Correct movies: ${this.correctMovies.length}`);
+        console.log(`❌ Wrong movies: ${this.wrongMovies.length}`);
+        
+        // Select a random movie from the current pool
+        if (this.currentMoviePool.length === 0) {
+            console.log('🏁 No more movies in pool, ending game');
+            this.endGame();
+            return;
+        }
+        
+        const randomIndex = Math.floor(Math.random() * this.currentMoviePool.length);
+        const currentMovie = this.currentMoviePool[randomIndex];
+        
+        console.log(`🎬 Selected movie: ${currentMovie.title}`);
+        
+        this.displayMovie(currentMovie);
         this.updateGameInfo();
         this.startTimer();
     }
     
     displayMovie(movie) {
+        console.log('🎬 Displaying movie:', movie);
+        
         // Show the real movie image
         const movieImage = document.getElementById('movie-image');
-        const imagePath = movie.image_path || movie.backdrop_path;
+        const imagePath = movie.image || movie.image_path || movie.backdrop_path;
+        
+        console.log('📸 Image path from API:', imagePath);
         
         if (imagePath) {
-            // Convert relative path to absolute URL
-            const imageUrl = imagePath.startsWith('data/') 
-                ? `http://localhost:8888/${imagePath}`
-                : `http://localhost:8888/data/movies/${imagePath}`;
+            // Construct proper URL - images are in data/movies/
+            const imageUrl = `http://localhost:8888/data/movies/${imagePath}`;
+            
+            console.log('🌐 Full image URL:', imageUrl);
             
             movieImage.src = imageUrl;
             movieImage.alt = `Movie screenshot: ${movie.title}`;
+            
+            // Add error handling
+            movieImage.onload = () => console.log('✅ Image loaded successfully');
+            movieImage.onerror = (e) => {
+                console.error('❌ Image failed to load:', e);
+                console.log('🔄 Falling back to placeholder');
+                movieImage.src = '/static/images/placeholder-movie.jpg';
+            };
         } else {
-            // Fallback to placeholder
+            console.log('⚠️ No image path found, using placeholder');
             movieImage.src = '/static/images/placeholder-movie.jpg';
             movieImage.alt = 'Movie screenshot';
         }
@@ -128,12 +167,16 @@ class GTMGame {
         const currentRound = this.currentRound + 1; // 1-based
         const maxChoices = Math.max(1, 6 - currentRound + 1); // 6 -> 5 -> 4 -> 3 -> 2 -> 1
         
+        console.log(`🎯 Round ${currentRound}: ${maxChoices} choices`);
+        
         // Get random wrong answers from other movies
         const wrongAnswers = this.getRandomWrongAnswers(movie.title, maxChoices - 1);
         
         // Combine correct answer with wrong answers
         const allAnswers = [movie.title, ...wrongAnswers];
         const shuffledAnswers = Utils.shuffleArray(allAnswers);
+        
+        console.log('📝 Answer options:', shuffledAnswers);
         
         const answerButtons = document.querySelectorAll('.answer-btn');
         
@@ -213,9 +256,22 @@ class GTMGame {
     processAnswer(selectedAnswer) {
         this.stopTimer();
         
-        const currentMovie = this.currentSession.movies[this.currentRound];
-        const isCorrect = selectedAnswer === currentMovie.title;
         const currentRound = this.currentRound + 1; // 1-based
+        
+        // Find the current movie from the display
+        const movieImage = document.getElementById('movie-image');
+        const currentMovieTitle = movieImage.alt.replace('Movie screenshot: ', '');
+        const currentMovie = this.currentMoviePool.find(m => m.title === currentMovieTitle);
+        
+        if (!currentMovie) {
+            console.error('❌ Could not find current movie!');
+            return;
+        }
+        
+        const isCorrect = selectedAnswer === currentMovie.title;
+        
+        console.log(`🎯 Answer processed: "${selectedAnswer}"`);
+        console.log(`✅ Correct: ${isCorrect}`);
         
         // Calculate round score (original scoring system)
         let roundScore = 0;
@@ -229,11 +285,20 @@ class GTMGame {
             
             roundScore = basePoints + timeBonus;
             this.score += roundScore;
+            
+            // PROGRESSIVE ELIMINATION: Move movie from wrong to correct
+            const wrongIndex = this.wrongMovies.findIndex(m => m.title === currentMovie.title);
+            if (wrongIndex !== -1) {
+                this.wrongMovies.splice(wrongIndex, 1);
+                this.correctMovies.push(currentMovie);
+                console.log(`✅ Movie moved to correct list: ${currentMovie.title}`);
+            }
         }
         
         // Track round score for results
         this.roundScores.push({
             round: currentRound,
+            movieTitle: currentMovie.title,
             correct: isCorrect,
             score: roundScore,
             timeBonus: isCorrect && currentRound < 6 ? this.timeLeft : 0
@@ -249,9 +314,21 @@ class GTMGame {
             btn.disabled = true;
         });
         
-        // Move to next round after delay
+        // PROGRESSIVE ELIMINATION: Setup next round
         setTimeout(() => {
             this.currentRound++;
+            
+            // Update movie pool for next round
+            if (this.currentRound < 6) {
+                // For rounds 1-5, only wrong movies continue
+                this.currentMoviePool = [...this.wrongMovies];
+                console.log(`🔄 Round ${this.currentRound + 1}: ${this.currentMoviePool.length} movies remaining`);
+            } else {
+                // Round 6: last chance with remaining wrong movies
+                this.currentMoviePool = this.wrongMovies.slice(0, 1); // Only one movie
+                console.log(`🎯 Round 6: Final movie`);
+            }
+            
             this.startRound();
         }, 2000);
     }
@@ -259,18 +336,46 @@ class GTMGame {
     timeUp() {
         this.stopTimer();
         
-        // Show correct answer
-        const currentMovie = this.currentSession.movies[this.currentRound];
-        document.querySelectorAll('.answer-btn').forEach(btn => {
-            if (btn.dataset.answer === currentMovie.title) {
-                btn.classList.add('correct');
-            }
-            btn.disabled = true;
-        });
+        // Find the current movie from the display
+        const movieImage = document.getElementById('movie-image');
+        const currentMovieTitle = movieImage.alt.replace('Movie screenshot: ', '');
+        const currentMovie = this.currentMoviePool.find(m => m.title === currentMovieTitle);
+        
+        if (currentMovie) {
+            // Show correct answer
+            document.querySelectorAll('.answer-btn').forEach(btn => {
+                if (btn.dataset.answer === currentMovie.title) {
+                    btn.classList.add('correct');
+                }
+                btn.disabled = true;
+            });
+            
+            // Track as incorrect (no score)
+            const currentRound = this.currentRound + 1;
+            this.roundScores.push({
+                round: currentRound,
+                movieTitle: currentMovie.title,
+                correct: false,
+                score: 0,
+                timeBonus: 0
+            });
+            
+            console.log(`⏰ Time's up for: ${currentMovie.title}`);
+        }
         
         // Move to next round after delay
         setTimeout(() => {
             this.currentRound++;
+            
+            // Update movie pool for next round (same as processAnswer)
+            if (this.currentRound < 6) {
+                this.currentMoviePool = [...this.wrongMovies];
+                console.log(`🔄 Round ${this.currentRound + 1}: ${this.currentMoviePool.length} movies remaining`);
+            } else {
+                this.currentMoviePool = this.wrongMovies.slice(0, 1);
+                console.log(`🎯 Round 6: Final movie`);
+            }
+            
             this.startRound();
         }, 2000);
     }
@@ -317,6 +422,13 @@ class GTMGame {
         this.currentRound = 0;
         this.score = 0;
         this.roundScores = [];
+        
+        // Reset progressive elimination
+        this.allMovies = [];
+        this.correctMovies = [];
+        this.wrongMovies = [];
+        this.currentMoviePool = [];
+        
         this.showSection('game-menu');
     }
     
@@ -326,6 +438,13 @@ class GTMGame {
         this.currentRound = 0;
         this.score = 0;
         this.roundScores = [];
+        
+        // Reset progressive elimination
+        this.allMovies = [];
+        this.correctMovies = [];
+        this.wrongMovies = [];
+        this.currentMoviePool = [];
+        
         this.showSection('game-menu');
     }
     
