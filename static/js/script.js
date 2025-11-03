@@ -403,9 +403,17 @@ class GTMGame {
                 this.correctMovies.push(currentMovie);
                 console.log(`✅ Movie added to correct list: ${currentMovie.title}`);
             }
+            
+            // CRITICAL FIX: Remove from wrong list if it was there
+            const wrongIndex = this.wrongMovies.findIndex(m => m.title === currentMovie.title);
+            if (wrongIndex !== -1) {
+                this.wrongMovies.splice(wrongIndex, 1);
+                console.log(`🔧 Movie removed from wrong list: ${currentMovie.title}`);
+            }
         } else {
-            // PROGRESSIVE ELIMINATION: Add to wrong list
-            if (!this.wrongMovies.find(m => m.title === currentMovie.title)) {
+            // PROGRESSIVE ELIMINATION: Add to wrong list (only if not already correct)
+            const isAlreadyCorrect = this.correctMovies.find(m => m.title === currentMovie.title);
+            if (!isAlreadyCorrect && !this.wrongMovies.find(m => m.title === currentMovie.title)) {
                 this.wrongMovies.push(currentMovie);
                 console.log(`❌ Movie added to wrong list: ${currentMovie.title}`);
             }
@@ -493,7 +501,7 @@ class GTMGame {
         }
         
         document.body.appendChild(feedbackDiv);
-        setTimeout(() => feedbackDiv.remove(), 2000);
+        setTimeout(() => feedbackDiv.remove(), 800); // Reduced from 2000ms to 800ms to not overlap with next movie
         
         document.querySelectorAll('.answer-btn').forEach(btn => {
             if (btn.classList.contains('selected')) {
@@ -509,6 +517,12 @@ class GTMGame {
         
         // PROGRESSIVE ELIMINATION: Move to next movie or round
         setTimeout(() => {
+            // Remove any lingering feedback popups
+            document.querySelectorAll('div').forEach(div => {
+                if (div.style.position === 'fixed' && div.style.zIndex === '10000') {
+                    div.remove();
+                }
+            });
             this.currentMovieIndex++;
             
             // Determine movies for current round
@@ -559,8 +573,9 @@ class GTMGame {
                 timeBonus: 0
             });
             
-            // Add to wrong list
-            if (!this.wrongMovies.find(m => m.title === currentMovie.title)) {
+            // Add to wrong list (only if not already answered correctly)
+            const isAlreadyCorrect = this.correctMovies.find(m => m.title === currentMovie.title);
+            if (!isAlreadyCorrect && !this.wrongMovies.find(m => m.title === currentMovie.title)) {
                 this.wrongMovies.push(currentMovie);
                 console.log(`⏰ Time's up - movie added to wrong list: ${currentMovie.title}`);
             }
