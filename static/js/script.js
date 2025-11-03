@@ -5,27 +5,87 @@ class GTMGame {
         this.currentRound = 0;
         this.score = 0;
         this.timer = null;
-        this.timeLeft = CONFIG.GAME_TIMER;
+        this.timeLeft = 0;
+        this.roundScores = [];
+        
+        // Progressive elimination
+        this.allMovies = [];
+        this.correctMovies = [];
+        this.wrongMovies = [];
+        this.currentMovieIndex = 0;
+        
+        // Background management
+        this.currentBackgroundMovie = null;
+        this.backgroundMovies = [];
         
         this.init();
     }
     
-    init() {
+    async init() {
+        console.log('🎮 GTM Game initializing...');
+        
+        // Load background movies for Netflix-style background
+        await this.loadBackgroundMovies();
+        
+        // Set initial random background
+        this.setRandomBackground();
+        
         this.bindEvents();
-        this.showSection('game-menu');
+        console.log('✅ GTM Game initialized');
+    }
+    
+    async loadBackgroundMovies() {
+        try {
+            const response = await fetch(`${CONFIG.API_BASE_URL}${CONFIG.ENDPOINTS.MOVIES_LIST}`);
+            if (response.ok) {
+                this.backgroundMovies = await response.json();
+                console.log(`🖼️ Loaded ${this.backgroundMovies.length} movies for background rotation`);
+            }
+        } catch (error) {
+            console.error('❌ Failed to load background movies:', error);
+        }
+    }
+    
+    setRandomBackground() {
+        if (this.backgroundMovies.length === 0) return;
+        
+        // Select a random movie different from current
+        const availableMovies = this.backgroundMovies.filter(m => 
+            !this.currentBackgroundMovie || m.title !== this.currentBackgroundMovie.title
+        );
+        
+        if (availableMovies.length === 0) return;
+        
+        const randomMovie = availableMovies[Math.floor(Math.random() * availableMovies.length)];
+        this.currentBackgroundMovie = randomMovie;
+        
+        // Set background image
+        const backgroundElement = document.getElementById('background-image');
+        const imagePath = randomMovie.image || randomMovie.image_path;
+        
+        if (imagePath) {
+            const imageUrl = `http://localhost:8888/data/movies/${imagePath}`;
+            backgroundElement.style.backgroundImage = `url(${imageUrl})`;
+            console.log(`🎬 Background changed to: ${randomMovie.title}`);
+        }
     }
     
     bindEvents() {
-        // Menu buttons
+        // Menu navigation
         document.getElementById('start-game-btn').addEventListener('click', () => this.startGame());
         document.getElementById('test-api-btn').addEventListener('click', () => this.showApiTest());
         document.getElementById('view-movies-btn').addEventListener('click', () => this.showMoviesList());
         
-        // Game buttons
+        // Game controls
         document.getElementById('skip-btn').addEventListener('click', () => this.skipQuestion());
         document.getElementById('quit-btn').addEventListener('click', () => this.quitGame());
         
-        // Results buttons
+        // Answer buttons
+        document.querySelectorAll('.answer-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => this.selectAnswer(e.target));
+        });
+        
+        // Results navigation
         document.getElementById('play-again-btn').addEventListener('click', () => this.playAgain());
         document.getElementById('back-menu-btn').addEventListener('click', () => this.backToMenu());
         
@@ -33,15 +93,10 @@ class GTMGame {
         document.getElementById('test-health').addEventListener('click', () => this.testHealth());
         document.getElementById('test-movies').addEventListener('click', () => this.testMovies());
         document.getElementById('test-game-start').addEventListener('click', () => this.testGameStart());
+        
+        // Back navigation
         document.getElementById('back-from-test').addEventListener('click', () => this.backToMenu());
-        
-        // Movies list button
         document.getElementById('back-from-movies').addEventListener('click', () => this.backToMenu());
-        
-        // Answer buttons
-        document.querySelectorAll('.answer-btn').forEach(btn => {
-            btn.addEventListener('click', (e) => this.selectAnswer(e.target));
-        });
     }
     
     showSection(sectionId) {
@@ -84,11 +139,12 @@ class GTMGame {
             // Initialize progressive elimination system
             this.allMovies = [...this.currentSession.movies];
             this.correctMovies = []; // Movies answered correctly
-            this.wrongMovies = [...this.currentSession.movies]; // Movies to try again
-            this.currentMoviePool = [...this.currentSession.movies]; // Current round movies
+            this.wrongMovies = []; // Movies answered incorrectly
+            this.currentMovieIndex = 0; // Track which movie we're on
             
             console.log('🎮 Game started with progressive elimination');
             console.log(`📊 Total movies: ${this.allMovies.length}`);
+            console.log(`🎯 Round 1 will show all ${this.allMovies.length} movies with 6 choices each`);
             
             Utils.hideLoading('loading-spinner');
             this.showSection('game-play');
@@ -102,30 +158,50 @@ class GTMGame {
     }
     
     startRound() {
-        // Progressive elimination: max 6 rounds
-        if (!this.currentSession || this.currentRound >= 6) {
-            this.endGame();
-            return;
-        }
-        
+        // Check if we've shown all movies for current round
         const currentRound = this.currentRound + 1; // 1-based
         
         console.log(`🔄 Starting round ${currentRound}`);
-        console.log(`📊 Movies in current pool: ${this.currentMoviePool.length}`);
-        console.log(`✅ Correct movies: ${this.correctMovies.length}`);
-        console.log(`❌ Wrong movies: ${this.wrongMovies.length}`);
+        console.log(`📊 Movies answered so far: ${this.correctMovies.length + this.wrongMovies.length}`);
+        console.log(`✅ Correct: ${this.correctMovies.length}, ❌ Wrong: ${this.wrongMovies.length}`);
         
-        // Select a random movie from the current pool
-        if (this.currentMoviePool.length === 0) {
-            console.log('🏁 No more movies in pool, ending game');
+        // Determine which movies to show in this round
+        let moviesToShow = [];
+        
+        if (currentRound === 1) {
+            // Round 1: Show ALL 20 movies with 6 choices each
+            moviesToShow = [...this.allMovies];
+            console.log(`🎯 Round 1: Showing all ${moviesToShow.length} movies with 6 choices`);
+        } else if (currentRound <= 5) {
+            // Rounds 2-5: Show only wrong movies from previous round with decreasing choices
+            moviesToShow = [...this.wrongMovies];
+            const choices = Math.max(1, 6 - currentRound + 1); // 5->4->3->2->1
+            console.log(`🎯 Round ${currentRound}: Showing ${moviesToShow.length} wrong movies with ${choices} choices each`);
+        } else {
+            // Round 6: Last chance - show remaining wrong movies with 1 choice
+            moviesToShow = this.wrongMovies.slice(0, 1); // Only one movie for final round
+            console.log(`🎯 Round 6: Final movie with 1 choice`);
+        }
+        
+        // Check if we have movies to show
+        if (moviesToShow.length === 0) {
+            console.log('🏁 No more movies to show, ending game');
             this.endGame();
             return;
         }
         
-        const randomIndex = Math.floor(Math.random() * this.currentMoviePool.length);
-        const currentMovie = this.currentMoviePool[randomIndex];
+        // Get current movie based on index
+        if (this.currentMovieIndex >= moviesToShow.length) {
+            // Move to next round
+            this.currentRound++;
+            this.currentMovieIndex = 0;
+            this.startRound();
+            return;
+        }
         
-        console.log(`🎬 Selected movie: ${currentMovie.title}`);
+        const currentMovie = moviesToShow[this.currentMovieIndex];
+        
+        console.log(`🎬 Movie ${this.currentMovieIndex + 1}/${moviesToShow.length} in round ${currentRound}: ${currentMovie.title}`);
         
         this.displayMovie(currentMovie);
         this.updateGameInfo();
@@ -165,7 +241,15 @@ class GTMGame {
         
         // Generate answer options based on current round
         const currentRound = this.currentRound + 1; // 1-based
-        const maxChoices = Math.max(1, 6 - currentRound + 1); // 6 -> 5 -> 4 -> 3 -> 2 -> 1
+        let maxChoices;
+        
+        if (currentRound === 1) {
+            maxChoices = 6; // Always 6 choices in round 1
+        } else if (currentRound <= 5) {
+            maxChoices = Math.max(1, 6 - currentRound + 1); // 5->4->3->2->1
+        } else {
+            maxChoices = 1; // Round 6: 1 choice
+        }
         
         console.log(`🎯 Round ${currentRound}: ${maxChoices} choices`);
         
@@ -261,7 +345,7 @@ class GTMGame {
         // Find the current movie from the display
         const movieImage = document.getElementById('movie-image');
         const currentMovieTitle = movieImage.alt.replace('Movie screenshot: ', '');
-        const currentMovie = this.currentMoviePool.find(m => m.title === currentMovieTitle);
+        const currentMovie = this.allMovies.find(m => m.title === currentMovieTitle);
         
         if (!currentMovie) {
             console.error('❌ Could not find current movie!');
@@ -286,12 +370,16 @@ class GTMGame {
             roundScore = basePoints + timeBonus;
             this.score += roundScore;
             
-            // PROGRESSIVE ELIMINATION: Move movie from wrong to correct
-            const wrongIndex = this.wrongMovies.findIndex(m => m.title === currentMovie.title);
-            if (wrongIndex !== -1) {
-                this.wrongMovies.splice(wrongIndex, 1);
+            // PROGRESSIVE ELIMINATION: Add to correct list
+            if (!this.correctMovies.find(m => m.title === currentMovie.title)) {
                 this.correctMovies.push(currentMovie);
-                console.log(`✅ Movie moved to correct list: ${currentMovie.title}`);
+                console.log(`✅ Movie added to correct list: ${currentMovie.title}`);
+            }
+        } else {
+            // PROGRESSIVE ELIMINATION: Add to wrong list
+            if (!this.wrongMovies.find(m => m.title === currentMovie.title)) {
+                this.wrongMovies.push(currentMovie);
+                console.log(`❌ Movie added to wrong list: ${currentMovie.title}`);
             }
         }
         
@@ -314,19 +402,25 @@ class GTMGame {
             btn.disabled = true;
         });
         
-        // PROGRESSIVE ELIMINATION: Setup next round
+        // PROGRESSIVE ELIMINATION: Move to next movie or round
         setTimeout(() => {
-            this.currentRound++;
+            this.currentMovieIndex++;
             
-            // Update movie pool for next round
-            if (this.currentRound < 6) {
-                // For rounds 1-5, only wrong movies continue
-                this.currentMoviePool = [...this.wrongMovies];
-                console.log(`🔄 Round ${this.currentRound + 1}: ${this.currentMoviePool.length} movies remaining`);
+            // Determine movies for current round
+            let moviesInRound = [];
+            if (currentRound === 1) {
+                moviesInRound = [...this.allMovies];
+            } else if (currentRound <= 5) {
+                moviesInRound = [...this.wrongMovies];
             } else {
-                // Round 6: last chance with remaining wrong movies
-                this.currentMoviePool = this.wrongMovies.slice(0, 1); // Only one movie
-                console.log(`🎯 Round 6: Final movie`);
+                moviesInRound = this.wrongMovies.slice(0, 1);
+            }
+            
+            // Check if we need to move to next round
+            if (this.currentMovieIndex >= moviesInRound.length) {
+                this.currentRound++;
+                this.currentMovieIndex = 0;
+                console.log(`🔄 Moving to round ${this.currentRound + 1}`);
             }
             
             this.startRound();
@@ -339,7 +433,7 @@ class GTMGame {
         // Find the current movie from the display
         const movieImage = document.getElementById('movie-image');
         const currentMovieTitle = movieImage.alt.replace('Movie screenshot: ', '');
-        const currentMovie = this.currentMoviePool.find(m => m.title === currentMovieTitle);
+        const currentMovie = this.allMovies.find(m => m.title === currentMovieTitle);
         
         if (currentMovie) {
             // Show correct answer
@@ -360,20 +454,34 @@ class GTMGame {
                 timeBonus: 0
             });
             
-            console.log(`⏰ Time's up for: ${currentMovie.title}`);
+            // Add to wrong list
+            if (!this.wrongMovies.find(m => m.title === currentMovie.title)) {
+                this.wrongMovies.push(currentMovie);
+                console.log(`⏰ Time's up - movie added to wrong list: ${currentMovie.title}`);
+            }
         }
         
-        // Move to next round after delay
+        // Move to next movie or round after delay
         setTimeout(() => {
-            this.currentRound++;
+            this.currentMovieIndex++;
             
-            // Update movie pool for next round (same as processAnswer)
-            if (this.currentRound < 6) {
-                this.currentMoviePool = [...this.wrongMovies];
-                console.log(`🔄 Round ${this.currentRound + 1}: ${this.currentMoviePool.length} movies remaining`);
+            const currentRound = this.currentRound + 1;
+            
+            // Determine movies for current round
+            let moviesInRound = [];
+            if (currentRound === 1) {
+                moviesInRound = [...this.allMovies];
+            } else if (currentRound <= 5) {
+                moviesInRound = [...this.wrongMovies];
             } else {
-                this.currentMoviePool = this.wrongMovies.slice(0, 1);
-                console.log(`🎯 Round 6: Final movie`);
+                moviesInRound = this.wrongMovies.slice(0, 1);
+            }
+            
+            // Check if we need to move to next round
+            if (this.currentMovieIndex >= moviesInRound.length) {
+                this.currentRound++;
+                this.currentMovieIndex = 0;
+                console.log(`🔄 Moving to round ${this.currentRound + 1}`);
             }
             
             this.startRound();
@@ -395,21 +503,21 @@ class GTMGame {
         this.stopTimer();
         
         const totalRounds = 6;
-        const correctAnswers = this.roundScores.filter(r => r.correct).length;
-        const percentage = Utils.calculatePercentage(correctAnswers, totalRounds);
+        const correctAnswers = this.correctMovies.length;
+        const percentage = Utils.calculatePercentage(correctAnswers, this.allMovies.length);
         
         document.getElementById('final-score-text').textContent = 
             `Your Score: ${this.score} points`;
         document.getElementById('final-percentage').textContent = `${percentage}%`;
         
         // Detailed results summary
-        let summary = `You got ${correctAnswers} out of ${totalRounds} movies correct.\n\n`;
+        let summary = `You got ${correctAnswers} out of ${this.allMovies.length} movies correct.\n\n`;
         summary += `Round breakdown:\n`;
         
         this.roundScores.forEach(round => {
             const status = round.correct ? '✓' : '✗';
             const bonusText = round.timeBonus > 0 ? ` (+${round.timeBonus}s bonus)` : '';
-            summary += `Round ${round.round}: ${status} ${round.score} points${bonusText}\n`;
+            summary += `Round ${round.round}: ${status} ${round.score} points${bonusText} - ${round.movieTitle}\n`;
         });
         
         document.getElementById('results-summary').textContent = summary;
@@ -427,7 +535,7 @@ class GTMGame {
         this.allMovies = [];
         this.correctMovies = [];
         this.wrongMovies = [];
-        this.currentMoviePool = [];
+        this.currentMovieIndex = 0;
         
         this.showSection('game-menu');
     }
@@ -443,7 +551,7 @@ class GTMGame {
         this.allMovies = [];
         this.correctMovies = [];
         this.wrongMovies = [];
-        this.currentMoviePool = [];
+        this.currentMovieIndex = 0;
         
         this.showSection('game-menu');
     }
