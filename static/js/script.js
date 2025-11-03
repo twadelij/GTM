@@ -291,8 +291,22 @@ class GTMGame {
     }
     
     updateGameInfo() {
+        const currentRound = this.currentRound + 1;
+        
+        // Determine movies in current round for progress display
+        let moviesInRound = [];
+        if (currentRound === 1) {
+            moviesInRound = [...this.allMovies];
+        } else {
+            moviesInRound = [...this.wrongMovies];
+        }
+        
+        const movieProgress = this.currentMovieIndex + 1;
+        const totalMovies = moviesInRound.length;
+        
+        // Update display with round and progress
         document.getElementById('current-round').textContent = 
-            `Round ${this.currentRound + 1} of 6`;
+            `Round ${currentRound} of 6 | Movie ${movieProgress}/${totalMovies}`;
         document.getElementById('current-score').textContent = `Score: ${this.score}`;
     }
     
@@ -393,10 +407,13 @@ class GTMGame {
         
         // Show correct/incorrect feedback
         document.querySelectorAll('.answer-btn').forEach(btn => {
-            if (btn.dataset.answer === currentMovie.title) {
-                btn.classList.add('correct');
-            } else if (btn.classList.contains('selected')) {
-                btn.classList.add('incorrect');
+            if (btn.classList.contains('selected')) {
+                // Only show if user was correct
+                if (isCorrect) {
+                    btn.classList.add('correct');
+                } else {
+                    btn.classList.add('incorrect');
+                }
             }
             btn.disabled = true;
         });
@@ -423,7 +440,7 @@ class GTMGame {
             }
             
             this.startRound();
-        }, 2000);
+        }, 1000); // Reduced from 2000ms to 1000ms for better responsiveness
     }
     
     timeUp() {
@@ -484,7 +501,7 @@ class GTMGame {
             }
             
             this.startRound();
-        }, 2000);
+        }, 1000); // Reduced from 2000ms to 1000ms for better responsiveness
     }
     
     skipQuestion() {
