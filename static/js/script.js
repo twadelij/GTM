@@ -155,8 +155,22 @@ class GTMGame {
     }
     
     startRound() {
+        // Check if all movies are guessed correctly
+        if (this.correctMovies.length === this.allMovies.length) {
+            console.log('🎉 All movies guessed correctly! Ending game.');
+            this.endGame();
+            return;
+        }
+        
         // Check if we've shown all movies for current round
         const currentRound = this.currentRound + 1; // 1-based
+        
+        // Check if game should end (max 6 rounds)
+        if (currentRound > 6) {
+            console.log('🏁 Maximum rounds reached, ending game');
+            this.endGame();
+            return;
+        }
         
         console.log(`🔄 Starting round ${currentRound}`);
         console.log(`📊 Movies answered so far: ${this.correctMovies.length + this.wrongMovies.length}`);
@@ -178,16 +192,17 @@ class GTMGame {
         
         // Check if we have movies to show
         if (moviesToShow.length === 0) {
-            console.log('🏁 No more movies to show, ending game');
+            console.log('🏁 No more wrong movies, ending game');
             this.endGame();
             return;
         }
         
         // Get current movie based on index
         if (this.currentMovieIndex >= moviesToShow.length) {
-            // Move to next round
+            // Move to next round - RESET wrongMovies for new round
             this.currentRound++;
             this.currentMovieIndex = 0;
+            this.wrongMovies = []; // CRITICAL: Reset wrong movies for next round
             this.startRound();
             return;
         }
@@ -405,7 +420,81 @@ class GTMGame {
             timeBonus: isCorrect && currentRound < 6 ? this.timeLeft : 0
         });
         
-        // Show correct/incorrect feedback
+        // Show correct/incorrect feedback with comments
+        const encouragingComments = [
+            "🎉 Brilliant! You nailed it!",
+            "⭐ Absolutely stellar!",
+            "🔥 You're on fire!",
+            "💪 Movie buff level: Expert!",
+            "🎬 Lights, camera, CORRECT!",
+            "🏆 Champion of cinema!",
+            "🎯 Bullseye! Perfect shot!",
+            "✨ That's the magic answer!",
+            "🚀 To the moon with that answer!",
+            "🧠 Big brain energy!",
+            "👑 Royalty of movie trivia!",
+            "💎 Diamond-tier guess!",
+            "🎪 You're the ringmaster!",
+            "🦸 Superhero status achieved!",
+            "🌟 Star of the show!",
+            "🎵 Music to my ears!",
+            "🎨 A masterpiece of knowledge!",
+            "🏅 Gold medal performance!",
+            "🎭 Oscar-worthy answer!",
+            "⚡ Lightning-fast brilliance!"
+        ];
+        
+        const snarkyComments = [
+            "😬 Yikes... that's not it, chief!",
+            "🤦 Maybe watch it again?",
+            "❌ Not even close, buddy!",
+            "😅 Did you even see this movie?",
+            "🙈 Ouch! That hurt to watch.",
+            "🎪 Nice try, clown!",
+            "📚 Time to hit the books!",
+            "🤔 Are you even trying?",
+            "😴 Did you fall asleep?",
+            "🎲 Random guess? Shows!",
+            "🤷 Better luck next time!",
+            "😂 That's... creative!",
+            "🎯 You missed by a mile!",
+            "🧐 Questionable choice there!",
+            "🙃 So close... not!",
+            "🎬 Cut! Let's do another take.",
+            "🍿 Maybe less popcorn, more focus?",
+            "🎰 Rolling snake eyes!",
+            "🎪 This isn't a comedy show!",
+            "😬 Swing and a miss!"
+        ];
+        
+        const feedbackDiv = document.createElement('div');
+        feedbackDiv.style.cssText = `
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0, 0, 0, 0.95);
+            padding: 30px 50px;
+            border-radius: 15px;
+            font-size: 1.5rem;
+            font-weight: bold;
+            z-index: 10000;
+            text-align: center;
+            border: 3px solid ${isCorrect ? '#00ff00' : '#ff0000'};
+            box-shadow: 0 0 30px ${isCorrect ? '#00ff00' : '#ff0000'};
+        `;
+        
+        if (isCorrect) {
+            feedbackDiv.textContent = encouragingComments[Math.floor(Math.random() * encouragingComments.length)];
+            feedbackDiv.style.color = '#00ff00';
+        } else {
+            feedbackDiv.textContent = snarkyComments[Math.floor(Math.random() * snarkyComments.length)];
+            feedbackDiv.style.color = '#ff0000';
+        }
+        
+        document.body.appendChild(feedbackDiv);
+        setTimeout(() => feedbackDiv.remove(), 2000);
+        
         document.querySelectorAll('.answer-btn').forEach(btn => {
             if (btn.classList.contains('selected')) {
                 // Only show if user was correct
