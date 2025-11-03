@@ -260,6 +260,9 @@ header p {
     grid-template-columns: 1fr 1fr;
     gap: 15px;
     margin-bottom: 30px;
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .answer-btn {
