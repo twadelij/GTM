@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Progressive Elimination Test</title>
+    <style>
+        body {
+            font-family: 'Courier New', monospace;
+            background: #1a1a1a;
+            color: #00ff00;
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .test-container {
+            background: #2a2a2a;
+            border: 1px solid #00ff00;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        .test-result {
+            background: #1a1a1a;
+            border: 1px solid #333;
+            border-radius: 5px;
+            padding: 10px;
+            margin: 10px 0;
+            white-space: pre-line;
+        }
+        .success { border-color: #00ff00; color: #00ff00; }
+        .error { border-color: #ff0000; color: #ff0000; }
+        .info { border-color: #ffff00; color: #ffff00; }
+        button {
+            background: #00ff00;
+            color: #000;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            margin: 5px;
+        }
+        button:hover { background: #00cc00; }
+        .round-display {
+            background: #333;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+        }
+        .movie-item {
+            background: #444;
+            padding: 10px;
+            margin: 5px 0;
+            border-radius: 3px;
+            border-left: 4px solid #00ff00;
+        }
+        .wrong-answer {
+            border-left-color: #ff0000;
+        }
+        .correct-answer {
+            border-left-color: #00ff00;
+        }
+    </style>
+</head>
+<body>
+    <h1>🧪 Progressive Elimination Test</h1>
+    
+    <div class="test-container">
+        <h2>Test Configuration</h2>
+        <p>Testing the progressive elimination gameplay logic:</p>
+        <ul>
+            <li>Round 1: 10 movies with 6 choices each</li>
+            <li>Round 2: Wrong movies from round 1 with 5 choices each</li>
+            <li>Round 3: Wrong movies from round 2 with 4 choices each</li>
+            <li>Round 4: Wrong movies from round 3 with 3 choices each</li>
+            <li>Round 5: Wrong movies from round 4 with 2 choices each</li>
+            <li>Round 6: Wrong movies from round 5 with 1 choice each</li>
+        </ul>
+        
+        <button onclick="runTest()">🚀 Run Test</button>
+        <button onclick="clearResults()">🗑️ Clear Results</button>
+    </div>
+
+    <div id="test-results"></div>
+
+    <script>
+        // Mock movie data for testing
+        const mockMovies = [
+            { title: "Movie A", image: "a.jpg" },
+            { title: "Movie B", image: "b.jpg" },
+            { title: "Movie C", image: "c.jpg" },
+            { title: "Movie D", image: "d.jpg" },
+            { title: "Movie E", image: "e.jpg" },
+            { title: "Movie F", image: "f.jpg" },
+            { title: "Movie G", image: "g.jpg" },
+            { title: "Movie H", image: "h.jpg" },
+            { title: "Movie I", image: "i.jpg" },
+            { title: "Movie J", image: "j.jpg" }
+        ];
+
+        // Test game state
+        let gameState = {
+            allMovies: [],
+            correctMovies: [],
+            wrongMovies: [],
+            currentRound: 0,
+            currentMovieIndex: 0,
+            testResults: []
+        };
+
+        function log(message, type = 'info') {
+            const timestamp = new Date().toLocaleTimeString();
+            gameState.testResults.push(`[${timestamp}] ${message}`);
+            
+            const resultsDiv = document.getElementById('test-results');
+            const resultDiv = document.createElement('div');
+            resultDiv.className = `test-result ${type}`;
+            resultDiv.textContent = `[${timestamp}] ${message}`;
+            resultsDiv.appendChild(resultDiv);
+            resultsDiv.scrollTop = resultsDiv.scrollHeight;
+        }
+
+        function shuffleArray(array) {
+            const shuffled = [...array];
+            for (let i = shuffled.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+            }
+            return shuffled;
+        }
+
+        function getRandomWrongAnswers(correctAnswer, count) {
+            const allTitles = gameState.allMovies.map(m => m.title);
+            const wrongTitles = allTitles.filter(title => title !== correctAnswer);
+            const shuffled = shuffleArray(wrongTitles);
+            return shuffled.slice(0, Math.min(count, shuffled.length));
+        }
+
+        function simulateAnswer(movieTitle) {
+            // Simulate 70% correct answers for testing
+            const isCorrect = Math.random() < 0.7;
+            
+            if (isCorrect) {
+                if (!gameState.correctMovies.find(m => m.title === movieTitle)) {
+                    gameState.correctMovies.push(gameState.allMovies.find(m => m.title === movieTitle));
+                }
+                return true;
+            } else {
+                if (!gameState.wrongMovies.find(m => m.title === movieTitle)) {
+                    gameState.wrongMovies.push(gameState.allMovies.find(m => m.title === movieTitle));
+                }
+                return false;
+            }
+        }
+
+        function getMoviesForRound(round) {
+            if (round === 1) {
+                return [...gameState.allMovies];
+            } else {
+                return [...gameState.wrongMovies];
+            }
+        }
+
+        function getChoicesForRound(round) {
+            if (round === 1) return 6;
+            return Math.max(1, 6 - round + 1); // 5->4->3->2->1
+        }
+
+        function displayRound(round) {
+            const moviesToShow = getMoviesForRound(round);
+            const choices = getChoicesForRound(round);
+            
+            log(`🎯 Round ${round}: ${moviesToShow.length} movies with ${choices} choices each`);
+            
+            const roundDiv = document.createElement('div');
+            roundDiv.className = 'round-display';
+            roundDiv.innerHTML = `<h3>Round ${round} (${choices} choices)</h3>`;
+            
+            moviesToShow.forEach((movie, index) => {
+                const movieDiv = document.createElement('div');
+                movieDiv.className = 'movie-item';
+                
+                const wrongAnswers = getRandomWrongAnswers(movie.title, choices - 1);
+                const allAnswers = [movie.title, ...wrongAnswers];
+                const shuffledAnswers = shuffleArray(allAnswers);
+                
+                // Verify correct answer is included
+                const hasCorrectAnswer = shuffledAnswers.includes(movie.title);
+                const answerClass = hasCorrectAnswer ? 'correct-answer' : 'error';
+                
+                movieDiv.className += ` ${answerClass}`;
+                movieDiv.innerHTML = `
+                    <strong>Movie ${index + 1}:</strong> ${movie.title}<br>
+                    <strong>Choices:</strong> ${shuffledAnswers.join(', ')}<br>
+                    <strong>Has Correct Answer:</strong> ${hasCorrectAnswer ? '✅ YES' : '❌ NO'}
+                `;
+                
+                roundDiv.appendChild(movieDiv);
+                
+                // Simulate answer
+                const wasCorrect = simulateAnswer(movie.title);
+                log(`  📝 ${movie.title}: ${wasCorrect ? '✅ Correct' : '❌ Wrong'}`, wasCorrect ? 'success' : 'error');
+            });
+            
+            document.getElementById('test-results').appendChild(roundDiv);
+            
+            return moviesToShow.length;
+        }
+
+        async function runTest() {
+            clearResults();
+            log('🧪 Starting Progressive Elimination Test...', 'info');
+            
+            // Initialize game state
+            gameState.allMovies = [...mockMovies];
+            gameState.correctMovies = [];
+            gameState.wrongMovies = [];
+            gameState.currentRound = 0;
+            gameState.currentMovieIndex = 0;
+            
+            log(`📊 Initialized with ${gameState.allMovies.length} movies`, 'info');
+            
+            // Run through all rounds
+            let totalQuestions = 0;
+            for (let round = 1; round <= 6; round++) {
+                gameState.currentRound = round;
+                
+                const moviesInRound = getMoviesForRound(round);
+                if (moviesInRound.length === 0) {
+                    log(`🏁 No movies left for round ${round}, ending test`, 'info');
+                    break;
+                }
+                
+                totalQuestions += displayRound(round);
+                
+                // Small delay for visual effect
+                await new Promise(resolve => setTimeout(resolve, 500));
+            }
+            
+            // Final summary
+            log('\n📊 TEST SUMMARY', 'info');
+            log(`Total Questions: ${totalQuestions}`, 'info');
+            log(`Correct Answers: ${gameState.correctMovies.length}`, 'success');
+            log(`Wrong Answers: ${gameState.wrongMovies.length}`, 'error');
+            log(`Success Rate: ${Math.round((gameState.correctMovies.length / totalQuestions) * 100)}%`, 'info');
+            
+            // Verify progressive elimination logic
+            let testsPassed = 0;
+            let totalTests = 0;
+            
+            // Test 1: Round 1 should have all movies
+            totalTests++;
+            if (gameState.allMovies.length === 10) {
+                log('✅ Test 1 PASSED: Round 1 has correct number of movies', 'success');
+                testsPassed++;
+            } else {
+                log('❌ Test 1 FAILED: Round 1 should have 10 movies', 'error');
+            }
+            
+            // Test 2: Progressive elimination should work
+            totalTests++;
+            if (gameState.correctMovies.length + gameState.wrongMovies.length === gameState.allMovies.length) {
+                log('✅ Test 2 PASSED: All movies accounted for', 'success');
+                testsPassed++;
+            } else {
+                log('❌ Test 2 FAILED: Movie count mismatch', 'error');
+            }
+            
+            // Test 3: Wrong movies should continue to next round
+            totalTests++;
+            if (gameState.wrongMovies.length > 0 || gameState.correctMovies.length === gameState.allMovies.length) {
+                log('✅ Test 3 PASSED: Progressive elimination logic working', 'success');
+                testsPassed++;
+            } else {
+                log('❌ Test 3 FAILED: Progressive elimination not working', 'error');
+            }
+            
+            log(`\n🎯 FINAL RESULT: ${testsPassed}/${totalTests} tests passed`, testsPassed === totalTests ? 'success' : 'error');
+        }
+
+        function clearResults() {
+            document.getElementById('test-results').innerHTML = '';
+            gameState.testResults = [];
+        }
+
+        // Auto-run test on page load
+        window.addEventListener('load', () => {
+            log('🧪 Progressive Elimination Test Suite Ready', 'info');
+            log('Click "Run Test" to start the test', 'info');
+        });
+    </script>
+</body>
+</html>

@@ -107,22 +107,19 @@ class GTMGame {
     }
     
     async startGame() {
-        const movieCount = parseInt(document.getElementById('movie-count').value);
         const playerName = document.getElementById('player-name').value || null;
         
         try {
             Utils.showLoading('loading-spinner');
             
-            // Always use 20 movies for original gameplay
-            const actualMovieCount = 20;
-            
+            // Get 20 movies from API, but only use 10 for gameplay
             const response = await fetch(`${CONFIG.API_BASE_URL}${CONFIG.ENDPOINTS.GAME_START}`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
-                    movie_count: actualMovieCount,
+                    movie_count: 20, // Get 20 from API for variety
                     player_name: playerName
                 })
             });
@@ -136,14 +133,14 @@ class GTMGame {
             this.score = 0;
             this.roundScores = [];
             
-            // Initialize progressive elimination system
-            this.allMovies = [...this.currentSession.movies];
+            // Initialize progressive elimination system with 10 movies
+            this.allMovies = this.currentSession.movies.slice(0, 10); // Use only first 10
             this.correctMovies = []; // Movies answered correctly
             this.wrongMovies = []; // Movies answered incorrectly
             this.currentMovieIndex = 0; // Track which movie we're on
             
             console.log('🎮 Game started with progressive elimination');
-            console.log(`📊 Total movies: ${this.allMovies.length}`);
+            console.log(`📊 Total movies in pool: ${this.allMovies.length}`);
             console.log(`🎯 Round 1 will show all ${this.allMovies.length} movies with 6 choices each`);
             
             Utils.hideLoading('loading-spinner');
@@ -169,18 +166,14 @@ class GTMGame {
         let moviesToShow = [];
         
         if (currentRound === 1) {
-            // Round 1: Show ALL 20 movies with 6 choices each
+            // Round 1: Show all 10 movies with 6 choices each
             moviesToShow = [...this.allMovies];
             console.log(`🎯 Round 1: Showing all ${moviesToShow.length} movies with 6 choices`);
-        } else if (currentRound <= 5) {
-            // Rounds 2-5: Show only wrong movies from previous round with decreasing choices
+        } else {
+            // Rounds 2+: Show only wrong movies from previous round with decreasing choices
             moviesToShow = [...this.wrongMovies];
             const choices = Math.max(1, 6 - currentRound + 1); // 5->4->3->2->1
             console.log(`🎯 Round ${currentRound}: Showing ${moviesToShow.length} wrong movies with ${choices} choices each`);
-        } else {
-            // Round 6: Last chance - show remaining wrong movies with 1 choice
-            moviesToShow = this.wrongMovies.slice(0, 1); // Only one movie for final round
-            console.log(`🎯 Round 6: Final movie with 1 choice`);
         }
         
         // Check if we have movies to show
@@ -245,22 +238,28 @@ class GTMGame {
         
         if (currentRound === 1) {
             maxChoices = 6; // Always 6 choices in round 1
-        } else if (currentRound <= 5) {
-            maxChoices = Math.max(1, 6 - currentRound + 1); // 5->4->3->2->1
         } else {
-            maxChoices = 1; // Round 6: 1 choice
+            maxChoices = Math.max(1, 6 - currentRound + 1); // 5->4->3->2->1
         }
         
         console.log(`🎯 Round ${currentRound}: ${maxChoices} choices`);
         
-        // Get random wrong answers from other movies
+        // Get random wrong answers from ALL movies (not just current round)
         const wrongAnswers = this.getRandomWrongAnswers(movie.title, maxChoices - 1);
         
-        // Combine correct answer with wrong answers
+        // IMPORTANT: Always include the correct answer!
         const allAnswers = [movie.title, ...wrongAnswers];
         const shuffledAnswers = Utils.shuffleArray(allAnswers);
         
+        // Verify correct answer is in the choices
+        if (!shuffledAnswers.includes(movie.title)) {
+            console.error('❌ CRITICAL ERROR: Correct answer not in choices!');
+            // Force include correct answer
+            shuffledAnswers[0] = movie.title;
+        }
+        
         console.log('📝 Answer options:', shuffledAnswers);
+        console.log(`✅ Correct answer "${movie.title}" is in choices: ${shuffledAnswers.includes(movie.title)}`);
         
         const answerButtons = document.querySelectorAll('.answer-btn');
         
