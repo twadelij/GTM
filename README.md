@@ -26,18 +26,19 @@ Een interactief spel waarbij spelers films moeten raden aan de hand van screensh
 
 ## 🎮 Gameplay
 
-- Start met 20 willekeurige films
-- 6 rondes om alle films te raden
+- Start met 10 willekeurige films uit de pool
+- 6 rondes om alle films te raden via progressive elimination
 - Punten per ronde:
   - Ronde 1: 5 punten + tijdbonus
   - Ronde 2: 4 punten + tijdbonus
   - Ronde 3: 3 punten + tijdbonus
   - Ronde 4: 2 punten + tijdbonus
   - Ronde 5: 1 punt + tijdbonus
-  - Ronde 6: Laatste kans (geen punten/tijdbonus)
+  - Ronde 6: Laatste kans (0 punten, geen tijdbonus)
 - Tijdbonus: 1 punt per seconde over (niet in ronde 6)
 - Foute antwoorden gaan door naar de volgende ronde
 - Minder keuzes per ronde (6 -> 5 -> 4 -> 3 -> 2 -> 1)
+- Correct antwoord is altijd aanwezig in de keuzes
 
 ## 🛠️ Technische Stack
 
