@@ -9,6 +9,12 @@
 - [x] Game design voorstel geschreven (GAME_DESIGN_PROPOSAL.md)
 - [x] TMDB API onderzocht (gratis, geen whitelisting nodig)
 - [x] Tech stack bepaald: FastAPI (Python) + PostgreSQL + HTML/CSS/JS
+- [x] requirements.txt opgeschoond (Stripe, Redis, Google OAuth verwijderd, python-ldap toegevoegd)
+- [x] docker-compose.yml opgeschoond (Redis, Nginx verwijderd, AD environment variables toegevoegd)
+- [x] AD auth service module gemaakt (src/services/ad_auth.py)
+- [x] docs/TODO.md aangemaakt
+- [x] Git commit en push naar GitHub
+- [x] Frontend game interface gemaakt (static/weekly-game.html)
 
 ---
 

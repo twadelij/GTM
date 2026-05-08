@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weekly GTM Challenge</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            min-height: 100vh;
+            color: #ffffff;
+        }
+
+        .header {
+            background: rgba(0, 0, 0, 0.5);
+            padding: 20px;
+            text-align: center;
+            border-bottom: 2px solid #e50914;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            color: #e50914;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+        }
+
+        .header .subtitle {
+            color: #ffffff;
+            font-size: 1rem;
+            margin-top: 5px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .game-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 15px 25px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            backdrop-filter: blur(10px);
+        }
+
+        .game-info span {
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+
+        .game-info .score {
+            color: #46d369;
+        }
+
+        .game-info .timer {
+            color: #e50914;
+        }
+
+        .movie-card {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            overflow: hidden;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+
+        .movie-image {
+            width: 100%;
+            height: 400px;
+            background: #000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .movie-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .movie-image img.loaded {
+            opacity: 1;
+        }
+
+        .movie-image .loading {
+            color: #ffffff;
+            font-size: 1.5rem;
+            animation: pulse 1.5s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 1; }
+        }
+
+        .movie-number {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            background: #e50914;
+            color: white;
+            padding: 8px 15px;
+            border-radius: 5px;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
+        .mystery-badge {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: #f5c518;
+            color: #000;
+            padding: 8px 15px;
+            border-radius: 5px;
+            font-weight: bold;
+            font-size: 1rem;
+        }
+
+        .options {
+            padding: 30px;
+        }
+
+        .options h3 {
+            margin-bottom: 20px;
+            font-size: 1.3rem;
+            color: #ffffff;
+        }
+
+        .options-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+        }
+
+        .option-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            color: #ffffff;
+            padding: 20px;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .option-btn:hover {
+            background: rgba(229, 9, 20, 0.3);
+            border-color: #e50914;
+            transform: translateY(-2px);
+        }
+
+        .option-btn.selected {
+            background: #e50914;
+            border-color: #e50914;
+        }
+
+        .option-btn.correct {
+            background: #46d369;
+            border-color: #46d369;
+        }
+
+        .option-btn.incorrect {
+            background: #e50914;
+            border-color: #e50914;
+        }
+
+        .option-btn:disabled {
+            cursor: not-allowed;
+            opacity: 0.5;
+        }
+
+        .submit-btn {
+            background: #e50914;
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            font-size: 1.2rem;
+            border-radius: 10px;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: background 0.3s ease;
+        }
+
+        .submit-btn:hover {
+            background: #f40612;
+        }
+
+        .submit-btn:disabled {
+            background: #666;
+            cursor: not-allowed;
+        }
+
+        .progress-bar {
+            height: 8px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 4px;
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: #e50914;
+            transition: width 0.3s ease;
+        }
+
+        .timer-bar {
+            height: 6px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 3px;
+            overflow: hidden;
+            margin-top: 20px;
+        }
+
+        .timer-fill {
+            height: 100%;
+            background: #e50914;
+            transition: width 1s linear;
+        }
+
+        .result-screen {
+            text-align: center;
+            padding: 50px 20px;
+        }
+
+        .result-screen h2 {
+            font-size: 3rem;
+            margin-bottom: 20px;
+        }
+
+        .result-screen .final-score {
+            font-size: 5rem;
+            color: #46d369;
+            margin-bottom: 30px;
+        }
+
+        .result-screen .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .result-screen .stat-box {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 10px;
+        }
+
+        .result-screen .stat-box h3 {
+            font-size: 2rem;
+            color: #e50914;
+            margin-bottom: 10px;
+        }
+
+        .result-screen .stat-box p {
+            color: #ffffff;
+        }
+
+        .rating-section {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 30px;
+            border-radius: 10px;
+            margin-top: 30px;
+        }
+
+        .rating-section h3 {
+            margin-bottom: 20px;
+        }
+
+        .rating-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .rating-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+        }
+
+        .rating-btn:hover {
+            background: rgba(229, 9, 20, 0.3);
+            border-color: #e50914;
+        }
+
+        .rating-btn.selected {
+            background: #e50914;
+            border-color: #e50914;
+        }
+
+        .start-screen {
+            text-align: center;
+            padding: 100px 20px;
+        }
+
+        .start-screen h1 {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            color: #e50914;
+        }
+
+        .start-screen p {
+            font-size: 1.3rem;
+            margin-bottom: 30px;
+            color: #ffffff;
+        }
+
+        .start-btn {
+            background: #e50914;
+            color: white;
+            border: none;
+            padding: 20px 60px;
+            font-size: 1.5rem;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .start-btn:hover {
+            background: #f40612;
+        }
+
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🎬 Weekly GTM Challenge</h1>
+        <div class="subtitle">Raad de 5 films van deze week!</div>
+    </div>
+
+    <div class="container">
+        <!-- Start Screen -->
+        <div id="startScreen" class="start-screen">
+            <h1>Weekly GTM Challenge</h1>
+            <p>5 films • 30 seconden per film • Max 75 punten</p>
+            <button class="start-btn" onclick="startGame()">Start Spel</button>
+        </div>
+
+        <!-- Game Screen -->
+        <div id="gameScreen" class="hidden">
+            <div class="game-info">
+                <span>Film: <span id="currentMovie">1</span>/5</span>
+                <span class="score">Score: <span id="score">0</span></span>
+                <span class="timer">Tijd: <span id="timer">30</span>s</span>
+            </div>
+
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressBar" style="width: 20%"></div>
+            </div>
+
+            <div class="movie-card">
+                <div class="movie-image">
+                    <span class="movie-number" id="movieNumber">1</span>
+                    <span class="mystery-badge hidden" id="mysteryBadge">MYSTERY</span>
+                    <img id="movieImage" alt="Film screenshot">
+                    <div class="loading" id="loading">Loading...</div>
+                </div>
+
+                <div class="options">
+                    <h3>Kies de juiste film:</h3>
+                    <div class="options-grid" id="optionsGrid">
+                        <!-- Options will be inserted here -->
+                    </div>
+                    <button class="submit-btn" id="submitBtn" onclick="submitAnswer()" disabled>Bevestig</button>
+                </div>
+
+                <div class="timer-bar">
+                    <div class="timer-fill" id="timerBar" style="width: 100%"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Result Screen -->
+        <div id="resultScreen" class="result-screen hidden">
+            <h2>🎉 Challenge Voltooid!</h2>
+            <div class="final-score" id="finalScore">0</div>
+            <p>Eindtotaal punten</p>
+
+            <div class="stats">
+                <div class="stat-box">
+                    <h3 id="correctCount">0</h3>
+                    <p>Correct</p>
+                </div>
+                <div class="stat-box">
+                    <h3 id="incorrectCount">0</h3>
+                    <p>Fout</p>
+                </div>
+                <div class="stat-box">
+                    <h3 id="avgTime">0s</h3>
+                    <p>Gem. Tijd</p>
+                </div>
+            </div>
+
+            <div class="rating-section">
+                <h3>⭐ Beoordeel deze week's films (1-5)</h3>
+                <div class="rating-buttons" id="ratingButtons">
+                    <button class="rating-btn" onclick="rateMovie(1)">1</button>
+                    <button class="rating-btn" onclick="rateMovie(2)">2</button>
+                    <button class="rating-btn" onclick="rateMovie(3)">3</button>
+                    <button class="rating-btn" onclick="rateMovie(4)">4</button>
+                    <button class="rating-btn" onclick="rateMovie(5)">5</button>
+                </div>
+                <p id="ratingMessage" style="margin-top: 15px;"></p>
+            </div>
+
+            <button class="submit-btn" onclick="location.reload()">Speel opnieuw</button>
+        </div>
+    </div>
+
+    <script>
+        // Game State
+        let currentMovieIndex = 0;
+        let score = 0;
+        let timeLeft = 30;
+        let timerInterval;
+        let selectedAnswer = null;
+        let correctAnswers = 0;
+        let incorrectAnswers = 0;
+        let totalTime = 0;
+        let movieStartTime;
+
+        // Mock data - in production this comes from backend
+        const movies = [
+            {
+                id: 1,
+                title: "The Matrix",
+                image: "https://image.tmdb.org/t/p/w1280/f89U3ADr1oiB1s9GkdPOEpXUk5H.jpg",
+                isMystery: false,
+                options: ["The Matrix", "Inception", "Blade Runner", "Tron"]
+            },
+            {
+                id: 2,
+                title: "Inception",
+                image: "https://image.tmdb.org/t/p/w1280/9gk7admal4zl67YrxIo2AO08qX8.jpg",
+                isMystery: false,
+                options: ["Inception", "Interstellar", "The Prestige", "Memento"]
+            },
+            {
+                id: 3,
+                title: "Mystery Film",
+                image: "https://image.tmdb.org/t/p/w1280/9gk7admal4zl67YrxIo2AO08qX8.jpg",
+                isMystery: true,
+                options: ["Mystery Film A", "Mystery Film B", "Mystery Film C", "Mystery Film D"]
+            },
+            {
+                id: 4,
+                title: "Interstellar",
+                image: "https://image.tmdb.org/t/p/w1280/gEU2QniL6C8zEfVfy23rUnLJpsp.jpg",
+                isMystery: false,
+                options: ["Interstellar", "Gravity", "The Martian", "Arrival"]
+            },
+            {
+                id: 5,
+                title: "The Dark Knight",
+                image: "https://image.tmdb.org/t/p/w1280/qJ2tW6WMUDux911r6m7haRef0WH.jpg",
+                isMystery: false,
+                options: ["The Dark Knight", "Batman Begins", "The Dark Knight Rises", "Joker"]
+            }
+        ];
+
+        function startGame() {
+            document.getElementById('startScreen').classList.add('hidden');
+            document.getElementById('gameScreen').classList.remove('hidden');
+            loadMovie(0);
+        }
+
+        function loadMovie(index) {
+            if (index >= movies.length) {
+                showResults();
+                return;
+            }
+
+            currentMovieIndex = index;
+            const movie = movies[index];
+            selectedAnswer = null;
+            timeLeft = 30;
+            movieStartTime = Date.now();
+
+            // Update UI
+            document.getElementById('currentMovie').textContent = index + 1;
+            document.getElementById('movieNumber').textContent = index + 1;
+            document.getElementById('timer').textContent = timeLeft;
+            document.getElementById('progressBar').style.width = ((index + 1) / 5 * 100) + '%';
+            document.getElementById('submitBtn').disabled = true;
+
+            // Mystery badge
+            if (movie.isMystery) {
+                document.getElementById('mysteryBadge').classList.remove('hidden');
+            } else {
+                document.getElementById('mysteryBadge').classList.add('hidden');
+            }
+
+            // Load image
+            const img = document.getElementById('movieImage');
+            const loading = document.getElementById('loading');
+            img.classList.remove('loaded');
+            loading.style.display = 'block';
+            
+            img.onload = function() {
+                img.classList.add('loaded');
+                loading.style.display = 'none';
+            };
+            img.src = movie.image;
+
+            // Load options
+            const optionsGrid = document.getElementById('optionsGrid');
+            optionsGrid.innerHTML = '';
+            movie.options.forEach(option => {
+                const btn = document.createElement('button');
+                btn.className = 'option-btn';
+                btn.textContent = option;
+                btn.onclick = () => selectOption(option, btn);
+                optionsGrid.appendChild(btn);
+            });
+
+            // Start timer
+            clearInterval(timerInterval);
+            timerInterval = setInterval(updateTimer, 1000);
+        }
+
+        function selectOption(option, btn) {
+            selectedAnswer = option;
+            document.querySelectorAll('.option-btn').forEach(b => b.classList.remove('selected'));
+            btn.classList.add('selected');
+            document.getElementById('submitBtn').disabled = false;
+        }
+
+        function submitAnswer() {
+            clearInterval(timerInterval);
+            const movie = movies[currentMovieIndex];
+            const isCorrect = selectedAnswer === movie.title;
+            const timeTaken = (Date.now() - movieStartTime) / 1000;
+            totalTime += timeTaken;
+
+            // Calculate score
+            let points = 0;
+            if (isCorrect) {
+                const basePoints = movie.isMystery ? 30 : 10;
+                const timeBonus = Math.min(5, Math.floor((30 - timeTaken) / 6));
+                points = basePoints + timeBonus;
+                correctAnswers++;
+            } else {
+                incorrectAnswers++;
+            }
+
+            score += points;
+            document.getElementById('score').textContent = score;
+
+            // Show correct/incorrect
+            document.querySelectorAll('.option-btn').forEach(btn => {
+                btn.disabled = true;
+                if (btn.textContent === movie.title) {
+                    btn.classList.add('correct');
+                } else if (btn.textContent === selectedAnswer && !isCorrect) {
+                    btn.classList.add('incorrect');
+                }
+            });
+
+            document.getElementById('submitBtn').disabled = true;
+
+            // Next movie after delay
+            setTimeout(() => loadMovie(currentMovieIndex + 1), 1500);
+        }
+
+        function updateTimer() {
+            timeLeft--;
+            document.getElementById('timer').textContent = timeLeft;
+            document.getElementById('timerBar').style.width = (timeLeft / 30 * 100) + '%';
+
+            if (timeLeft <= 0) {
+                clearInterval(timerInterval);
+                submitAnswer();
+            }
+        }
+
+        function showResults() {
+            document.getElementById('gameScreen').classList.add('hidden');
+            document.getElementById('resultScreen').classList.remove('hidden');
+            document.getElementById('finalScore').textContent = score;
+            document.getElementById('correctCount').textContent = correctAnswers;
+            document.getElementById('incorrectCount').textContent = incorrectAnswers;
+            document.getElementById('avgTime').textContent = (totalTime / 5).toFixed(1) + 's';
+        }
+
+        function rateMovie(rating) {
+            document.querySelectorAll('.rating-btn').forEach(btn => btn.classList.remove('selected'));
+            event.target.classList.add('selected');
+            document.getElementById('ratingMessage').textContent = `Bedankt voor je beoordeling: ${rating}/5 ⭐`;
+        }
+    </script>
+</body>
+</html>
