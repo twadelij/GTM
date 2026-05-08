@@ -474,10 +474,19 @@
         });
 
         async function approveAll() {
-            const cards = document.querySelectorAll('.image-card[data-title]');
+            const cards = Array.from(document.querySelectorAll('.image-card[data-title]'));
+            if (cards.length === 0) {
+                showMessage('Geen kaartjes om goed te keuren', 'info');
+                return;
+            }
+            if (!confirm(`${cards.length} films goedkeuren?`)) return;
+            
+            let ok = 0, fail = 0;
+            showMessage(`Bezig met goedkeuren (0/${cards.length})...`, 'info');
+            
             for (const card of cards) {
                 try {
-                    await fetch(`${BACKEND_URL}/api/approve`, {
+                    const r = await fetch(`${BACKEND_URL}/api/approve`, {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({
@@ -487,13 +496,26 @@
                             tmdb_rating: parseFloat(card.dataset.rating) || 0
                         })
                     });
-                    approvedTotal++;
-                } catch(e) {}
+                    if (r.ok) {
+                        card.remove();
+                        approvedTotal++;
+                        ok++;
+                    } else {
+                        fail++;
+                        console.error('Approve failed:', card.dataset.title, await r.text());
+                    }
+                } catch(e) {
+                    fail++;
+                    console.error('Approve error:', card.dataset.title, e);
+                }
+                showMessage(`Bezig met goedkeuren (${ok + fail}/${cards.length})...`, 'info');
             }
-            cards.forEach(card => card.remove());
             updateStats();
             refreshPoolCount();
-            showMessage(`${cards.length} films goedgekeurd`, 'success');
+            const msg = fail > 0 
+                ? `${ok} goedgekeurd, ${fail} mislukt` 
+                : `${ok} films goedgekeurd`;
+            showMessage(msg, fail > 0 ? 'error' : 'success');
         }
 
         function updateStats() {

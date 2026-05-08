@@ -212,7 +212,7 @@
                     localStorage.setItem('gtm_token', data.token);
                     localStorage.setItem('gtm_user', JSON.stringify(data.user));
                     localStorage.setItem('gtm_player_name', data.user.display_name);
-                    window.location.href = '/weekly-game.html';
+                    window.location.href = data.user.is_admin ? '/admin.html' : '/weekly-game.html';
                 } else {
                     showError(data.error);
                 }
