@@ -25,9 +25,16 @@ pip install -r requirements.txt
 
 3. Start de backend (serveert zowel API als static files):
 ```bash
-./start-server.sh
+./game-server.sh start
 # Of direct:
 python3 backend.py
+```
+
+Server beheer:
+```bash
+./game-server.sh status   # Check of server draait
+./game-server.sh stop     # Stop server
+./game-server.sh restart  # Herstart server
 ```
 
 4. Open de browser:
@@ -52,28 +59,30 @@ De backend draait op poort 30067 en serveert zowel API als static files:
 
 - `GET /api/weekly-challenge` - Huidige weekly challenge ophalen
 - `GET /api/generate-challenge` - Forceer nieuwe weekly challenge genereren
-- `GET /weekly-game.html` - Frontend interface
+- `GET /api/blacklist` - Bekijk blacklist
+- `POST /api/blacklist` - Film toevoegen aan blacklist
+- `DELETE /api/blacklist` - Film verwijderen van blacklist
+- `GET /weekly-game.html` - Frontend game interface
+- `GET /admin.html` - Admin panel voor kwaliteitscontrole
 - `GET /static/*` - Static files
 
-De backend gebruikt SQLite voor weekly challenge storage. Iedereen krijgt dezelfde films die week.
+De backend gebruikt SQLite voor weekly challenge storage en blacklist. Iedereen krijgt dezelfde films die week.
 
 ## 🏗️ Project Structuur
 
 ```
 GTM/
 ├── backend.py              # Backend server (API + static files)
-├── start-server.sh         # Script om backend te starten
+├── game-server.sh          # Script om backend te beheren (start/stop/status)
 ├── static/
-│   └── weekly-game.html    # Frontend game interface
-├── src/
-│   ├── config/            # Configuratie
-│   ├── core/              # Database setup
-│   └── services/          # AD auth service
+│   ├── weekly-game.html    # Frontend game interface
+│   └── admin.html          # Admin panel voor kwaliteitscontrole
+├── test_backend.py         # End-to-end tests voor backend
 ├── docs/
 │   ├── GAME_DESIGN_PROPOSAL.md
 │   └── TODO.md
 ├── requirements.txt
-└── docker-compose.yml
+└── weekly_challenges.db    # SQLite database (wordt aangemaakt bij eerste run)
 ```
 
 ## 🛠️ Tech Stack

@@ -214,13 +214,18 @@
         <div class="message" id="message"></div>
 
         <div class="images-grid" id="imagesGrid">
-            <div class="loading">Klik op "Laad willekeurige stills" om te beginnen</div>
+            <div class="loading">Stills laden...</div>
         </div>
     </div>
 
     <script>
         const BACKEND_URL = window.location.origin;
         let currentImages = [];
+
+        // Load images automatically on page load
+        window.onload = function() {
+            loadRandomImages();
+        };
 
         async function loadRandomImages() {
             showMessage('Laden...', 'info');
