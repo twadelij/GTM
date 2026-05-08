@@ -50,7 +50,7 @@
 **Elke weekag (bijv. maandag 09:00):**
 - Automatische selectie van 5 films uit pool
 - 1 screenshot per film (willekeurig moment)
-- Multiple choice met 4 opties
+- Multiple choice met 9 opties (genre-matched, 3x3 grid)
 - 30 seconden per film
 - Score: 10 punten per correct antwoord
 
@@ -157,79 +157,75 @@ def select_tmdb_films():
 
 ---
 
-## 🛠️ Technische Implementatie
+## 🛠️ Technische Implementatie (huidige staat)
 
-### Database Schema
+### Architectuur
+
+- **Backend:** Python 3 HTTP server (backend.py) op poort 30067
+- **Database:** SQLite (weekly_challenges + blacklist tabellen)
+- **Frontend:** HTML/CSS/JS (static/weekly-game.html)
+- **Admin:** HTML/CSS/JS (static/admin.html)
+- **API:** TMDB voor films en stills
+
+### Database Schema (SQLite)
 
 ```sql
--- Films pool
-films (
-  id, title, year, imdb_votes, 
-  screenshot_path, category, 
-  is_mystery, avg_rating, times_shown
-)
-
--- Weekly challenges
+-- Weekly challenges (JSON met 5 films + opties)
 weekly_challenges (
-  id, week_number, year,
-  film_1_id, film_2_id, film_3_id, film_4_id, film_5_id,
-  created_at
+  id INTEGER PRIMARY KEY,
+  week_start TEXT UNIQUE,
+  movies TEXT (JSON),
+  created_at TEXT
 )
 
+-- Blacklist voor afgekeurde stills
+blacklist (
+  id INTEGER PRIMARY KEY,
+  movie_id INTEGER UNIQUE,
+  movie_title TEXT,
+  image_url TEXT,
+  created_at TEXT
+)
+```
+
+### Toekomstige tabellen (na AD integratie)
+
+```sql
 -- User scores
 user_scores (
-  user_id, challenge_id,
-  score_1, score_2, score_3, score_4, score_5,
-  total_score, time_taken,
-  submitted_at
+  user_id TEXT,  -- AD username
+  challenge_id INTEGER,
+  total_score INTEGER,
+  time_taken REAL,
+  submitted_at TEXT
 )
 
 -- Film ratings
 film_ratings (
-  user_id, film_id, rating (1-5),
-  rated_at
-)
-
--- Teams
-teams (
-  id, name, captain_id,
-  created_at
-)
-
-team_members (
-  team_id, user_id,
-  joined_at
+  user_id TEXT, film_id INTEGER, rating INTEGER,
+  rated_at TEXT
 )
 ```
 
-### Automatisering
+### Automatisering (huidige implementatie)
 
-**Weekly challenge generator (cron job):**
-```python
-def generate_weekly_challenge():
-    # Selecteer 4 normale films (high rating, niet recent shown)
-    normal_films = get_high_rated_films(limit=10, exclude_recent=4)
-    selected = random.sample(normal_films, 4)
-    
-    # Selecteer 1 mysterie film (low rating of obscure)
-    mystery_films = get_mystery_films(limit=5)
-    selected.append(random.choice(mystery_films))
-    
-    # Shuffle volgorde
-    random.shuffle(selected)
-    
-    # Sla op in database
-    create_weekly_challenge(selected)
-    
-    # Stuur Slack notificatie
-    send_slack_notification("Nieuwe weekly challenge live!")
-```
+**Weekly challenge generator (automatisch bij eerste request van de week):**
+- Backend haalt 60 films op van TMDB (3 pages popular)
+- Filtert blacklisted films eruit
+- Selecteert 5 random films
+- Genereert 9 genre-gematchte opties per film
+- Slaat op in SQLite, geldig voor hele week
+
+**Admin kwaliteitscontrole:**
+- Admin scherm op /admin.html
+- Stills bekijken en blacklisten
+- Blacklist persistent in database
+- Geblackliste films worden overgeslagen bij nieuwe challenges
 
 **Maintenance:**
-- Cron job draait automatisch elke week
-- Geen handmatige interventie nodig
-- Content pool groeit via community bijdragen
-- Rating systeem houdt kwaliteit hoog
+- Challenge wordt automatisch gegenereerd bij eerste bezoek
+- Admin keurt stills goed/af via admin panel
+- Blacklist groeit, kwaliteit verbetert over tijd
 
 ---
 
@@ -305,30 +301,29 @@ def generate_weekly_challenge():
 
 ## 🚀 Implementatie Roadmap
 
-### Fase 1: MVP (4 weken)
-- [ ] Backend met weekly challenge generator
-- [ ] Frontend met 5-film gameplay
-- [ ] Leaderboard (wekelijks)
-- [ ] Basic user registration
-- [ ] Film rating systeem
+### Fase 1: MVP ✅ (voltooid)
+- [x] Backend met weekly challenge generator
+- [x] Frontend met 5-film gameplay (9 opties, 3x3 grid)
+- [x] Admin panel voor kwaliteitscontrole
+- [x] Blacklist functionaliteit
+- [x] End-to-end tests
 
-### Fase 2: Community (2 weken)
+### Fase 2: Deployment (todo)
+- [ ] Deploy naar CBS server
+- [ ] AD integratie voor login
+- [ ] Leaderboard per gebruiker
+
+### Fase 3: Community (todo)
 - [ ] Film inlever formulier
 - [ ] Approval queue
 - [ ] Mysterie film E logica
 - [ ] Badges en levels
 
-### Fase 3: Social (2 weken)
+### Fase 4: Social (todo)
 - [ ] Team modus
 - [ ] Seizoen systeem
-- [ ] Slack integration
+- [ ] Slack/Teams integration
 - [ ] Statistics dashboard
-
-### Fase 4: Polish (1 week)
-- [ ] UI/UX verbeteringen
-- [ ] Performance optimalisatie
-- [ ] Documentation
-- [ ] Beta test met volledige groep
 
 ---
 

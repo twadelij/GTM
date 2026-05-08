@@ -1,150 +1,134 @@
 # 📋 Weekly GTM League - TODO
 
-**Laatste update:** 2026-05-08
+**Laatste update:** 2026-05-08 12:40
 
 ---
 
 ## ✅ Voltooid
 
+### Fase 1: Basis opzetten
 - [x] Game design voorstel geschreven (GAME_DESIGN_PROPOSAL.md)
 - [x] TMDB API onderzocht (gratis, geen whitelisting nodig)
-- [x] Tech stack bepaald: FastAPI (Python) + PostgreSQL + HTML/CSS/JS
-- [x] requirements.txt opgeschoond (Stripe, Redis, Google OAuth verwijderd, python-ldap toegevoegd)
-- [x] docker-compose.yml opgeschoond (Redis, Nginx verwijderd, AD environment variables toegevoegd)
-- [x] AD auth service module gemaakt (src/services/ad_auth.py)
+- [x] requirements.txt opgeschoond
 - [x] docs/TODO.md aangemaakt
-- [x] Git commit en push naar GitHub
-- [x] Frontend game interface gemaakt (static/weekly-game.html)
+
+### Fase 2: Backend MVP
+- [x] Simpele Python HTTP server (backend.py) op poort 30067
+- [x] SQLite database voor weekly challenge storage
+- [x] TMDB API integratie (3 pages, 60 films pool)
+- [x] Weekly challenge generator (5 films per week)
+- [x] 9 genre-gematchte keuzes per film
+- [x] Blacklist tabel in database
+- [x] API endpoints:
+  - `GET /api/weekly-challenge` - Huidige weekly challenge
+  - `GET /api/generate-challenge` - Forceer nieuwe challenge
+  - `GET /api/blacklist` - Bekijk blacklist
+  - `POST /api/blacklist` - Film blacklisten
+  - `DELETE /api/blacklist` - Film van blacklist verwijderen
+- [x] Static file serving (frontend + admin vanuit zelfde server)
+- [x] End-to-end test script (test_backend.py)
+
+### Fase 3: Frontend game
+- [x] Frontend game interface (static/weekly-game.html)
+- [x] 5 films per weekly challenge
+- [x] 30 seconden timer per film
+- [x] 9 keuzes in 3x3 grid layout
+- [x] Direct antwoord bij klikken (geen bevestig knop)
+- [x] Score systeem met tijdbonus
+- [x] Mystery film badge + 3x bonus
+- [x] Rating interface na afloop
+- [x] Resultaat scherm met totaalscore
+
+### Fase 4: Admin panel
+- [x] Admin scherm (static/admin.html)
+- [x] Stills laden en bekijken
+- [x] Films blacklisten via backend API
+- [x] Blacklist bekijken en beheren
+- [x] Films van blacklist verwijderen
+- [x] Blacklist wordt meegenomen bij challenge generatie
+
+### Bugfixes
+- [x] Fix: sort() vs sorted() bug (backend crashte)
+- [x] Fix: 5 films in plaats van 4
+- [x] Fix: 9 opties in plaats van 4 (full pool nodig)
+- [x] Fix: poort conflict (backend serveert nu ook static files)
+- [x] Fix: frontend BACKEND_URL dynamisch (window.location.origin)
 
 ---
 
 ## 🚀 In Progress
 
-### Analyseer huidige codebase op herbruikbaarheid
-- [x] Backend: FastAPI al aanwezig - herbruikbaar
-- [x] Database: PostgreSQL al in docker-compose.yml - herbruikbaar
-- [x] Models: GameSession, GameResult, Leaderboard - deels herbruikbaar
-- [ ] Auth: Google OAuth moet worden vervangen door AD
-- [ ] Frontend: HTML/CSS/JS kan als basis worden gebruikt
+### Kwaliteitscontrole
+- [ ] Tekst detectie in stills (OCR of AI)
+- [ ] Automatische filtering van stills met ondertitels/watermarks
 
 ---
 
-## 🔄 Tech Stack
+## 🔄 Tech Stack (huidige implementatie)
 
 **Backend:**
-- Python FastAPI (al aanwezig)
-- PostgreSQL (al aanwezig in docker-compose.yml)
-- SQLAlchemy ORM (al aanwezig)
-- Alembic migrations (al aanwezig)
+- Python 3 HTTP server (standalone, geen framework nodig)
+- SQLite (weekly challenges + blacklist)
+- requests (TMDB API calls)
 
 **Frontend:**
-- HTML/CSS/JS (al aanwezig in src/client/)
-- Kan later worden uitgebreid met React
+- HTML/CSS/JavaScript (single-page)
+- Geen build tools nodig
 
-**Integraties:**
-- TMDB API (httpx al in requirements.txt)
-- AD/LDAP (python-ldap of ldap3 moet worden toegevoegd)
-
----
-
-## 📝 Taken
-
-### Fase 1: Opruimen en voorbereiden
-- [ ] Verwijder Stripe/monetization dependencies
-- [ ] Verwijder Google OAuth auth routes
-- [ ] Verwijder Redis (niet nodig voor MVP)
-- [ ] Update requirements.txt
-- [ ] Update docker-compose.yml (verwijder nginx, redis)
-- [ ] Maak docs/TODO.md aan ✅
-
-### Fase 2: AD Integratie basis
-- [ ] Voeg python-ldap of ldap3 toe aan requirements.txt
-- [ ] Maak AD/LDAP auth module
-- [ ] Update User model (google_id -> ad_username)
-- [ ] Maak AD auth routes
-- [ ] Test AD verbinding met CBS AD
-
-### Fase 3: Database update voor nieuwe gameplay
-- [ ] Update GameSession model (5 films, 1 ronde)
-- [ ] Maak WeeklyChallenge model
-- [ ] Maak Film model (TMDB + community)
-- [ ] Maak FilmRating model
-- [ ] Maak Team model
-- [ ] Voeg Alembic migration toe
-
-### Fase 4: TMDB API integratie
-- [ ] Maak TMDB service module
-- [ ] Implementeer film selectie logica
-- [ ] Implementeer backdrop image ophalen
-- [ ] Test TMDB API key setup
-
-### Fase 5: Backend routes
-- [ ] Maak weekly challenge generator
-- [ ] Maak game submission endpoint
-- [ ] Maak leaderboard endpoints
-- [ ] Maak film rating endpoint
-- [ ] Maak team management endpoints
-
-### Fase 6: Frontend game interface (zonder login)
-- [ ] Update HTML voor nieuwe gameplay (5 films)
-- [ ] Update CSS voor moderne styling
-- [ ] Maak JavaScript voor game logic
-- [ ] Maak leaderboard view
-- [ ] Maak film rating interface
-
-### Fase 7: Frontend login
-- [ ] Maak login pagina
-- [ ] Koppel login aan AD auth
-- [ ] Maak user profile pagina
-
-### Fase 8: Automatisering
-- [ ] Maak cron job voor weekly challenge generator
-- [ ] Configureer Slack notificaties
-- [ ] Test automatische weekly challenge
-
-### Fase 9: Testing en deployment
-- [ ] Test met kleine groep
-- [ ] Deploy naar gtm.cbsp.nl
-- [ ] Monitor performance
-- [ ] Bug fixes
+**Extern:**
+- TMDB API (films, stills, backdrops)
 
 ---
 
-## 🗑️ Niet herbruikbaar (verwijderen)
+## 📝 Openstaande taken
 
-**Code:**
-- src/api/routes/auth.py (Google OAuth - vervangen door AD)
-- src/models/user.py (google_id field - aanpassen voor AD)
-- Stripe dependencies in requirements.txt
-- Redis service in docker-compose.yml
-- Nginx in docker-compose.yml (voor nu)
+### Fase 5: Deployment CBS
+- [ ] Deploy naar CBS server (poort 30067)
+- [ ] start-server.sh als systemd service
+- [ ] Firewall regel voor poort 30067
+- [ ] Test met collega's
 
-**Features:**
-- Monetization (Stripe)
-- Google OAuth
-- Redis caching
-- Huidige gameplay (10 films, 6 rounds) - vervangen door 5 films, 1 ronde
+### Fase 6: AD Integratie
+- [ ] Login via CBS Active Directory
+- [ ] User scores koppelen aan AD username
+- [ ] Leaderboard per gebruiker
+
+### Fase 7: Leaderboard en scores
+- [ ] Score opslaan in database per gebruiker
+- [ ] Wekelijks leaderboard
+- [ ] Seizoen leaderboard
+- [ ] Streak counter
+
+### Fase 8: Community content
+- [ ] Mystery film upload formulier
+- [ ] Approval queue voor mystery films
+- [ ] Rating systeem na afloop challenge
+
+### Fase 9: Polish
+- [ ] Slack/Teams notificatie bij nieuwe challenge
+- [ ] Responsive design verbeteren
+- [ ] Performance optimalisatie
 
 ---
 
 ## 📊 Voortgang
 
-**Fase 1:** 0% (0/6)
-**Fase 2:** 0% (0/6)
-**Fase 3:** 0% (0/7)
-**Fase 4:** 0% (0/4)
-**Fase 5:** 0% (0/5)
-**Fase 6:** 0% (0/5)
-**Fase 7:** 0% (0/3)
+**Fase 1:** 100% ✅
+**Fase 2:** 100% ✅
+**Fase 3:** 100% ✅
+**Fase 4:** 100% ✅
+**Fase 5:** 0% (0/4)
+**Fase 6:** 0% (0/3)
+**Fase 7:** 0% (0/4)
 **Fase 8:** 0% (0/3)
-**Fase 9:** 0% (0/4)
+**Fase 9:** 0% (0/3)
 
-**Totaal:** 0% (0/43)
+**Totaal:** ~60% (kern gameplay en admin werkend)
 
 ---
 
 ## 🎯 Next Steps
 
-1. Opruimen niet-herbruikbare code
-2. AD integratie basis opzetten
-3. Frontend game interface bouwen (zonder login)
+1. Test met collega's op lokaal netwerk
+2. Deploy naar CBS server
+3. AD integratie voor leaderboard
