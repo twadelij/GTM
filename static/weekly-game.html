@@ -147,7 +147,7 @@
 
         .options-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            grid-template-columns: repeat(3, 1fr);
             gap: 10px;
         }
 
@@ -391,7 +391,6 @@
                     <div class="options-grid" id="optionsGrid">
                         <!-- Options will be inserted here -->
                     </div>
-                    <button class="submit-btn" id="submitBtn" onclick="submitAnswer()" disabled>Bevestig</button>
                 </div>
 
                 <div class="timer-bar">
@@ -527,7 +526,6 @@
             document.getElementById('movieNumber').textContent = index + 1;
             document.getElementById('timer').textContent = timeLeft;
             document.getElementById('progressBar').style.width = ((index + 1) / 5 * 100) + '%';
-            document.getElementById('submitBtn').disabled = true;
 
             // Mystery badge
             if (movie.isMystery) {
@@ -574,10 +572,9 @@
         }
 
         function selectOption(option, btn) {
+            // Direct submit answer on click
             selectedAnswer = option;
-            document.querySelectorAll('.option-btn').forEach(b => b.classList.remove('selected'));
-            btn.classList.add('selected');
-            document.getElementById('submitBtn').disabled = false;
+            submitAnswer();
         }
 
         function submitAnswer() {
@@ -610,8 +607,6 @@
                     btn.classList.add('incorrect');
                 }
             });
-
-            document.getElementById('submitBtn').disabled = true;
 
             // Next movie after delay
             setTimeout(() => loadMovie(currentMovieIndex + 1), 1500);

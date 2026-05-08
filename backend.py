@@ -75,17 +75,23 @@ def generate_weekly_challenge():
     print("Generating weekly challenge from TMDB...")
     
     try:
-        # Get popular movies with high vote count (fetch more for options pool)
-        response = requests.get(
-            f'{TMDB_BASE_URL}/movie/popular',
-            params={
-                'api_key': TMDB_API_KEY,
-                'language': 'en-US',
-                'page': 1,
-                'vote_count.gte': 1000
-            }
-        )
-        data = response.json()
+        # Get popular movies from multiple pages for variety (not just recent)
+        all_movies = []
+        for page in range(1, 4):  # Fetch 3 pages for variety
+            response = requests.get(
+                f'{TMDB_BASE_URL}/movie/popular',
+                params={
+                    'api_key': TMDB_API_KEY,
+                    'language': 'en-US',
+                    'page': page,
+                    'vote_count.gte': 500  # Lower threshold for more variety
+                }
+            )
+            page_data = response.json()
+            if 'results' in page_data:
+                all_movies.extend(page_data['results'])
+        
+        data = {'results': all_movies}
         
         # Check if response is valid
         if not data or 'results' not in data or not data['results']:
@@ -203,6 +209,8 @@ class GTMHandler(BaseHTTPRequestHandler):
         # Serve static files
         elif path == '/' or path == '/weekly-game.html':
             self.serve_file('static/weekly-game.html', 'text/html')
+        elif path == '/admin.html':
+            self.serve_file('static/admin.html', 'text/html')
         elif path.startswith('/static/'):
             file_path = path[1:]  # Remove leading /
             self.serve_file(file_path, self.guess_type(file_path))
