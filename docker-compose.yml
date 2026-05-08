@@ -22,23 +22,6 @@ services:
       timeout: 5s
       retries: 5
 
-  # Redis Cache
-  redis:
-    image: redis:7-alpine
-    container_name: gtm_redis
-    command: redis-server --appendonly yes
-    volumes:
-      - redis_data:/data
-    ports:
-      - "6379:6379"
-    networks:
-      - gtm_network
-    healthcheck:
-      test: ["CMD", "redis-cli", "ping"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-
   # GTM Game Backend
   backend:
     build:
@@ -48,13 +31,16 @@ services:
     environment:
       - NODE_ENV=development
       - DATABASE_URL=postgresql://gtm_user:gtm_password@postgres:5432/gtm_game
-      - REDIS_URL=redis://redis:6379
       - PORT=8888
       - HOST=0.0.0.0
       - ENABLE_AUTHENTICATION=false
       - ENABLE_MONETIZATION=false
       - JWT_SECRET=test-jwt-secret-for-development-only
       - SESSION_SECRET=test-session-secret-for-development-only
+      - AD_SERVER=ldap://cbsp.nl
+      - AD_BASE_DN=dc=cbsp,dc=nl
+      - AD_BIND_USER=sa_ansible
+      - AD_BIND_PASSWORD=
     volumes:
       - ./src:/app/src
       - ./data:/app/data
@@ -67,8 +53,6 @@ services:
     depends_on:
       postgres:
         condition: service_healthy
-      redis:
-        condition: service_healthy
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8888/health"]
       interval: 30s
@@ -76,27 +60,8 @@ services:
       retries: 3
     restart: unless-stopped
 
-  # Nginx Reverse Proxy (for production)
-  nginx:
-    image: nginx:alpine
-    container_name: gtm_nginx
-    volumes:
-      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
-      - ./nginx/ssl:/etc/nginx/ssl:ro
-    ports:
-      - "80:80"
-      - "443:443"
-    networks:
-      - gtm_network
-    depends_on:
-      - backend
-    profiles:
-      - production
-
 volumes:
   postgres_data:
-    driver: local
-  redis_data:
     driver: local
 
 networks:
