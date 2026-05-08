@@ -1,120 +1,117 @@
 ---
-title: Guess The Movie Game
-created: 2024-01-09
-updated: 2024-01-09
-tags: [game, movies, project]
-aliases: [GTM, Movie Game]
+title: Weekly GTM League
+created: 2026-05-08
+updated: 2026-05-08
+tags: [game, movies, weekly, team]
+aliases: [GTM, Weekly Movie Game]
 ---
 
-# 🎬 Guess The Movie Game
+# 🎬 Weekly GTM League
 
-Een interactief spel waarbij spelers films moeten raden aan de hand van screenshots.
+Wekelijks ontspannend spel via gtm.cbsp.nl, laag maintenance, groep en individueel speelbaar.
 
 ## 📁 Projectstructuur
 
-- `src/` - Broncode van de applicatie
-  - `client/` - Frontend code
-    - `js/` - JavaScript modules
-    - `css/` - Styling
-  - `server/` - Backend server code
-- `tools/` - Hulpprogramma's en scripts
-- `data/` - Databestanden en resources
+- `src/` - Backend code (FastAPI)
+  - `api/` - API routes
+  - `models/` - Database models (SQLAlchemy)
+  - `services/` - Business logic (AD auth, TMDB)
+  - `config/` - Configuration
+  - `core/` - Core functionality
+- `static/` - Frontend code
+  - `weekly-game.html` - Weekly challenge game interface
+- `data/` - Data files (uploads, TMDB cache)
 - `docs/` - Projectdocumentatie
-- `templates/` - HTML templates
-- `static/` - Statische bestanden (CSS, JS, afbeeldingen)
-- `uploads/` - Gebruikersuploads en tijdelijke bestanden
+- `scripts/` - Utility scripts
+- `uploads/` - User uploads (mystery films)
 
 ## 🎮 Gameplay
 
-- Start met 10 willekeurige films uit de pool
-- 6 rondes om alle films te raden via progressive elimination
-- Punten per ronde:
-  - Ronde 1: 5 punten + tijdbonus
-  - Ronde 2: 4 punten + tijdbonus
-  - Ronde 3: 3 punten + tijdbonus
-  - Ronde 4: 2 punten + tijdbonus
-  - Ronde 5: 1 punt + tijdbonus
-  - Ronde 6: Laatste kans (0 punten, geen tijdbonus)
-- Tijdbonus: 1 punt per seconde over (niet in ronde 6)
-- Foute antwoorden gaan door naar de volgende ronde
-- Minder keuzes per ronde (6 -> 5 -> 4 -> 3 -> 2 -> 1)
-- Correct antwoord is altijd aanwezig in de keuzes
+**Weekly Challenge:**
+- 5 films per week (4 via TMDB API, 1 mystery via community)
+- 1 ronde per film, 30 seconden per film
+- Multiple choice met 4 opties
+- Score: 10 punten per correct antwoord + snelheidsbonus (max 5 extra)
+- Mystery film: 30 punten (3x bonus)
+- Totale speeltijd: 2-3 minuten per week
 
-## 🛠️ Technische Stack
+**Features:**
+- Leaderboard (wekelijks en seizoens)
+- Team modus (optioneel)
+- Rating systeem voor films
+- Badges en levels
+- Seizoen competitie
 
-- Frontend: React.js met TypeScript
-- Backend: Python met FastAPI
-- Database: PostgreSQL met Prisma
-- Testing: Jest en Pytest
-- CI/CD: GitHub Actions
-- Image Management: Custom ImageManager met caching en preloading
+## 🛠️ Tech Stack
 
-## 🆕 Laatste Updates
+**Backend:**
+- Python FastAPI
+- PostgreSQL (SQLAlchemy ORM)
+- Alembic migrations
+- python-ldap (AD integratie)
+- httpx (TMDB API)
 
-- Geoptimaliseerde afbeeldingslaadtijd met caching
-- Preloading van volgende ronde afbeeldingen
-- Verbeterde error handling
-- Lazy loading implementatie
-- Test modus toegevoegd
+**Frontend:**
+- HTML/CSS/JavaScript
+- Netflix/Jellyfin inspired styling
 
-## 📥 Installatie
+**Infrastructure:**
+- Docker Compose (PostgreSQL + Backend)
+- Active Directory (CBS AD voor authenticatie)
 
-1. Clone de repository:
+## 📋 Setup
+
+**1. Clone repository:**
 ```bash
 git clone https://github.com/twadelij/GTM.git
 cd GTM
 ```
 
-2. Installeer dependencies:
+**2. Configure environment:**
 ```bash
-pip install -r requirements.txt
+cp .env.example .env
+# Edit .env with your settings:
+# - TMDB_API_KEY (get from https://www.themoviedb.org/settings/api)
+# - AD_SERVER, AD_BASE_DN, AD_BIND_USER, AD_BIND_PASSWORD
+# - DATABASE_URL
 ```
 
-3. Start de server:
+**3. Start with Docker:**
 ```bash
-python src/server/server.py
+docker-compose up -d
 ```
 
-## 👩‍💻 Ontwikkeling
+**4. Access game:**
+- Open http://localhost:8888/static/weekly-game.html
 
-1. Maak een nieuwe branch voor je feature:
+## 📖 Documentatie
+
+- `docs/GAME_DESIGN_PROPOSAL.md` - Volledig game design voorstel
+- `docs/TODO.md` - Voortgangsbijhouding
+- `docs/Technical-Details.md` - Technische details
+- `docs/Troubleshooting.md` - Troubleshooting guide
+
+## 🚀 Development
+
+**Start development server:**
 ```bash
-git checkout -b feature/nieuwe-feature
+docker-compose up backend
 ```
 
-2. Start de development server:
+**Run migrations:**
 ```bash
-python src/server/server.py --dev
+docker-compose exec backend alembic upgrade head
 ```
 
-3. Run de tests:
+**Run tests:**
 ```bash
-pytest tests/
+docker-compose exec backend pytest tests/
 ```
-
-## 🧪 Test Modus
-
-Om het spel te testen zonder handmatig te spelen:
-
-1. Open de browser console (F12)
-2. Voer het volgende commando uit:
-```javascript
-runGameTest(5); // Test met 5 foute antwoorden in ronde 1
-```
-
-Parameters:
-- `forcedWrongAnswers`: Aantal foute antwoorden in ronde 1 (default: 5)
-
-## 📝 Links
-
-- [[TODO]] - Project ToDo lijst
-- [[CHANGELOG]] - Versie geschiedenis
-- [[CONTRIBUTING]] - Bijdrage richtlijnen
 
 ## 🤝 Bijdragen
 
-Bijdragen zijn welkom! Zie [[CONTRIBUTING]] voor details.
+Bijdragen zijn welkom! Zie docs/TODO.md voor huidige taken.
 
 ## 📄 Licentie
 
-Dit project is gelicenseerd onder de MIT License - zie het [[LICENSE]] bestand voor details.
+Dit project is gelicenseerd onder de MIT License.
