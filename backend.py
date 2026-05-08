@@ -59,6 +59,20 @@ def init_db():
             created_at TEXT DEFAULT CURRENT_TIMESTAMP
         )
     ''')
+    cursor.execute('''
+        CREATE TABLE IF NOT EXISTS scores (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            player_name TEXT NOT NULL,
+            week_start TEXT NOT NULL,
+            score INTEGER NOT NULL DEFAULT 0,
+            correct INTEGER NOT NULL DEFAULT 0,
+            total INTEGER NOT NULL DEFAULT 5,
+            avg_time REAL NOT NULL DEFAULT 0,
+            details TEXT,
+            created_at TEXT DEFAULT CURRENT_TIMESTAMP,
+            UNIQUE(player_name, week_start)
+        )
+    ''')
     conn.commit()
     conn.close()
 
@@ -220,6 +234,70 @@ def get_rejected_image_urls():
     results = cursor.fetchall()
     conn.close()
     return {r[0] for r in results}
+
+
+def save_score(player_name, score, correct, total, avg_time, details=None):
+    """Save player score for current week. Updates if already played this week."""
+    week_start = get_current_week()
+    conn = sqlite3.connect(DB_PATH)
+    cursor = conn.cursor()
+    cursor.execute('''
+        INSERT OR REPLACE INTO scores (player_name, week_start, score, correct, total, avg_time, details, created_at)
+        VALUES (?, ?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP)
+    ''', (player_name, week_start, score, correct, total, avg_time, json.dumps(details) if details else None))
+    conn.commit()
+    conn.close()
+    print(f"Score saved: {player_name} = {score} pts ({correct}/{total})")
+
+def get_leaderboard(week_start=None):
+    """Get leaderboard for a specific week (default: current week)"""
+    if not week_start:
+        week_start = get_current_week()
+    conn = sqlite3.connect(DB_PATH)
+    cursor = conn.cursor()
+    cursor.execute('''
+        SELECT player_name, score, correct, total, avg_time, created_at
+        FROM scores WHERE week_start = ?
+        ORDER BY score DESC, avg_time ASC
+    ''', (week_start,))
+    results = cursor.fetchall()
+    conn.close()
+    return [{
+        'player_name': r[0], 'score': r[1], 'correct': r[2],
+        'total': r[3], 'avg_time': r[4], 'played_at': r[5]
+    } for r in results]
+
+def get_player_history(player_name):
+    """Get all scores for a player across weeks"""
+    conn = sqlite3.connect(DB_PATH)
+    cursor = conn.cursor()
+    cursor.execute('''
+        SELECT week_start, score, correct, total, avg_time
+        FROM scores WHERE player_name = ?
+        ORDER BY week_start DESC
+    ''', (player_name,))
+    results = cursor.fetchall()
+    conn.close()
+    return results
+
+def get_streak(player_name):
+    """Calculate consecutive weeks played streak"""
+    history = get_player_history(player_name)
+    if not history:
+        return 0
+    
+    streak = 0
+    current_week = datetime.now()
+    current_monday = current_week - timedelta(days=current_week.weekday())
+    
+    for row in history:
+        week_date = datetime.strptime(row[0], '%Y-%m-%d')
+        expected_monday = current_monday - timedelta(weeks=streak)
+        if week_date.date() == expected_monday.date():
+            streak += 1
+        else:
+            break
+    return streak
 
 
 def fetch_random_stills(count=25):
@@ -493,6 +571,25 @@ class GTMHandler(BaseHTTPRequestHandler):
                 add_rejected_still(data['movie_id'], data['image_url'])
                 self.send_json_response(200, {'status': 'success'})
         
+        elif path == '/api/score':
+            if self.command == 'POST':
+                content_length = int(self.headers.get('Content-Length', 0))
+                post_data = self.rfile.read(content_length)
+                data = json.loads(post_data)
+                save_score(
+                    data['player_name'], data['score'], data['correct'],
+                    data.get('total', 5), data.get('avg_time', 0),
+                    data.get('details')
+                )
+                streak = get_streak(data['player_name'])
+                self.send_json_response(200, {'status': 'success', 'streak': streak})
+        
+        elif path == '/api/leaderboard':
+            params = parse_qs(parsed.query)
+            week = params.get('week', [None])[0]
+            leaderboard = get_leaderboard(week)
+            self.send_json_response(200, leaderboard)
+        
         elif path == '/api/blacklist':
             # Legacy full-ban blacklist
             if self.command == 'GET':
@@ -516,6 +613,8 @@ class GTMHandler(BaseHTTPRequestHandler):
             self.serve_file('static/weekly-game.html', 'text/html')
         elif path == '/admin.html':
             self.serve_file('static/admin.html', 'text/html')
+        elif path == '/leaderboard.html':
+            self.serve_file('static/leaderboard.html', 'text/html')
         elif path.startswith('/static/'):
             file_path = path[1:]  # Remove leading /
             self.serve_file(file_path, self.guess_type(file_path))

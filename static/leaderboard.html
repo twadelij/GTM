@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GTM Leaderboard</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            min-height: 100vh;
+            color: #ffffff;
+        }
+        .header {
+            background: rgba(0, 0, 0, 0.5);
+            padding: 20px;
+            text-align: center;
+            border-bottom: 2px solid #e50914;
+        }
+        .header h1 { font-size: 2rem; color: #e50914; letter-spacing: 2px; }
+        .header .nav { margin-top: 10px; }
+        .header .nav a {
+            color: rgba(255,255,255,0.7);
+            text-decoration: none;
+            margin: 0 15px;
+            transition: color 0.3s;
+        }
+        .header .nav a:hover { color: #e50914; }
+        .container { max-width: 800px; margin: 0 auto; padding: 30px 20px; }
+
+        .week-selector {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .week-selector button {
+            background: rgba(255,255,255,0.1);
+            border: 2px solid rgba(255,255,255,0.3);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            margin: 0 5px;
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+        .week-selector button:hover, .week-selector button.active {
+            background: #e50914;
+            border-color: #e50914;
+        }
+        .week-label {
+            font-size: 1.2rem;
+            margin: 0 15px;
+            font-weight: bold;
+        }
+
+        .leaderboard { margin-top: 20px; }
+
+        .lb-row {
+            display: flex;
+            align-items: center;
+            padding: 15px 20px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 10px;
+            margin-bottom: 8px;
+            transition: background 0.3s;
+        }
+        .lb-row:hover { background: rgba(255,255,255,0.1); }
+        .lb-row.top1 { background: rgba(255,215,0,0.15); border: 1px solid rgba(255,215,0,0.3); }
+        .lb-row.top2 { background: rgba(192,192,192,0.1); border: 1px solid rgba(192,192,192,0.2); }
+        .lb-row.top3 { background: rgba(205,127,50,0.1); border: 1px solid rgba(205,127,50,0.2); }
+
+        .lb-rank {
+            font-size: 1.5rem;
+            font-weight: bold;
+            width: 50px;
+            text-align: center;
+        }
+        .lb-rank.gold { color: #ffd700; }
+        .lb-rank.silver { color: #c0c0c0; }
+        .lb-rank.bronze { color: #cd7f32; }
+
+        .lb-name { flex: 1; font-size: 1.1rem; font-weight: 600; margin-left: 10px; }
+        .lb-details {
+            text-align: right;
+            color: rgba(255,255,255,0.6);
+            font-size: 0.9rem;
+        }
+        .lb-score {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #46d369;
+            margin-left: 20px;
+            min-width: 60px;
+            text-align: right;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: rgba(255,255,255,0.5);
+            font-size: 1.2rem;
+        }
+
+        @media (max-width: 600px) {
+            .lb-details { display: none; }
+            .lb-name { font-size: 1rem; }
+            .lb-score { font-size: 1.2rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>📊 GTM Leaderboard</h1>
+        <div class="nav">
+            <a href="/weekly-game.html">🎬 Speel</a>
+            <a href="/admin.html">⚙️ Admin</a>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="week-selector">
+            <button onclick="changeWeek(-1)">◀</button>
+            <span class="week-label" id="weekLabel">Deze week</span>
+            <button onclick="changeWeek(1)">▶</button>
+        </div>
+
+        <div class="leaderboard" id="leaderboard">
+            <div class="empty-state">Laden...</div>
+        </div>
+    </div>
+
+    <script>
+        const BACKEND_URL = window.location.origin;
+        let weekOffset = 0;
+
+        function getWeekStart(offset) {
+            const now = new Date();
+            const monday = new Date(now);
+            monday.setDate(now.getDate() - now.getDay() + 1 + (offset * 7));
+            return monday.toISOString().split('T')[0];
+        }
+
+        function formatWeekLabel(offset) {
+            if (offset === 0) return 'Deze week';
+            if (offset === -1) return 'Vorige week';
+            const ws = getWeekStart(offset);
+            const d = new Date(ws);
+            return `Week ${d.toLocaleDateString('nl-NL', { day: 'numeric', month: 'short' })}`;
+        }
+
+        async function loadLeaderboard() {
+            document.getElementById('weekLabel').textContent = formatWeekLabel(weekOffset);
+            const week = getWeekStart(weekOffset);
+            
+            try {
+                const r = await fetch(`${BACKEND_URL}/api/leaderboard?week=${week}`);
+                const data = await r.json();
+                
+                const container = document.getElementById('leaderboard');
+                
+                if (data.length === 0) {
+                    container.innerHTML = '<div class="empty-state">Nog geen scores deze week.<br>Speel mee!</div>';
+                    return;
+                }
+                
+                container.innerHTML = data.map((entry, i) => {
+                    const rank = i + 1;
+                    const rankClass = rank === 1 ? 'gold' : rank === 2 ? 'silver' : rank === 3 ? 'bronze' : '';
+                    const rowClass = rank <= 3 ? `top${rank}` : '';
+                    const medal = rank === 1 ? '🥇' : rank === 2 ? '🥈' : rank === 3 ? '🥉' : rank;
+                    
+                    return `
+                        <div class="lb-row ${rowClass}">
+                            <div class="lb-rank ${rankClass}">${medal}</div>
+                            <div class="lb-name">${escapeHtml(entry.player_name)}</div>
+                            <div class="lb-details">${entry.correct}/${entry.total} correct • ${entry.avg_time}s gem.</div>
+                            <div class="lb-score">${entry.score}</div>
+                        </div>
+                    `;
+                }).join('');
+                
+            } catch(e) {
+                document.getElementById('leaderboard').innerHTML = 
+                    '<div class="empty-state">Fout bij laden leaderboard</div>';
+            }
+        }
+
+        function changeWeek(dir) {
+            weekOffset += dir;
+            if (weekOffset > 0) weekOffset = 0;
+            loadLeaderboard();
+        }
+
+        function escapeHtml(str) {
+            if (!str) return '';
+            return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+        }
+
+        loadLeaderboard();
+    </script>
+</body>
+</html>

@@ -390,7 +390,13 @@
         <div id="startScreen" class="start-screen">
             <h1>Weekly GTM Challenge</h1>
             <p>5 films • 30 seconden per film • Max 75 punten</p>
+            <div style="margin-bottom: 20px;">
+                <input type="text" id="playerName" placeholder="Je naam" 
+                    style="padding: 12px 20px; font-size: 1.2rem; border-radius: 10px; border: 2px solid rgba(255,255,255,0.3); background: rgba(255,255,255,0.1); color: white; text-align: center; width: 250px;"
+                    maxlength="20">
+            </div>
             <button class="start-btn" onclick="startGame()">Start Spel</button>
+            <p style="margin-top: 20px;"><a href="/leaderboard.html" style="color: #e50914; text-decoration: none;">📊 Bekijk Leaderboard</a></p>
         </div>
 
         <!-- Game Screen -->
@@ -463,6 +469,7 @@
 
             <div style="margin-top: 20px; display: flex; gap: 10px; justify-content: center; flex-wrap: wrap;">
                 <button class="submit-btn" onclick="copyResults()">📋 Kopieer resultaat</button>
+                <button class="submit-btn" onclick="window.location='/leaderboard.html'">📊 Leaderboard</button>
                 <button class="submit-btn" onclick="location.reload()">🔄 Speel opnieuw</button>
             </div>
             <p id="copyMessage" style="margin-top: 10px; color: #46d369;"></p>
@@ -491,6 +498,15 @@
         let movieStartTime;
         let movies = [];
         let gameResults = [];
+        let playerName = '';
+
+        // Restore saved player name
+        const savedName = localStorage.getItem('gtm_player_name');
+        if (savedName) {
+            document.addEventListener('DOMContentLoaded', () => {
+                document.getElementById('playerName').value = savedName;
+            });
+        }
 
         // Fetch weekly challenge from backend
         async function fetchWeeklyChallenge() {
@@ -526,7 +542,9 @@
         }
 
         async function startGame() {
-            log('Starting game...', 'info');
+            playerName = document.getElementById('playerName').value.trim() || 'Anoniem';
+            localStorage.setItem('gtm_player_name', playerName);
+            log(`Starting game as ${playerName}...`, 'info');
             document.getElementById('startScreen').classList.add('hidden');
             document.getElementById('gameScreen').classList.remove('hidden');
             
@@ -682,11 +700,36 @@
                     return `<div style="padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.1);">${icon} Film ${i+1}: <strong>${r.title}</strong> (${r.timeTaken.toFixed(1)}s, ${pts} pts)</div>`;
                 }).join('');
 
-            // Save to localStorage
-            saveScore();
+            // Submit score to backend
+            submitScore();
         }
 
-        function saveScore() {
+        async function submitScore() {
+            try {
+                const r = await fetch(`${BACKEND_URL}/api/score`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        player_name: playerName,
+                        score: score,
+                        correct: correctAnswers,
+                        total: movies.length,
+                        avg_time: parseFloat((totalTime / movies.length).toFixed(1)),
+                        details: gameResults
+                    })
+                });
+                if (r.ok) {
+                    const data = await r.json();
+                    if (data.streak > 0) {
+                        document.getElementById('ratingMessage').textContent = 
+                            `🔥 ${data.streak} ${data.streak === 1 ? 'week' : 'weken'} streak!`;
+                    }
+                }
+            } catch(e) {
+                console.error('Score submit failed:', e);
+            }
+
+            // Also save to localStorage as backup
             const history = JSON.parse(localStorage.getItem('gtm_scores') || '[]');
             history.push({
                 date: new Date().toISOString(),
@@ -695,7 +738,6 @@
                 total: movies.length,
                 avgTime: (totalTime / movies.length).toFixed(1)
             });
-            // Keep last 20 scores
             if (history.length > 20) history.shift();
             localStorage.setItem('gtm_scores', JSON.stringify(history));
         }
