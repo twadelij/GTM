@@ -31,6 +31,16 @@ def init_db():
             created_at TEXT DEFAULT CURRENT_TIMESTAMP
         )
     ''')
+    cursor.execute('''
+        CREATE TABLE IF NOT EXISTS blacklist (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            movie_id INTEGER NOT NULL,
+            movie_title TEXT NOT NULL,
+            image_url TEXT NOT NULL,
+            created_at TEXT DEFAULT CURRENT_TIMESTAMP,
+            UNIQUE(movie_id)
+        )
+    ''')
     conn.commit()
     conn.close()
 
@@ -68,6 +78,47 @@ def get_weekly_challenge():
         return json.loads(result[0])
     return None
 
+def add_to_blacklist(movie_id, movie_title, image_url):
+    """Add movie to blacklist"""
+    conn = sqlite3.connect(DB_PATH)
+    cursor = conn.cursor()
+    cursor.execute('''
+        INSERT OR REPLACE INTO blacklist (movie_id, movie_title, image_url)
+        VALUES (?, ?, CURRENT_TIMESTAMP)
+    ''', (movie_id, movie_title, image_url))
+    conn.commit()
+    conn.close()
+    print(f"Added {movie_title} to blacklist")
+
+def remove_from_blacklist(movie_id):
+    """Remove movie from blacklist"""
+    conn = sqlite3.connect(DB_PATH)
+    cursor = conn.cursor()
+    cursor.execute('DELETE FROM blacklist WHERE movie_id = ?', (movie_id,))
+    conn.commit()
+    conn.close()
+    print(f"Removed movie {movie_id} from blacklist")
+
+def get_blacklist():
+    """Get all blacklisted movies"""
+    conn = sqlite3.connect(DB_PATH)
+    cursor = conn.cursor()
+    cursor.execute('SELECT movie_id, movie_title, image_url FROM blacklist')
+    results = cursor.fetchall()
+    conn.close()
+    
+    return [{'movie_id': r[0], 'movie_title': r[1], 'image_url': r[2]} for r in results]
+
+def is_blacklisted(movie_id):
+    """Check if movie is blacklisted"""
+    conn = sqlite3.connect(DB_PATH)
+    cursor = conn.cursor()
+    cursor.execute('SELECT COUNT(*) FROM blacklist WHERE movie_id = ?', (movie_id,))
+    result = cursor.fetchone()
+    conn.close()
+    
+    return result[0] > 0
+
 def generate_weekly_challenge():
     """Generate new weekly challenge using TMDB API"""
     import requests
@@ -100,8 +151,19 @@ def generate_weekly_challenge():
         
         print(f"Fetched {len(data['results'])} movies from TMDB")
         
+        # Filter out blacklisted movies
+        blacklist = get_blacklist()
+        blacklisted_ids = {b['movie_id'] for b in blacklist}
+        filtered_movies = [m for m in data['results'] if m['id'] not in blacklisted_ids]
+        
+        if len(filtered_movies) < 5:
+            print(f"Warning: Only {len(filtered_movies)} movies available after blacklist filter")
+            if len(filtered_movies) == 0:
+                print("No movies available after blacklist filter, using original list")
+                filtered_movies = data['results']
+        
         # Shuffle and pick 5 movies for the challenge
-        shuffled = sorted(data['results'], key=lambda x: random.random())
+        shuffled = sorted(filtered_movies, key=lambda x: random.random())
         selected = shuffled[:5]
         
         # Use all fetched movies as pool for wrong options
@@ -168,6 +230,15 @@ class GTMHandler(BaseHTTPRequestHandler):
     """HTTP request handler for GTM backend"""
     
     def do_GET(self):
+        self.handle_request()
+    
+    def do_POST(self):
+        self.handle_request()
+    
+    def do_DELETE(self):
+        self.handle_request()
+    
+    def handle_request(self):
         parsed = urlparse(self.path)
         path = parsed.path
         
@@ -205,6 +276,35 @@ class GTMHandler(BaseHTTPRequestHandler):
             else:
                 self.send_response(500)
                 self.end_headers()
+        
+        elif path == '/api/blacklist':
+            # Get blacklist
+            if self.command == 'GET':
+                blacklist = get_blacklist()
+                self.send_response(200)
+                self.send_header('Content-type', 'application/json')
+                self.end_headers()
+                self.wfile.write(json.dumps(blacklist).encode())
+            elif self.command == 'POST':
+                # Add to blacklist
+                content_length = int(self.headers.get('Content-Length', 0))
+                post_data = self.rfile.read(content_length)
+                data = json.loads(post_data)
+                add_to_blacklist(data['movie_id'], data['movie_title'], data['image_url'])
+                self.send_response(200)
+                self.send_header('Content-type', 'application/json')
+                self.end_headers()
+                self.wfile.write(json.dumps({'status': 'success'}).encode())
+            elif self.command == 'DELETE':
+                # Remove from blacklist
+                content_length = int(self.headers.get('Content-Length', 0))
+                post_data = self.rfile.read(content_length)
+                data = json.loads(post_data)
+                remove_from_blacklist(data['movie_id'])
+                self.send_response(200)
+                self.send_header('Content-type', 'application/json')
+                self.end_headers()
+                self.wfile.write(json.dumps({'status': 'success'}).encode())
         
         # Serve static files
         elif path == '/' or path == '/weekly-game.html':

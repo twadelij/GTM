@@ -246,6 +246,45 @@
             }
         }
 
+        async function loadBlacklist() {
+            try {
+                const response = await fetch(`${BACKEND_URL}/api/blacklist`);
+                const blacklist = await response.json();
+                
+                if (blacklist.length === 0) {
+                    showMessage('Blacklist is leeg', 'info');
+                    return;
+                }
+
+                const grid = document.getElementById('imagesGrid');
+                grid.innerHTML = '';
+                
+                blacklist.forEach(item => {
+                    const card = document.createElement('div');
+                    card.className = 'image-card blacklisted';
+                    
+                    card.innerHTML = `
+                        <img src="${item.image_url}" alt="${item.movie_title}">
+                        <div class="image-card-content">
+                            <div class="movie-title">${item.movie_title}</div>
+                            <div class="image-actions">
+                                <button class="btn-secondary" onclick="removeFromBlacklist('${item.movie_id}')">Verwijder van blacklist</button>
+                            </div>
+                        </div>
+                    `;
+                    
+                    grid.appendChild(card);
+                });
+                
+                updateStats(0, blacklist.length, 0);
+                showMessage(`${blacklist.length} items op blacklist`, 'info');
+                
+            } catch (error) {
+                console.error('Error loading blacklist:', error);
+                showMessage('Fout bij laden van blacklist', 'error');
+            }
+        }
+
         function displayImages(movies) {
             const grid = document.getElementById('imagesGrid');
             grid.innerHTML = '';
@@ -272,7 +311,7 @@
             currentImages = movies;
         }
 
-        function approveImage(movieId) {
+        async function approveImage(movieId) {
             const card = document.querySelector(`[data-movie-id="${movieId}"]`);
             if (card) {
                 card.style.opacity = '0.3';
@@ -282,60 +321,49 @@
             }
         }
 
-        function blacklistImage(movieId, title, image) {
-            // Add to blacklist (stored in localStorage for now)
-            let blacklist = JSON.parse(localStorage.getItem('gtm_blacklist') || '[]');
-            blacklist.push({ movieId, title, image, date: new Date().toISOString() });
-            localStorage.setItem('gtm_blacklist', JSON.stringify(blacklist));
-            
-            const card = document.querySelector(`[data-movie-id="${movieId}"]`);
-            if (card) {
-                card.classList.add('blacklisted');
-                card.style.pointerEvents = 'none';
-                updateStats();
-                showMessage(`"${title}" toegevoegd aan blacklist`, 'success');
+        async function blacklistImage(movieId, title, image) {
+            try {
+                const response = await fetch(`${BACKEND_URL}/api/blacklist`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ movie_id: movieId, movie_title: title, image_url: image })
+                });
+                
+                if (response.ok) {
+                    const card = document.querySelector(`[data-movie-id="${movieId}"]`);
+                    if (card) {
+                        card.classList.add('blacklisted');
+                        card.style.pointerEvents = 'none';
+                        updateStats();
+                        showMessage(`"${title}" toegevoegd aan blacklist`, 'success');
+                    }
+                } else {
+                    showMessage('Fout bij toevoegen aan blacklist', 'error');
+                }
+            } catch (error) {
+                console.error('Error adding to blacklist:', error);
+                showMessage('Fout bij toevoegen aan blacklist', 'error');
             }
         }
 
-        function loadBlacklist() {
-            const blacklist = JSON.parse(localStorage.getItem('gtm_blacklist') || '[]');
-            
-            if (blacklist.length === 0) {
-                showMessage('Blacklist is leeg', 'info');
-                return;
+        async function removeFromBlacklist(movieId) {
+            try {
+                const response = await fetch(`${BACKEND_URL}/api/blacklist`, {
+                    method: 'DELETE',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ movie_id: movieId })
+                });
+                
+                if (response.ok) {
+                    loadBlacklist();
+                    showMessage('Item verwijderd van blacklist', 'success');
+                } else {
+                    showMessage('Fout bij verwijderen van blacklist', 'error');
+                }
+            } catch (error) {
+                console.error('Error removing from blacklist:', error);
+                showMessage('Fout bij verwijderen van blacklist', 'error');
             }
-
-            const grid = document.getElementById('imagesGrid');
-            grid.innerHTML = '';
-            
-            blacklist.forEach(item => {
-                const card = document.createElement('div');
-                card.className = 'image-card blacklisted';
-                
-                card.innerHTML = `
-                    <img src="${item.image}" alt="${item.title}">
-                    <div class="image-card-content">
-                        <div class="movie-title">${item.title}</div>
-                        <div class="image-actions">
-                            <button class="btn-secondary" onclick="removeFromBlacklist('${item.movieId}')">Verwijder van blacklist</button>
-                        </div>
-                    </div>
-                `;
-                
-                grid.appendChild(card);
-            });
-            
-            updateStats(0, blacklist.length, 0);
-            showMessage(`${blacklist.length} items op blacklist`, 'info');
-        }
-
-        function removeFromBlacklist(movieId) {
-            let blacklist = JSON.parse(localStorage.getItem('gtm_blacklist') || '[]');
-            blacklist = blacklist.filter(item => item.movieId != movieId);
-            localStorage.setItem('gtm_blacklist', JSON.stringify(blacklist));
-            
-            loadBlacklist();
-            showMessage('Item verwijderd van blacklist', 'success');
         }
 
         function approveAll() {
