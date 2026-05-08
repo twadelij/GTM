@@ -10,6 +10,8 @@ from datetime import datetime, timedelta
 from http.server import HTTPServer, BaseHTTPRequestHandler
 from urllib.parse import urlparse, parse_qs
 import random
+import secrets
+import bcrypt
 
 # TMDB API Configuration
 TMDB_API_KEY = '706c86407a5fbf917664b5e62a30893e'
@@ -59,6 +61,32 @@ def init_db():
             created_at TEXT DEFAULT CURRENT_TIMESTAMP
         )
     ''')
+    # Add last_used_week column if not exists (migration-safe)
+    try:
+        cursor.execute('ALTER TABLE approved_films ADD COLUMN last_used_week TEXT DEFAULT NULL')
+    except sqlite3.OperationalError:
+        pass  # Column already exists
+    
+    cursor.execute('''
+        CREATE TABLE IF NOT EXISTS users (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            username TEXT NOT NULL UNIQUE,
+            password_hash TEXT NOT NULL,
+            display_name TEXT,
+            is_admin INTEGER DEFAULT 0,
+            created_at TEXT DEFAULT CURRENT_TIMESTAMP
+        )
+    ''')
+    cursor.execute('''
+        CREATE TABLE IF NOT EXISTS sessions (
+            token TEXT PRIMARY KEY,
+            username TEXT NOT NULL,
+            created_at TEXT DEFAULT CURRENT_TIMESTAMP,
+            expires_at TEXT NOT NULL,
+            FOREIGN KEY (username) REFERENCES users(username)
+        )
+    ''')
+    
     cursor.execute('''
         CREATE TABLE IF NOT EXISTS scores (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -81,6 +109,98 @@ def get_current_week():
     today = datetime.now()
     week_start = today - timedelta(days=today.weekday())
     return week_start.strftime('%Y-%m-%d')
+
+## --- AUTH FUNCTIONS --- ##
+
+SESSION_DURATION_HOURS = 168  # 1 week
+
+def register_user(username, password, display_name=None, is_admin=False):
+    """Register a new user with bcrypt hashed password"""
+    password_hash = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
+    conn = sqlite3.connect(DB_PATH)
+    cursor = conn.cursor()
+    try:
+        cursor.execute('''
+            INSERT INTO users (username, password_hash, display_name, is_admin)
+            VALUES (?, ?, ?, ?)
+        ''', (username, password_hash, display_name or username, 1 if is_admin else 0))
+        conn.commit()
+        return True
+    except sqlite3.IntegrityError:
+        return False
+    finally:
+        conn.close()
+
+def authenticate_user(username, password):
+    """Verify username/password, returns user dict or None"""
+    conn = sqlite3.connect(DB_PATH)
+    cursor = conn.cursor()
+    cursor.execute('SELECT username, password_hash, display_name, is_admin FROM users WHERE username = ?',
+                   (username,))
+    row = cursor.fetchone()
+    conn.close()
+    if row and bcrypt.checkpw(password.encode('utf-8'), row[1].encode('utf-8')):
+        return {'username': row[0], 'display_name': row[2], 'is_admin': bool(row[3])}
+    return None
+
+def create_session(username):
+    """Create a session token for authenticated user"""
+    token = secrets.token_hex(32)
+    expires = datetime.now() + timedelta(hours=SESSION_DURATION_HOURS)
+    conn = sqlite3.connect(DB_PATH)
+    cursor = conn.cursor()
+    cursor.execute('INSERT INTO sessions (token, username, expires_at) VALUES (?, ?, ?)',
+                   (token, username, expires.isoformat()))
+    conn.commit()
+    conn.close()
+    return token
+
+def validate_session(token):
+    """Validate session token, returns username or None"""
+    if not token:
+        return None
+    conn = sqlite3.connect(DB_PATH)
+    cursor = conn.cursor()
+    cursor.execute('SELECT username, expires_at FROM sessions WHERE token = ?', (token,))
+    row = cursor.fetchone()
+    conn.close()
+    if row:
+        if datetime.fromisoformat(row[1]) > datetime.now():
+            return row[0]
+        # Expired - clean up
+        cleanup_session(token)
+    return None
+
+def cleanup_session(token):
+    """Remove an expired or invalid session"""
+    conn = sqlite3.connect(DB_PATH)
+    cursor = conn.cursor()
+    cursor.execute('DELETE FROM sessions WHERE token = ?', (token,))
+    conn.commit()
+    conn.close()
+
+def get_user(username):
+    """Get user info"""
+    conn = sqlite3.connect(DB_PATH)
+    cursor = conn.cursor()
+    cursor.execute('SELECT username, display_name, is_admin, created_at FROM users WHERE username = ?',
+                   (username,))
+    row = cursor.fetchone()
+    conn.close()
+    if row:
+        return {'username': row[0], 'display_name': row[1], 'is_admin': bool(row[2]), 'created_at': row[3]}
+    return None
+
+def is_admin_user(token):
+    """Check if session belongs to an admin"""
+    username = validate_session(token)
+    if not username:
+        return False
+    user = get_user(username)
+    return user and user['is_admin']
+
+## --- END AUTH --- ##
+
 
 def save_weekly_challenge(movies):
     """Save weekly challenge to database"""
@@ -300,6 +420,32 @@ def get_streak(player_name):
     return streak
 
 
+def mark_films_used(movie_ids):
+    """Mark films as used in the current week's challenge"""
+    week_start = get_current_week()
+    conn = sqlite3.connect(DB_PATH)
+    cursor = conn.cursor()
+    for mid in movie_ids:
+        cursor.execute('UPDATE approved_films SET last_used_week = ? WHERE movie_id = ?',
+                       (week_start, mid))
+    conn.commit()
+    conn.close()
+
+def get_unused_approved_films(cooldown_weeks=3):
+    """Get approved films not used in the last N weeks"""
+    cutoff = datetime.now() - timedelta(weeks=cooldown_weeks)
+    cutoff_str = (cutoff - timedelta(days=cutoff.weekday())).strftime('%Y-%m-%d')
+    conn = sqlite3.connect(DB_PATH)
+    cursor = conn.cursor()
+    cursor.execute('''
+        SELECT movie_id, movie_title, image_url FROM approved_films
+        WHERE last_used_week IS NULL OR last_used_week < ?
+    ''', (cutoff_str,))
+    results = cursor.fetchall()
+    conn.close()
+    return [{'movie_id': r[0], 'movie_title': r[1], 'image_url': r[2]} for r in results]
+
+
 def has_played_this_week(player_name):
     """Check if player already submitted a score this week"""
     week_start = get_current_week()
@@ -413,11 +559,20 @@ def generate_weekly_challenge():
     import requests
     
     approved = get_approved_films()
-    use_approved = len(approved) >= 10
+    unused = get_unused_approved_films(cooldown_weeks=3)
     
-    if use_approved:
-        print(f"Generating challenge from {len(approved)} approved films")
+    # Use approved pool if enough unused films available (fallback: all approved if pool exhausted)
+    if len(unused) >= 5:
+        use_approved = True
+        pool_source = unused
+        print(f"Generating challenge from {len(unused)} unused approved films (3-week cooldown)")
+    elif len(approved) >= 10:
+        use_approved = True
+        pool_source = approved
+        print(f"All films recently used, picking from full pool of {len(approved)}")
     else:
+        use_approved = False
+        pool_source = []
         print(f"Only {len(approved)} approved films, using TMDB random (need 10+)")
     
     try:
@@ -439,8 +594,8 @@ def generate_weekly_challenge():
         all_titles = [m['title'] for m in all_tmdb]
         
         if use_approved:
-            # Pick 5 random approved films (no duplicates)
-            selected_approved = random.sample(approved, 5)
+            # Pick 5 random films from pool (unused preferred)
+            selected_approved = random.sample(pool_source, 5)
             movies_with_images = []
             for af in selected_approved:
                 # Generate wrong options from TMDB pool
@@ -456,6 +611,8 @@ def generate_weekly_challenge():
                     'isMystery': False,
                     'options': options
                 })
+            # Mark these films as used this week
+            mark_films_used([af['movie_id'] for af in selected_approved])
             return movies_with_images
         
         else:
@@ -526,8 +683,68 @@ class GTMHandler(BaseHTTPRequestHandler):
         
         print(f"Request: {self.command} {path}")
         
+        # Auth endpoints
+        if path == '/api/auth/register':
+            if self.command == 'POST':
+                content_length = int(self.headers.get('Content-Length', 0))
+                post_data = self.rfile.read(content_length)
+                data = json.loads(post_data)
+                username = data.get('username', '').strip().lower()
+                password = data.get('password', '')
+                display_name = data.get('display_name', '').strip()
+                
+                if not username or not password:
+                    self.send_json_response(400, {'error': 'Username en wachtwoord zijn verplicht'})
+                elif len(username) < 3:
+                    self.send_json_response(400, {'error': 'Username moet minstens 3 tekens zijn'})
+                elif len(password) < 4:
+                    self.send_json_response(400, {'error': 'Wachtwoord moet minstens 4 tekens zijn'})
+                elif register_user(username, password, display_name):
+                    token = create_session(username)
+                    user = get_user(username)
+                    self.send_json_response(201, {
+                        'status': 'success',
+                        'token': token,
+                        'user': user
+                    })
+                else:
+                    self.send_json_response(409, {'error': f'Username "{username}" is al bezet'})
+        
+        elif path == '/api/auth/login':
+            if self.command == 'POST':
+                content_length = int(self.headers.get('Content-Length', 0))
+                post_data = self.rfile.read(content_length)
+                data = json.loads(post_data)
+                user = authenticate_user(data.get('username', ''), data.get('password', ''))
+                if user:
+                    token = create_session(user['username'])
+                    self.send_json_response(200, {
+                        'status': 'success',
+                        'token': token,
+                        'user': user
+                    })
+                else:
+                    self.send_json_response(401, {'error': 'Ongeldige username of wachtwoord'})
+        
+        elif path == '/api/auth/logout':
+            if self.command == 'POST':
+                token = self.headers.get('Authorization', '').replace('Bearer ', '')
+                if token:
+                    cleanup_session(token)
+                self.send_json_response(200, {'status': 'success'})
+        
+        elif path == '/api/auth/me':
+            token = self.headers.get('Authorization', '').replace('Bearer ', '')
+            username = validate_session(token)
+            if username:
+                user = get_user(username)
+                streak = get_streak(username)
+                self.send_json_response(200, {**user, 'streak': streak})
+            else:
+                self.send_json_response(401, {'error': 'Niet ingelogd'})
+        
         # API endpoints
-        if path == '/api/weekly-challenge':
+        elif path == '/api/weekly-challenge':
             # Get current weekly challenge
             challenge = get_weekly_challenge()
             if challenge:
@@ -574,6 +791,27 @@ class GTMHandler(BaseHTTPRequestHandler):
             elif self.command == 'GET':
                 approved = get_approved_films()
                 self.send_json_response(200, approved)
+            elif self.command == 'DELETE':
+                content_length = int(self.headers.get('Content-Length', 0))
+                post_data = self.rfile.read(content_length)
+                data = json.loads(post_data)
+                remove_from_approved(data['movie_id'])
+                self.send_json_response(200, {'status': 'success'})
+        
+        elif path == '/api/approve/import':
+            if self.command == 'POST':
+                content_length = int(self.headers.get('Content-Length', 0))
+                post_data = self.rfile.read(content_length)
+                data = json.loads(post_data)
+                imported = 0
+                for film in data.get('films', []):
+                    try:
+                        add_to_approved(film['movie_id'], film['movie_title'],
+                                       film['image_url'], film.get('tmdb_rating', 0))
+                        imported += 1
+                    except:
+                        pass
+                self.send_json_response(200, {'status': 'success', 'imported': imported})
         
         elif path == '/api/reject-still':
             if self.command == 'POST':
@@ -652,6 +890,8 @@ class GTMHandler(BaseHTTPRequestHandler):
             self.serve_file('static/admin.html', 'text/html')
         elif path == '/leaderboard.html':
             self.serve_file('static/leaderboard.html', 'text/html')
+        elif path == '/login.html':
+            self.serve_file('static/login.html', 'text/html')
         elif path.startswith('/static/'):
             file_path = path[1:]  # Remove leading /
             self.serve_file(file_path, self.guess_type(file_path))

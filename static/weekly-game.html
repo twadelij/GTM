@@ -24,7 +24,7 @@
             inset: 0;
             background-size: cover;
             background-position: center;
-            filter: blur(20px) brightness(0.3);
+            filter: blur(8px) brightness(0.35);
             transition: background-image 1.5s ease;
             z-index: 0;
         }
@@ -403,7 +403,7 @@
         <!-- Start Screen -->
         <div id="startScreen" class="start-screen">
             <h1>Weekly GTM Challenge</h1>
-            <p>5 films • 30 seconden per film • Max 75 punten</p>
+            <p>5 films • 30 seconden per film • Max 125 punten</p>
             <div style="margin-bottom: 20px;">
                 <input type="text" id="playerName" placeholder="Je naam" 
                     style="padding: 12px 20px; font-size: 1.2rem; border-radius: 10px; border: 2px solid rgba(255,255,255,0.3); background: rgba(255,255,255,0.1); color: white; text-align: center; width: 250px;"
@@ -696,12 +696,15 @@
             const timeTaken = (Date.now() - movieStartTime) / 1000;
             totalTime += timeTaken;
 
-            // Calculate score
+            // Calculate score: base 10 + speed bonus up to 15
+            // Speed bonus curve: 15 * e^(-timeTaken/5) — rewards quick answers exponentially
+            // < 2s: ~10-15 bonus | 5s: ~5 bonus | 10s: ~2 bonus | 15s+: ~0-1 bonus
             let points = 0;
+            let speedBonus = 0;
             if (isCorrect) {
                 const basePoints = movie.isMystery ? 30 : 10;
-                const timeBonus = Math.min(5, Math.floor((30 - timeTaken) / 6));
-                points = basePoints + timeBonus;
+                speedBonus = Math.round(15 * Math.exp(-timeTaken / 5));
+                points = basePoints + speedBonus;
                 correctAnswers++;
             } else {
                 incorrectAnswers++;
@@ -715,6 +718,7 @@
                 title: movie.title,
                 correct: isCorrect,
                 points: points,
+                speedBonus: speedBonus,
                 timeTaken: timeTaken
             });
 
@@ -756,8 +760,9 @@
             breakdown.innerHTML = '<h3 style="margin-bottom: 15px;">📊 Per film:</h3>' +
                 gameResults.map((r, i) => {
                     const icon = r.correct ? '✅' : '❌';
+                    const bonusText = r.correct ? ` (10 + ⚡${r.speedBonus})` : '';
                     const pts = r.correct ? `+${r.points}` : '0';
-                    return `<div style="padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.1);">${icon} Film ${i+1}: <strong>${r.title}</strong> (${r.timeTaken.toFixed(1)}s, ${pts} pts)</div>`;
+                    return `<div style="padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.1);">${icon} Film ${i+1}: <strong>${r.title}</strong> — ${r.timeTaken.toFixed(1)}s — ${pts} pts${bonusText}</div>`;
                 }).join('');
 
             // Submit score to backend
@@ -805,10 +810,14 @@
         function copyResults() {
             const lines = [
                 `🎬 Weekly GTM Challenge`,
-                `Score: ${score}/75`,
+                `Score: ${score}/125`,
                 `${correctAnswers}/5 correct | Gem. ${(totalTime/5).toFixed(1)}s`,
                 '',
-                ...gameResults.map((r, i) => `${r.correct ? '✅' : '❌'} Film ${i+1}: ${r.title}`)
+                ...gameResults.map((r, i) => {
+                    const icon = r.correct ? '✅' : '❌';
+                    const bonus = r.correct ? ` (⚡+${r.speedBonus})` : '';
+                    return `${icon} Film ${i+1}: ${r.title} [${r.timeTaken.toFixed(1)}s]${bonus}`;
+                })
             ];
             navigator.clipboard.writeText(lines.join('\n')).then(() => {
                 document.getElementById('copyMessage').textContent = 'Gekopieerd! Plak in Slack/Teams.';

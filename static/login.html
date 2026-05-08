@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GTM - Inloggen</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            min-height: 100vh;
+            color: #ffffff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .login-container {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 40px;
+            width: 100%;
+            max-width: 400px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .login-container h1 {
+            text-align: center;
+            color: #e50914;
+            margin-bottom: 10px;
+            font-size: 2rem;
+        }
+        .login-container .subtitle {
+            text-align: center;
+            color: rgba(255, 255, 255, 0.6);
+            margin-bottom: 30px;
+        }
+        .tabs {
+            display: flex;
+            margin-bottom: 25px;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+        }
+        .tab {
+            flex: 1;
+            padding: 12px;
+            text-align: center;
+            cursor: pointer;
+            color: rgba(255, 255, 255, 0.5);
+            border-bottom: 2px solid transparent;
+            margin-bottom: -2px;
+            transition: all 0.3s;
+        }
+        .tab.active {
+            color: #e50914;
+            border-bottom-color: #e50914;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 6px;
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.9rem;
+        }
+        .form-group input {
+            width: 100%;
+            padding: 12px 16px;
+            border-radius: 10px;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.05);
+            color: white;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+        .form-group input:focus {
+            outline: none;
+            border-color: #e50914;
+        }
+        .btn {
+            width: 100%;
+            padding: 14px;
+            border: none;
+            border-radius: 10px;
+            background: #e50914;
+            color: white;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        .btn:hover { background: #f40612; }
+        .btn:disabled { background: #555; cursor: not-allowed; }
+        .error {
+            background: rgba(229, 9, 20, 0.2);
+            border: 1px solid #e50914;
+            border-radius: 8px;
+            padding: 10px 15px;
+            margin-bottom: 15px;
+            font-size: 0.9rem;
+            display: none;
+        }
+        .success {
+            background: rgba(70, 211, 105, 0.2);
+            border: 1px solid #46d369;
+            border-radius: 8px;
+            padding: 10px 15px;
+            margin-bottom: 15px;
+            font-size: 0.9rem;
+            display: none;
+        }
+        #registerForm { display: none; }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <h1>🎬 GTM</h1>
+        <p class="subtitle">Weekly Film Challenge</p>
+
+        <div class="tabs">
+            <div class="tab active" onclick="showTab('login')">Inloggen</div>
+            <div class="tab" onclick="showTab('register')">Registreren</div>
+        </div>
+
+        <div id="errorMsg" class="error"></div>
+        <div id="successMsg" class="success"></div>
+
+        <form id="loginForm" onsubmit="handleLogin(event)">
+            <div class="form-group">
+                <label for="loginUser">Username</label>
+                <input type="text" id="loginUser" required minlength="3" autocomplete="username">
+            </div>
+            <div class="form-group">
+                <label for="loginPass">Wachtwoord</label>
+                <input type="password" id="loginPass" required minlength="4" autocomplete="current-password">
+            </div>
+            <button type="submit" class="btn">Inloggen</button>
+        </form>
+
+        <form id="registerForm" onsubmit="handleRegister(event)">
+            <div class="form-group">
+                <label for="regUser">Username</label>
+                <input type="text" id="regUser" required minlength="3" autocomplete="username">
+            </div>
+            <div class="form-group">
+                <label for="regDisplay">Weergavenaam (voor leaderboard)</label>
+                <input type="text" id="regDisplay" placeholder="Optioneel">
+            </div>
+            <div class="form-group">
+                <label for="regPass">Wachtwoord</label>
+                <input type="password" id="regPass" required minlength="4" autocomplete="new-password">
+            </div>
+            <div class="form-group">
+                <label for="regPass2">Wachtwoord bevestigen</label>
+                <input type="password" id="regPass2" required minlength="4" autocomplete="new-password">
+            </div>
+            <button type="submit" class="btn">Registreren</button>
+        </form>
+    </div>
+
+    <script>
+        const BACKEND_URL = window.location.origin;
+
+        // If already logged in, redirect
+        if (localStorage.getItem('gtm_token')) {
+            window.location.href = '/weekly-game.html';
+        }
+
+        function showTab(tab) {
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            document.getElementById('errorMsg').style.display = 'none';
+            document.getElementById('successMsg').style.display = 'none';
+            if (tab === 'login') {
+                document.querySelectorAll('.tab')[0].classList.add('active');
+                document.getElementById('loginForm').style.display = 'block';
+                document.getElementById('registerForm').style.display = 'none';
+            } else {
+                document.querySelectorAll('.tab')[1].classList.add('active');
+                document.getElementById('loginForm').style.display = 'none';
+                document.getElementById('registerForm').style.display = 'block';
+            }
+        }
+
+        function showError(msg) {
+            const el = document.getElementById('errorMsg');
+            el.textContent = msg;
+            el.style.display = 'block';
+            document.getElementById('successMsg').style.display = 'none';
+        }
+
+        function showSuccess(msg) {
+            const el = document.getElementById('successMsg');
+            el.textContent = msg;
+            el.style.display = 'block';
+            document.getElementById('errorMsg').style.display = 'none';
+        }
+
+        async function handleLogin(e) {
+            e.preventDefault();
+            const username = document.getElementById('loginUser').value.trim();
+            const password = document.getElementById('loginPass').value;
+            
+            try {
+                const r = await fetch(`${BACKEND_URL}/api/auth/login`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username, password })
+                });
+                const data = await r.json();
+                if (r.ok) {
+                    localStorage.setItem('gtm_token', data.token);
+                    localStorage.setItem('gtm_user', JSON.stringify(data.user));
+                    localStorage.setItem('gtm_player_name', data.user.display_name);
+                    window.location.href = '/weekly-game.html';
+                } else {
+                    showError(data.error);
+                }
+            } catch(err) {
+                showError('Verbinding met server mislukt');
+            }
+        }
+
+        async function handleRegister(e) {
+            e.preventDefault();
+            const username = document.getElementById('regUser').value.trim();
+            const display_name = document.getElementById('regDisplay').value.trim();
+            const password = document.getElementById('regPass').value;
+            const password2 = document.getElementById('regPass2').value;
+            
+            if (password !== password2) {
+                showError('Wachtwoorden komen niet overeen');
+                return;
+            }
+            
+            try {
+                const r = await fetch(`${BACKEND_URL}/api/auth/register`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username, password, display_name })
+                });
+                const data = await r.json();
+                if (r.ok) {
+                    localStorage.setItem('gtm_token', data.token);
+                    localStorage.setItem('gtm_user', JSON.stringify(data.user));
+                    localStorage.setItem('gtm_player_name', data.user.display_name);
+                    window.location.href = '/weekly-game.html';
+                } else {
+                    showError(data.error);
+                }
+            } catch(err) {
+                showError('Verbinding met server mislukt');
+            }
+        }
+    </script>
+</body>
+</html>
