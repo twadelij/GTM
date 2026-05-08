@@ -83,8 +83,8 @@ def add_to_blacklist(movie_id, movie_title, image_url):
     conn = sqlite3.connect(DB_PATH)
     cursor = conn.cursor()
     cursor.execute('''
-        INSERT OR REPLACE INTO blacklist (movie_id, movie_title, image_url)
-        VALUES (?, ?, CURRENT_TIMESTAMP)
+        INSERT OR REPLACE INTO blacklist (movie_id, movie_title, image_url, created_at)
+        VALUES (?, ?, ?, CURRENT_TIMESTAMP)
     ''', (movie_id, movie_title, image_url))
     conn.commit()
     conn.close()
@@ -228,6 +228,7 @@ def generate_weekly_challenge():
 
 class GTMHandler(BaseHTTPRequestHandler):
     """HTTP request handler for GTM backend"""
+    protocol_version = 'HTTP/1.1'
     
     def do_GET(self):
         self.handle_request()
@@ -242,24 +243,20 @@ class GTMHandler(BaseHTTPRequestHandler):
         parsed = urlparse(self.path)
         path = parsed.path
         
+        print(f"Request: {self.command} {path}")
+        
         # API endpoints
         if path == '/api/weekly-challenge':
             # Get current weekly challenge
             challenge = get_weekly_challenge()
             if challenge:
-                self.send_response(200)
-                self.send_header('Content-type', 'application/json')
-                self.end_headers()
-                self.wfile.write(json.dumps(challenge).encode())
+                self.send_json_response(200, challenge)
             else:
                 # Generate new challenge
                 challenge = generate_weekly_challenge()
                 if challenge:
                     save_weekly_challenge(challenge)
-                    self.send_response(200)
-                    self.send_header('Content-type', 'application/json')
-                    self.end_headers()
-                    self.wfile.write(json.dumps(challenge).encode())
+                    self.send_json_response(200, challenge)
                 else:
                     self.send_response(500)
                     self.end_headers()
@@ -269,10 +266,7 @@ class GTMHandler(BaseHTTPRequestHandler):
             challenge = generate_weekly_challenge()
             if challenge:
                 save_weekly_challenge(challenge)
-                self.send_response(200)
-                self.send_header('Content-type', 'application/json')
-                self.end_headers()
-                self.wfile.write(json.dumps({'status': 'success', 'movies': challenge}).encode())
+                self.send_json_response(200, {'status': 'success', 'movies': challenge})
             else:
                 self.send_response(500)
                 self.end_headers()
@@ -281,30 +275,21 @@ class GTMHandler(BaseHTTPRequestHandler):
             # Get blacklist
             if self.command == 'GET':
                 blacklist = get_blacklist()
-                self.send_response(200)
-                self.send_header('Content-type', 'application/json')
-                self.end_headers()
-                self.wfile.write(json.dumps(blacklist).encode())
+                self.send_json_response(200, blacklist)
             elif self.command == 'POST':
                 # Add to blacklist
                 content_length = int(self.headers.get('Content-Length', 0))
                 post_data = self.rfile.read(content_length)
                 data = json.loads(post_data)
                 add_to_blacklist(data['movie_id'], data['movie_title'], data['image_url'])
-                self.send_response(200)
-                self.send_header('Content-type', 'application/json')
-                self.end_headers()
-                self.wfile.write(json.dumps({'status': 'success'}).encode())
+                self.send_json_response(200, {'status': 'success'})
             elif self.command == 'DELETE':
                 # Remove from blacklist
                 content_length = int(self.headers.get('Content-Length', 0))
                 post_data = self.rfile.read(content_length)
                 data = json.loads(post_data)
                 remove_from_blacklist(data['movie_id'])
-                self.send_response(200)
-                self.send_header('Content-type', 'application/json')
-                self.end_headers()
-                self.wfile.write(json.dumps({'status': 'success'}).encode())
+                self.send_json_response(200, {'status': 'success'})
         
         # Serve static files
         elif path == '/' or path == '/weekly-game.html':
@@ -354,6 +339,16 @@ class GTMHandler(BaseHTTPRequestHandler):
     def log_message(self, format, *args):
         """Suppress default logging"""
         pass
+    
+    def send_json_response(self, status_code, data):
+        """Send JSON response with proper headers"""
+        response = json.dumps(data)
+        self.send_response(status_code)
+        self.send_header('Content-type', 'application/json')
+        self.send_header('Content-Length', str(len(response)))
+        self.end_headers()
+        self.wfile.write(response.encode())
+        self.wfile.flush()
 
 def run_server(port=30067):
     """Run HTTP server on specified port"""
