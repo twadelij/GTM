@@ -90,9 +90,10 @@
         .movie-image img {
             width: 100%;
             height: 100%;
-            object-fit: cover;
+            object-fit: contain;
             opacity: 0;
             transition: opacity 0.3s ease;
+            background: #000;
         }
 
         .movie-image img.loaded {
@@ -437,6 +438,12 @@
     </div>
 
     <script>
+        // Logging utility
+        function log(message, type = 'info') {
+            const timestamp = new Date().toISOString();
+            console.log(`[${timestamp}] [${type.toUpperCase()}] ${message}`);
+        }
+
         // Game State
         let currentMovieIndex = 0;
         let score = 0;
@@ -488,6 +495,7 @@
         ];
 
         function startGame() {
+            log('Game started', 'info');
             document.getElementById('startScreen').classList.add('hidden');
             document.getElementById('gameScreen').classList.remove('hidden');
             loadMovie(0);
@@ -495,6 +503,7 @@
 
         function loadMovie(index) {
             if (index >= movies.length) {
+                log('All movies completed, showing results', 'info');
                 showResults();
                 return;
             }
@@ -504,6 +513,8 @@
             selectedAnswer = null;
             timeLeft = 30;
             movieStartTime = Date.now();
+
+            log(`Loading movie ${index + 1}: ${movie.title}`, 'info');
 
             // Update UI
             document.getElementById('currentMovie').textContent = index + 1;
@@ -526,9 +537,18 @@
             loading.style.display = 'block';
             
             img.onload = function() {
+                log(`Image loaded successfully: ${movie.image}`, 'info');
                 img.classList.add('loaded');
                 loading.style.display = 'none';
             };
+            
+            img.onerror = function() {
+                log(`Failed to load image: ${movie.image}`, 'error');
+                loading.textContent = '❌ Image failed to load';
+                loading.style.color = '#e50914';
+            };
+            
+            log(`Attempting to load image from: ${movie.image}`, 'debug');
             img.src = movie.image;
 
             // Load options
