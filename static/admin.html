@@ -140,7 +140,26 @@
         .movie-title {
             font-size: 1.1rem;
             font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .movie-rating {
+            font-size: 0.9rem;
+            color: rgba(255,255,255,0.7);
             margin-bottom: 10px;
+        }
+
+        .movie-rating .rating-value {
+            color: #f5c518;
+            font-weight: bold;
+        }
+
+        .movie-rating .rating-low {
+            color: #e94560;
+        }
+
+        .movie-rating .rating-high {
+            color: #46d369;
         }
 
         .image-actions {
@@ -166,11 +185,17 @@
         }
 
         .message {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 1000;
             text-align: center;
-            padding: 20px;
-            margin-bottom: 20px;
+            padding: 12px 30px;
             border-radius: 8px;
             display: none;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+            pointer-events: none;
         }
 
         .message.success {
@@ -192,6 +217,7 @@
 
         <div class="controls">
             <button class="btn-primary" onclick="loadRandomImages()">Laad willekeurige stills</button>
+            <button class="btn-secondary" onclick="loadApproved()">Bekijk goedgekeurd</button>
             <button class="btn-secondary" onclick="loadBlacklist()">Bekijk blacklist</button>
             <button class="btn-success" onclick="approveAll()">Alles goedkeuren</button>
         </div>
@@ -199,15 +225,19 @@
         <div class="stats">
             <div class="stat-card">
                 <div class="stat-number" id="totalImages">0</div>
-                <div class="stat-label">Totaal getoond</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-number" id="blacklistedCount">0</div>
-                <div class="stat-label">Op blacklist</div>
+                <div class="stat-label">Te beoordelen</div>
             </div>
             <div class="stat-card">
                 <div class="stat-number" id="approvedCount">0</div>
-                <div class="stat-label">Goedgekeurd</div>
+                <div class="stat-label">Goedgekeurd (sessie)</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="rejectedCount">0</div>
+                <div class="stat-label">Afgekeurd (sessie)</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="approvedPool">-</div>
+                <div class="stat-label">Game pool (10 nodig)</div>
             </div>
         </div>
 
@@ -221,33 +251,81 @@
     <script>
         const BACKEND_URL = window.location.origin;
         let currentImages = [];
+        let approvedTotal = 0;
+        let rejectedTotal = 0;
 
-        // Load images automatically on page load
         window.onload = function() {
             loadRandomImages();
+            refreshPoolCount();
         };
 
+        async function refreshPoolCount() {
+            try {
+                const r = await fetch(`${BACKEND_URL}/api/approve`);
+                const approved = await r.json();
+                const el = document.getElementById('approvedPool');
+                el.textContent = approved.length;
+                el.style.color = approved.length >= 10 ? '#46d369' : '#e94560';
+            } catch(e) {}
+        }
+
         async function loadRandomImages() {
-            showMessage('Laden...', 'info');
+            showMessage('Stills ophalen van TMDB (25 films, even geduld)...', 'info');
+            approvedTotal = 0;
+            rejectedTotal = 0;
             
             try {
-                // Fetch random movies from TMDB via backend
-                const response = await fetch(`${BACKEND_URL}/api/weekly-challenge`);
+                const response = await fetch(`${BACKEND_URL}/api/random-stills?count=25`);
                 const movies = await response.json();
                 
                 if (!movies || movies.length === 0) {
-                    showMessage('Geen films gevonden', 'error');
+                    showMessage('Geen nieuwe films gevonden', 'error');
                     return;
                 }
 
-                // Display images from current weekly challenge
+                currentImages = movies;
                 displayImages(movies);
-                updateStats(movies.length, 0, movies.length);
-                showMessage(`${movies.length} stills geladen`, 'success');
+                updateStats();
+                showMessage(`${movies.length} nieuwe stills geladen`, 'success');
                 
             } catch (error) {
                 console.error('Error loading images:', error);
                 showMessage('Fout bij laden van stills', 'error');
+            }
+        }
+
+        async function loadApproved() {
+            try {
+                const r = await fetch(`${BACKEND_URL}/api/approve`);
+                const approved = await r.json();
+                
+                if (approved.length === 0) {
+                    showMessage('Nog geen goedgekeurde films', 'info');
+                    return;
+                }
+
+                const grid = document.getElementById('imagesGrid');
+                grid.innerHTML = '';
+                
+                approved.forEach(item => {
+                    const card = document.createElement('div');
+                    card.className = 'image-card';
+                    card.style.borderColor = '#46d369';
+                    card.dataset.movieId = item.movie_id;
+                    
+                    card.innerHTML = `
+                        <img src="${escapeHtml(item.image_url)}" alt="${escapeHtml(item.movie_title)}">
+                        <div class="image-card-content">
+                            <div class="movie-title">${escapeHtml(item.movie_title)}</div>
+                            <div class="movie-rating">TMDB: <span class="rating-value">${item.tmdb_rating}</span></div>
+                        </div>
+                    `;
+                    grid.appendChild(card);
+                });
+                
+                showMessage(`${approved.length} goedgekeurde films in game pool`, 'success');
+            } catch(e) {
+                showMessage('Fout bij laden', 'error');
             }
         }
 
@@ -267,25 +345,22 @@
                 blacklist.forEach(item => {
                     const card = document.createElement('div');
                     card.className = 'image-card blacklisted';
+                    card.dataset.movieId = item.movie_id;
                     
                     card.innerHTML = `
-                        <img src="${item.image_url}" alt="${item.movie_title}">
+                        <img src="${escapeHtml(item.image_url)}" alt="${escapeHtml(item.movie_title)}">
                         <div class="image-card-content">
-                            <div class="movie-title">${item.movie_title}</div>
+                            <div class="movie-title">${escapeHtml(item.movie_title)}</div>
                             <div class="image-actions">
-                                <button class="btn-secondary" onclick="removeFromBlacklist('${item.movie_id}')">Verwijder van blacklist</button>
+                                <button class="btn-secondary" data-action="unban" data-id="${item.movie_id}">Verwijder ban</button>
                             </div>
                         </div>
                     `;
-                    
                     grid.appendChild(card);
                 });
                 
-                updateStats(0, blacklist.length, 0);
-                showMessage(`${blacklist.length} items op blacklist`, 'info');
-                
+                showMessage(`${blacklist.length} gebande films`, 'info');
             } catch (error) {
-                console.error('Error loading blacklist:', error);
                 showMessage('Fout bij laden van blacklist', 'error');
             }
         }
@@ -298,109 +373,139 @@
                 const card = document.createElement('div');
                 card.className = 'image-card';
                 card.dataset.movieId = movie.id;
+                card.dataset.title = movie.title;
+                card.dataset.image = movie.image;
+                card.dataset.rating = movie.rating || 0;
+                card.dataset.votes = movie.vote_count || 0;
+                
+                const rating = movie.rating || 0;
+                const ratingClass = rating >= 7.5 ? 'rating-high' : rating < 6 ? 'rating-low' : 'rating-value';
+                const votes = movie.vote_count || 0;
                 
                 card.innerHTML = `
-                    <img src="${movie.image}" alt="${movie.title}" onerror="this.src='https://via.placeholder.com/300x200?text=Image+Error'">
+                    <img src="${escapeHtml(movie.image)}" alt="${escapeHtml(movie.title)}" onerror="this.src='https://via.placeholder.com/300x200?text=No+Image'">
                     <div class="image-card-content">
-                        <div class="movie-title">${movie.title}</div>
+                        <div class="movie-title">${escapeHtml(movie.title)}</div>
+                        <div class="movie-rating">TMDB: <span class="${ratingClass}">${rating}</span> (${votes.toLocaleString()} votes)</div>
                         <div class="image-actions">
-                            <button class="btn-success" onclick="approveImage('${movie.id}')">✓ Goed</button>
-                            <button class="btn-danger" onclick="blacklistImage('${movie.id}', '${movie.title}', '${movie.image}')">✗ Blacklist</button>
+                            <button class="btn-success" data-action="approve" data-id="${movie.id}">✓ Goed</button>
+                            <button class="btn-danger" data-action="reject" data-id="${movie.id}">✗ Foto af</button>
                         </div>
                     </div>
                 `;
-                
                 grid.appendChild(card);
             });
+        }
+
+        // Event delegation - handles all button clicks (fixes apostrophe bug)
+        document.getElementById('imagesGrid').addEventListener('click', async function(e) {
+            const btn = e.target.closest('button[data-action]');
+            if (!btn) return;
             
-            currentImages = movies;
-        }
-
-        async function approveImage(movieId) {
-            const card = document.querySelector(`[data-movie-id="${movieId}"]`);
-            if (card) {
-                card.style.opacity = '0.3';
-                card.style.pointerEvents = 'none';
-                updateStats();
-                showMessage('Stil goedgekeurd', 'success');
-            }
-        }
-
-        async function blacklistImage(movieId, title, image) {
-            try {
-                const response = await fetch(`${BACKEND_URL}/api/blacklist`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ movie_id: movieId, movie_title: title, image_url: image })
-                });
+            const action = btn.dataset.action;
+            const movieId = btn.dataset.id;
+            const card = btn.closest('.image-card');
+            
+            if (action === 'approve') {
+                const title = card.dataset.title;
+                const image = card.dataset.image;
+                const rating = parseFloat(card.dataset.rating) || 0;
                 
-                if (response.ok) {
-                    const card = document.querySelector(`[data-movie-id="${movieId}"]`);
-                    if (card) {
-                        card.classList.add('blacklisted');
-                        card.style.pointerEvents = 'none';
+                try {
+                    const r = await fetch(`${BACKEND_URL}/api/approve`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            movie_id: parseInt(movieId),
+                            movie_title: title,
+                            image_url: image,
+                            tmdb_rating: rating
+                        })
+                    });
+                    if (r.ok) {
+                        card.remove();
+                        approvedTotal++;
                         updateStats();
-                        showMessage(`"${title}" toegevoegd aan blacklist`, 'success');
+                        refreshPoolCount();
+                        showMessage(`"${title}" goedgekeurd`, 'success');
                     }
-                } else {
-                    showMessage('Fout bij toevoegen aan blacklist', 'error');
+                } catch(err) {
+                    showMessage('Fout bij goedkeuren', 'error');
                 }
-            } catch (error) {
-                console.error('Error adding to blacklist:', error);
-                showMessage('Fout bij toevoegen aan blacklist', 'error');
             }
-        }
-
-        async function removeFromBlacklist(movieId) {
-            try {
-                const response = await fetch(`${BACKEND_URL}/api/blacklist`, {
-                    method: 'DELETE',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ movie_id: movieId })
-                });
+            else if (action === 'reject') {
+                const image = card.dataset.image;
+                const title = card.dataset.title;
                 
-                if (response.ok) {
-                    loadBlacklist();
-                    showMessage('Item verwijderd van blacklist', 'success');
-                } else {
-                    showMessage('Fout bij verwijderen van blacklist', 'error');
+                try {
+                    const r = await fetch(`${BACKEND_URL}/api/reject-still`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            movie_id: parseInt(movieId),
+                            image_url: image
+                        })
+                    });
+                    if (r.ok) {
+                        card.remove();
+                        rejectedTotal++;
+                        updateStats();
+                        showMessage(`Foto afgekeurd (film kan terugkomen met andere foto)`, 'success');
+                    }
+                } catch(err) {
+                    showMessage('Fout bij afkeuren', 'error');
                 }
-            } catch (error) {
-                console.error('Error removing from blacklist:', error);
-                showMessage('Fout bij verwijderen van blacklist', 'error');
             }
-        }
+            else if (action === 'unban') {
+                try {
+                    const r = await fetch(`${BACKEND_URL}/api/blacklist`, {
+                        method: 'DELETE',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ movie_id: parseInt(movieId) })
+                    });
+                    if (r.ok) {
+                        card.remove();
+                        showMessage('Film verwijderd van blacklist', 'success');
+                    }
+                } catch(err) {
+                    showMessage('Fout bij verwijderen', 'error');
+                }
+            }
+        });
 
-        function approveAll() {
-            const cards = document.querySelectorAll('.image-card:not(.blacklisted)');
-            cards.forEach(card => {
-                card.style.opacity = '0.3';
-                card.style.pointerEvents = 'none';
-            });
+        async function approveAll() {
+            const cards = document.querySelectorAll('.image-card[data-title]');
+            for (const card of cards) {
+                try {
+                    await fetch(`${BACKEND_URL}/api/approve`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            movie_id: parseInt(card.dataset.movieId),
+                            movie_title: card.dataset.title,
+                            image_url: card.dataset.image,
+                            tmdb_rating: parseFloat(card.dataset.rating) || 0
+                        })
+                    });
+                    approvedTotal++;
+                } catch(e) {}
+            }
+            cards.forEach(card => card.remove());
             updateStats();
-            showMessage('Alle stills goedgekeurd', 'success');
+            refreshPoolCount();
+            showMessage(`${cards.length} films goedgekeurd`, 'success');
         }
 
-        function updateStats(total, blacklisted, approved) {
-            if (total !== undefined) {
-                document.getElementById('totalImages').textContent = total;
-            }
-            if (blacklisted !== undefined) {
-                document.getElementById('blacklistedCount').textContent = blacklisted;
-            }
-            if (approved !== undefined) {
-                document.getElementById('approvedCount').textContent = approved;
-            }
-            
-            // Calculate from DOM if not provided
-            const totalCards = document.querySelectorAll('.image-card').length;
-            const blacklistedCards = document.querySelectorAll('.image-card.blacklisted').length;
-            const approvedCards = document.querySelectorAll('.image-card:not(.blacklisted)').length - 
-                                  document.querySelectorAll('.image-card:not(.blacklisted):not([style*="opacity: 0.3"])').length;
-            
-            if (total === undefined) document.getElementById('totalImages').textContent = totalCards;
-            if (blacklisted === undefined) document.getElementById('blacklistedCount').textContent = blacklistedCards;
-            if (approved === undefined) document.getElementById('approvedCount').textContent = approvedCards;
+        function updateStats() {
+            const remaining = document.querySelectorAll('.image-card[data-title]').length;
+            document.getElementById('totalImages').textContent = remaining;
+            document.getElementById('approvedCount').textContent = approvedTotal;
+            document.getElementById('rejectedCount').textContent = rejectedTotal;
+        }
+
+        function escapeHtml(str) {
+            if (!str) return '';
+            return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
         }
 
         function showMessage(text, type) {
@@ -411,11 +516,10 @@
             
             setTimeout(() => {
                 messageEl.style.display = 'none';
-            }, 3000);
+            }, 1500);
         }
 
-        // Initialize
-        updateStats(0, 0, 0);
+        updateStats();
     </script>
 </body>
 </html>

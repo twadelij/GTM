@@ -1,0 +1,24 @@
+[Unit]
+Description=GTM Weekly Challenge Game Server
+After=network.target
+
+[Service]
+Type=simple
+User=gtm
+Group=gtm
+WorkingDirectory=/opt/gtm
+ExecStart=/usr/bin/python3 /opt/gtm/backend.py
+Restart=on-failure
+RestartSec=5
+StandardOutput=journal
+StandardError=journal
+
+# Security hardening
+NoNewPrivileges=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/opt/gtm
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target

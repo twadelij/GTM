@@ -41,6 +41,24 @@ def init_db():
             UNIQUE(movie_id)
         )
     ''')
+    cursor.execute('''
+        CREATE TABLE IF NOT EXISTS approved_films (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            movie_id INTEGER NOT NULL UNIQUE,
+            movie_title TEXT NOT NULL,
+            image_url TEXT NOT NULL,
+            tmdb_rating REAL DEFAULT 0,
+            created_at TEXT DEFAULT CURRENT_TIMESTAMP
+        )
+    ''')
+    cursor.execute('''
+        CREATE TABLE IF NOT EXISTS rejected_stills (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            movie_id INTEGER NOT NULL,
+            image_url TEXT NOT NULL UNIQUE,
+            created_at TEXT DEFAULT CURRENT_TIMESTAMP
+        )
+    ''')
     conn.commit()
     conn.close()
 
@@ -64,7 +82,9 @@ def save_weekly_challenge(movies):
     print(f"Saved weekly challenge for week {week_start}")
 
 def get_weekly_challenge():
-    """Get current weekly challenge from database"""
+    """Get current weekly challenge from database.
+    Regenerates if it contains blacklisted films or if approved pool is now
+    large enough but the cached challenge doesn't use approved films."""
     week_start = get_current_week()
     conn = sqlite3.connect(DB_PATH)
     cursor = conn.cursor()
@@ -75,7 +95,30 @@ def get_weekly_challenge():
     conn.close()
     
     if result:
-        return json.loads(result[0])
+        movies = json.loads(result[0])
+        needs_regen = False
+        
+        # Check if any film in the challenge is now blacklisted
+        blacklist = get_blacklist()
+        blacklisted_ids = {b['movie_id'] for b in blacklist}
+        if any(m['id'] in blacklisted_ids for m in movies):
+            print("Weekly challenge contains blacklisted films, regenerating...")
+            needs_regen = True
+        
+        # Check if approved pool is large enough but challenge isn't using it
+        approved_ids = get_approved_ids()
+        if len(approved_ids) >= 10:
+            challenge_ids = {m['id'] for m in movies}
+            if not challenge_ids.issubset(approved_ids):
+                print(f"Approved pool has {len(approved_ids)} films but challenge uses non-approved films, regenerating...")
+                needs_regen = True
+        
+        if needs_regen:
+            new_challenge = generate_weekly_challenge()
+            if new_challenge:
+                save_weekly_challenge(new_challenge)
+                return new_challenge
+        return movies
     return None
 
 def add_to_blacklist(movie_id, movie_title, image_url):
@@ -119,59 +162,120 @@ def is_blacklisted(movie_id):
     
     return result[0] > 0
 
-def generate_weekly_challenge():
-    """Generate new weekly challenge using TMDB API"""
+def add_to_approved(movie_id, movie_title, image_url, tmdb_rating=0):
+    """Add movie to approved films pool"""
+    conn = sqlite3.connect(DB_PATH)
+    cursor = conn.cursor()
+    cursor.execute('''
+        INSERT OR REPLACE INTO approved_films (movie_id, movie_title, image_url, tmdb_rating, created_at)
+        VALUES (?, ?, ?, ?, CURRENT_TIMESTAMP)
+    ''', (movie_id, movie_title, image_url, tmdb_rating))
+    conn.commit()
+    conn.close()
+    print(f"Approved: {movie_title} (rating: {tmdb_rating})")
+
+def get_approved_films():
+    """Get all approved films"""
+    conn = sqlite3.connect(DB_PATH)
+    cursor = conn.cursor()
+    cursor.execute('SELECT movie_id, movie_title, image_url, tmdb_rating FROM approved_films')
+    results = cursor.fetchall()
+    conn.close()
+    return [{'movie_id': r[0], 'movie_title': r[1], 'image_url': r[2], 'tmdb_rating': r[3]} for r in results]
+
+def get_approved_ids():
+    """Get set of approved movie IDs"""
+    conn = sqlite3.connect(DB_PATH)
+    cursor = conn.cursor()
+    cursor.execute('SELECT movie_id FROM approved_films')
+    results = cursor.fetchall()
+    conn.close()
+    return {r[0] for r in results}
+
+def remove_from_approved(movie_id):
+    """Remove movie from approved pool"""
+    conn = sqlite3.connect(DB_PATH)
+    cursor = conn.cursor()
+    cursor.execute('DELETE FROM approved_films WHERE movie_id = ?', (movie_id,))
+    conn.commit()
+    conn.close()
+
+def add_rejected_still(movie_id, image_url):
+    """Reject a specific still (movie can appear again with different still)"""
+    conn = sqlite3.connect(DB_PATH)
+    cursor = conn.cursor()
+    cursor.execute('''
+        INSERT OR IGNORE INTO rejected_stills (movie_id, image_url, created_at)
+        VALUES (?, ?, CURRENT_TIMESTAMP)
+    ''', (movie_id, image_url))
+    conn.commit()
+    conn.close()
+    print(f"Rejected still for movie {movie_id}")
+
+def get_rejected_image_urls():
+    """Get set of rejected image URLs"""
+    conn = sqlite3.connect(DB_PATH)
+    cursor = conn.cursor()
+    cursor.execute('SELECT image_url FROM rejected_stills')
+    results = cursor.fetchall()
+    conn.close()
+    return {r[0] for r in results}
+
+
+def fetch_random_stills(count=25):
+    """Fetch random movie stills from TMDB for admin review.
+    Excludes: blacklisted movies, already-approved movies, rejected stills."""
     import requests
     
-    print("Generating weekly challenge from TMDB...")
+    print(f"Fetching {count} random stills from TMDB for review...")
     
     try:
-        # Get popular movies from multiple pages for variety (not just recent)
+        # Collect exclusion sets
+        blacklisted_ids = {b['movie_id'] for b in get_blacklist()}
+        approved_ids = get_approved_ids()
+        rejected_urls = get_rejected_image_urls()
+        exclude_ids = blacklisted_ids | approved_ids
+        
+        # Fetch from multiple random pages for variety
         all_movies = []
-        for page in range(1, 4):  # Fetch 3 pages for variety
+        pages_needed = max(4, (count // 20) + 2)
+        random_pages = random.sample(range(1, 50), min(pages_needed, 10))
+        
+        for page in random_pages:
             response = requests.get(
                 f'{TMDB_BASE_URL}/movie/popular',
                 params={
                     'api_key': TMDB_API_KEY,
                     'language': 'en-US',
-                    'page': page,
-                    'vote_count.gte': 500  # Lower threshold for more variety
+                    'page': page
                 }
             )
             page_data = response.json()
             if 'results' in page_data:
                 all_movies.extend(page_data['results'])
         
-        data = {'results': all_movies}
-        
-        # Check if response is valid
-        if not data or 'results' not in data or not data['results']:
-            print("Invalid TMDB API response")
+        if not all_movies:
+            print("No movies fetched from TMDB")
             return []
         
-        print(f"Fetched {len(data['results'])} movies from TMDB")
+        # Deduplicate by movie ID and filter excluded
+        seen_ids = set()
+        filtered = []
+        for m in all_movies:
+            if m['id'] not in exclude_ids and m['id'] not in seen_ids:
+                seen_ids.add(m['id'])
+                filtered.append(m)
         
-        # Filter out blacklisted movies
-        blacklist = get_blacklist()
-        blacklisted_ids = {b['movie_id'] for b in blacklist}
-        filtered_movies = [m for m in data['results'] if m['id'] not in blacklisted_ids]
+        if not filtered:
+            print("All fetched movies are excluded")
+            return []
         
-        if len(filtered_movies) < 5:
-            print(f"Warning: Only {len(filtered_movies)} movies available after blacklist filter")
-            if len(filtered_movies) == 0:
-                print("No movies available after blacklist filter, using original list")
-                filtered_movies = data['results']
+        # Shuffle and pick requested count
+        random.shuffle(filtered)
+        selected = filtered[:count]
         
-        # Shuffle and pick 5 movies for the challenge
-        shuffled = sorted(filtered_movies, key=lambda x: random.random())
-        selected = shuffled[:5]
-        
-        # Use all fetched movies as pool for wrong options
-        all_movies = data['results']
-        all_titles = [m['title'] for m in all_movies]
-        
-        # Fetch stills for each selected movie
-        movies_with_images = []
+        # Fetch stills/backdrops for each movie, skipping rejected URLs
+        stills_result = []
         for movie in selected:
             images_response = requests.get(
                 f'{TMDB_BASE_URL}/movie/{movie["id"]}/images',
@@ -179,46 +283,133 @@ def generate_weekly_challenge():
             )
             images_data = images_response.json()
             
-            # Use stills if available
-            stills = images_data.get('stills', [])
             backdrops = images_data.get('backdrops', [])
+            stills = images_data.get('stills', [])
+            all_images = stills + backdrops
             
-            if stills:
-                image_path = random.choice(stills)['file_path']
-            elif backdrops:
-                image_path = random.choice(backdrops)['file_path']
+            # Filter out rejected stills
+            available = [img for img in all_images
+                        if f'{TMDB_IMAGE_BASE_URL}{img["file_path"]}' not in rejected_urls]
+            
+            if available:
+                image_path = random.choice(available)['file_path']
+            elif movie.get('poster_path'):
+                image_path = movie['poster_path']
             else:
-                image_path = movie.get('poster_path', '')
+                continue
             
-            # Generate wrong options (8 wrong + 1 correct = 9 options)
-            wrong_options = []
-            
-            # Try genre matching from the full pool
-            if movie.get('genre_ids'):
-                primary_genre = movie['genre_ids'][0]
-                same_genre = [m['title'] for m in all_movies
-                            if m.get('genre_ids') and primary_genre in m['genre_ids']
-                            and m['title'] != movie['title']]
-                if len(same_genre) >= 8:
-                    wrong_options = random.sample(same_genre, 8)
-            
-            # Fallback to random from full pool
-            if len(wrong_options) < 8:
-                available = [t for t in all_titles if t != movie['title']]
-                wrong_options = random.sample(available, min(8, len(available)))
-            
-            options = [movie['title']] + wrong_options[:8]
-            random.shuffle(options)
-            
-            movies_with_images.append({
+            stills_result.append({
                 'id': movie['id'],
                 'title': movie['title'],
                 'image': f'{TMDB_IMAGE_BASE_URL}{image_path}',
-                'isMystery': False,
-                'options': options
+                'rating': round(movie.get('vote_average', 0), 1),
+                'vote_count': movie.get('vote_count', 0)
             })
         
-        return movies_with_images
+        print(f"Returning {len(stills_result)} stills for review "
+              f"(excluded {len(approved_ids)} approved, {len(blacklisted_ids)} blacklisted)")
+        return stills_result
+        
+    except Exception as e:
+        print(f"Error fetching random stills: {e}")
+        import traceback
+        traceback.print_exc()
+        return []
+
+
+def generate_weekly_challenge():
+    """Generate new weekly challenge.
+    Uses approved films if pool >= 10, otherwise falls back to TMDB random."""
+    import requests
+    
+    approved = get_approved_films()
+    use_approved = len(approved) >= 10
+    
+    if use_approved:
+        print(f"Generating challenge from {len(approved)} approved films")
+    else:
+        print(f"Only {len(approved)} approved films, using TMDB random (need 10+)")
+    
+    try:
+        # Always fetch TMDB popular for wrong options pool
+        all_tmdb = []
+        for page in range(1, 4):
+            response = requests.get(
+                f'{TMDB_BASE_URL}/movie/popular',
+                params={
+                    'api_key': TMDB_API_KEY,
+                    'language': 'en-US',
+                    'page': page
+                }
+            )
+            page_data = response.json()
+            if 'results' in page_data:
+                all_tmdb.extend(page_data['results'])
+        
+        all_titles = [m['title'] for m in all_tmdb]
+        
+        if use_approved:
+            # Pick 5 random approved films (no duplicates)
+            selected_approved = random.sample(approved, 5)
+            movies_with_images = []
+            for af in selected_approved:
+                # Generate wrong options from TMDB pool
+                wrong_pool = [t for t in all_titles if t != af['movie_title']]
+                wrong_options = random.sample(wrong_pool, min(8, len(wrong_pool)))
+                options = [af['movie_title']] + wrong_options[:8]
+                random.shuffle(options)
+                
+                movies_with_images.append({
+                    'id': af['movie_id'],
+                    'title': af['movie_title'],
+                    'image': af['image_url'],
+                    'isMystery': False,
+                    'options': options
+                })
+            return movies_with_images
+        
+        else:
+            # Fallback: random TMDB (old behavior)
+            blacklisted_ids = {b['movie_id'] for b in get_blacklist()}
+            filtered = [m for m in all_tmdb if m['id'] not in blacklisted_ids]
+            
+            if len(filtered) < 5:
+                filtered = all_tmdb
+            
+            random.shuffle(filtered)
+            selected = filtered[:5]
+            
+            movies_with_images = []
+            for movie in selected:
+                images_response = requests.get(
+                    f'{TMDB_BASE_URL}/movie/{movie["id"]}/images',
+                    params={'api_key': TMDB_API_KEY}
+                )
+                images_data = images_response.json()
+                stills = images_data.get('stills', [])
+                backdrops = images_data.get('backdrops', [])
+                
+                if stills:
+                    image_path = random.choice(stills)['file_path']
+                elif backdrops:
+                    image_path = random.choice(backdrops)['file_path']
+                else:
+                    image_path = movie.get('poster_path', '')
+                
+                wrong_pool = [t for t in all_titles if t != movie['title']]
+                wrong_options = random.sample(wrong_pool, min(8, len(wrong_pool)))
+                options = [movie['title']] + wrong_options[:8]
+                random.shuffle(options)
+                
+                movies_with_images.append({
+                    'id': movie['id'],
+                    'title': movie['title'],
+                    'image': f'{TMDB_IMAGE_BASE_URL}{image_path}',
+                    'isMystery': False,
+                    'options': options
+                })
+            
+            return movies_with_images
         
     except Exception as e:
         print(f"Error generating weekly challenge: {e}")
@@ -271,20 +462,49 @@ class GTMHandler(BaseHTTPRequestHandler):
                 self.send_response(500)
                 self.end_headers()
         
+        elif path == '/api/random-stills':
+            # Fetch random stills for admin review (not cached)
+            params = parse_qs(parsed.query)
+            count = int(params.get('count', ['25'])[0])
+            count = min(count, 50)  # Cap at 50
+            stills = fetch_random_stills(count)
+            if stills:
+                self.send_json_response(200, stills)
+            else:
+                self.send_json_response(200, [])
+        
+        elif path == '/api/approve':
+            if self.command == 'POST':
+                content_length = int(self.headers.get('Content-Length', 0))
+                post_data = self.rfile.read(content_length)
+                data = json.loads(post_data)
+                add_to_approved(data['movie_id'], data['movie_title'],
+                               data['image_url'], data.get('tmdb_rating', 0))
+                self.send_json_response(200, {'status': 'success'})
+            elif self.command == 'GET':
+                approved = get_approved_films()
+                self.send_json_response(200, approved)
+        
+        elif path == '/api/reject-still':
+            if self.command == 'POST':
+                content_length = int(self.headers.get('Content-Length', 0))
+                post_data = self.rfile.read(content_length)
+                data = json.loads(post_data)
+                add_rejected_still(data['movie_id'], data['image_url'])
+                self.send_json_response(200, {'status': 'success'})
+        
         elif path == '/api/blacklist':
-            # Get blacklist
+            # Legacy full-ban blacklist
             if self.command == 'GET':
                 blacklist = get_blacklist()
                 self.send_json_response(200, blacklist)
             elif self.command == 'POST':
-                # Add to blacklist
                 content_length = int(self.headers.get('Content-Length', 0))
                 post_data = self.rfile.read(content_length)
                 data = json.loads(post_data)
                 add_to_blacklist(data['movie_id'], data['movie_title'], data['image_url'])
                 self.send_json_response(200, {'status': 'success'})
             elif self.command == 'DELETE':
-                # Remove from blacklist
                 content_length = int(self.headers.get('Content-Length', 0))
                 post_data = self.rfile.read(content_length)
                 data = json.loads(post_data)
@@ -310,13 +530,16 @@ class GTMHandler(BaseHTTPRequestHandler):
                 content = f.read()
             self.send_response(200)
             self.send_header('Content-type', content_type)
+            self.send_header('Content-Length', str(len(content)))
             self.end_headers()
             self.wfile.write(content)
         except FileNotFoundError:
             self.send_response(404)
+            self.send_header('Content-Length', '0')
             self.end_headers()
         except Exception as e:
             self.send_response(500)
+            self.send_header('Content-Length', '0')
             self.end_headers()
     
     def guess_type(self, file_path):

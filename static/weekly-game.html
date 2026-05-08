@@ -151,6 +151,33 @@
             gap: 10px;
         }
 
+        @media (max-width: 768px) {
+            .options-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .movie-image {
+                height: 250px;
+            }
+            .header h1 {
+                font-size: 1.5rem;
+            }
+            .game-info {
+                flex-direction: column;
+                gap: 8px;
+                text-align: center;
+            }
+            .option-btn {
+                padding: 14px;
+                font-size: 0.95rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .options-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
         .option-btn {
             background: rgba(255, 255, 255, 0.1);
             border: 2px solid rgba(255, 255, 255, 0.3);
@@ -432,7 +459,13 @@
                 <p id="ratingMessage" style="margin-top: 15px;"></p>
             </div>
 
-            <button class="submit-btn" onclick="location.reload()">Speel opnieuw</button>
+            <div id="scoreBreakdown" class="rating-section" style="margin-top: 20px; text-align: left;"></div>
+
+            <div style="margin-top: 20px; display: flex; gap: 10px; justify-content: center; flex-wrap: wrap;">
+                <button class="submit-btn" onclick="copyResults()">📋 Kopieer resultaat</button>
+                <button class="submit-btn" onclick="location.reload()">🔄 Speel opnieuw</button>
+            </div>
+            <p id="copyMessage" style="margin-top: 10px; color: #46d369;"></p>
         </div>
     </div>
 
@@ -457,6 +490,7 @@
         let totalTime = 0;
         let movieStartTime;
         let movies = [];
+        let gameResults = [];
 
         // Fetch weekly challenge from backend
         async function fetchWeeklyChallenge() {
@@ -598,6 +632,14 @@
             score += points;
             document.getElementById('score').textContent = score;
 
+            // Track per-film results
+            gameResults.push({
+                title: movie.title,
+                correct: isCorrect,
+                points: points,
+                timeTaken: timeTaken
+            });
+
             // Show correct/incorrect
             document.querySelectorAll('.option-btn').forEach(btn => {
                 btn.disabled = true;
@@ -630,6 +672,45 @@
             document.getElementById('correctCount').textContent = correctAnswers;
             document.getElementById('incorrectCount').textContent = incorrectAnswers;
             document.getElementById('avgTime').textContent = (totalTime / 5).toFixed(1) + 's';
+
+            // Show per-film breakdown
+            const breakdown = document.getElementById('scoreBreakdown');
+            breakdown.innerHTML = '<h3 style="margin-bottom: 15px;">📊 Per film:</h3>' +
+                gameResults.map((r, i) => {
+                    const icon = r.correct ? '✅' : '❌';
+                    const pts = r.correct ? `+${r.points}` : '0';
+                    return `<div style="padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.1);">${icon} Film ${i+1}: <strong>${r.title}</strong> (${r.timeTaken.toFixed(1)}s, ${pts} pts)</div>`;
+                }).join('');
+
+            // Save to localStorage
+            saveScore();
+        }
+
+        function saveScore() {
+            const history = JSON.parse(localStorage.getItem('gtm_scores') || '[]');
+            history.push({
+                date: new Date().toISOString(),
+                score: score,
+                correct: correctAnswers,
+                total: movies.length,
+                avgTime: (totalTime / movies.length).toFixed(1)
+            });
+            // Keep last 20 scores
+            if (history.length > 20) history.shift();
+            localStorage.setItem('gtm_scores', JSON.stringify(history));
+        }
+
+        function copyResults() {
+            const lines = [
+                `🎬 Weekly GTM Challenge`,
+                `Score: ${score}/75`,
+                `${correctAnswers}/5 correct | Gem. ${(totalTime/5).toFixed(1)}s`,
+                '',
+                ...gameResults.map((r, i) => `${r.correct ? '✅' : '❌'} Film ${i+1}: ${r.title}`)
+            ];
+            navigator.clipboard.writeText(lines.join('\n')).then(() => {
+                document.getElementById('copyMessage').textContent = 'Gekopieerd! Plak in Slack/Teams.';
+            });
         }
 
         function rateMovie(rating) {

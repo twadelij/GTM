@@ -1,6 +1,6 @@
 # 📋 Weekly GTM League - TODO
 
-**Laatste update:** 2026-05-08 12:40
+**Laatste update:** 2026-05-08 15:45
 
 ---
 
@@ -46,6 +46,26 @@
 - [x] Blacklist bekijken en beheren
 - [x] Films van blacklist verwijderen
 - [x] Blacklist wordt meegenomen bij challenge generatie
+
+### Fase 4b: Admin panel verbeterd
+- [x] 25 willekeurige stills laden (ipv 5 gecachte)
+- [x] Nieuw `/api/random-stills` endpoint
+- [x] Blacklisten verwijdert card direct uit grid
+- [x] Zwevende meldingen (page shift fix)
+- [x] TMDB rating tonen per film in admin
+- [x] Fix apostrophe bug (films met ' konden niet afgewijkt worden)
+- [x] Approved films pool: goedgekeurde films worden opgeslagen in DB
+- [x] Reject still: wijst alleen de foto af, film kan terugkomen met andere foto
+- [x] Goedgekeurde films worden niet meer aangeboden in admin
+- [x] Game pool counter in admin (toont hoeveel goedgekeurde films beschikbaar)
+- [x] Game gebruikt goedgekeurde films als pool >= 10
+
+### Fase 4c: Game verbeteringen
+- [x] Score tracking (localStorage)
+- [x] Per-film breakdown na afloop
+- [x] Kopieer resultaat naar clipboard (voor Slack/Teams)
+- [x] Responsive design (2 kolommen tablet, 1 kolom mobiel)
+- [x] Content-Length header (server hing bij HTTP/1.1)
 
 ### Bugfixes
 - [x] Fix: sort() vs sorted() bug (backend crashte)
@@ -117,13 +137,15 @@
 **Fase 2:** 100% ✅
 **Fase 3:** 100% ✅
 **Fase 4:** 100% ✅
-**Fase 5:** 0% (0/4)
-**Fase 6:** 0% (0/3)
-**Fase 7:** 0% (0/4)
-**Fase 8:** 0% (0/3)
-**Fase 9:** 0% (0/3)
+**Fase 4b:** 100% ✅
+**Fase 4c:** 100% ✅
+**Fase 5:** 0% (0/4) - deployment
+**Fase 6:** 0% (0/3) - AD integratie
+**Fase 7:** 0% (0/4) - leaderboard
+**Fase 8:** 0% (0/3) - community content
+**Fase 9:** 0% (0/3) - polish
 
-**Totaal:** ~60% (kern gameplay en admin werkend)
+**Totaal:** ~65% (gameplay, admin QC, approved pool, score tracking werkend)
 
 ---
 
