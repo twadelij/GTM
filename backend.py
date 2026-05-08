@@ -75,7 +75,7 @@ def generate_weekly_challenge():
     print("Generating weekly challenge from TMDB...")
     
     try:
-        # Get popular movies with high vote count
+        # Get popular movies with high vote count (fetch more for options pool)
         response = requests.get(
             f'{TMDB_BASE_URL}/movie/popular',
             params={
@@ -87,11 +87,22 @@ def generate_weekly_challenge():
         )
         data = response.json()
         
-        # Shuffle and pick 5 movies
-        shuffled = data['results'].sort(key=lambda x: random.random())
+        # Check if response is valid
+        if not data or 'results' not in data or not data['results']:
+            print("Invalid TMDB API response")
+            return []
+        
+        print(f"Fetched {len(data['results'])} movies from TMDB")
+        
+        # Shuffle and pick 5 movies for the challenge
+        shuffled = sorted(data['results'], key=lambda x: random.random())
         selected = shuffled[:5]
         
-        # Fetch stills for each movie
+        # Use all fetched movies as pool for wrong options
+        all_movies = data['results']
+        all_titles = [m['title'] for m in all_movies]
+        
+        # Fetch stills for each selected movie
         movies_with_images = []
         for movie in selected:
             images_response = requests.get(
@@ -113,20 +124,20 @@ def generate_weekly_challenge():
             
             # Generate wrong options (8 wrong + 1 correct = 9 options)
             wrong_options = []
-            all_titles = [m['title'] for m in selected if m['title'] != movie['title']]
             
-            # Try genre matching
+            # Try genre matching from the full pool
             if movie.get('genre_ids'):
                 primary_genre = movie['genre_ids'][0]
-                same_genre = [m['title'] for m in selected 
+                same_genre = [m['title'] for m in all_movies
                             if m.get('genre_ids') and primary_genre in m['genre_ids']
                             and m['title'] != movie['title']]
                 if len(same_genre) >= 8:
                     wrong_options = random.sample(same_genre, 8)
             
-            # Fallback to random
+            # Fallback to random from full pool
             if len(wrong_options) < 8:
-                wrong_options = random.sample(all_titles, min(8, len(all_titles)))
+                available = [t for t in all_titles if t != movie['title']]
+                wrong_options = random.sample(available, min(8, len(available)))
             
             options = [movie['title']] + wrong_options[:8]
             random.shuffle(options)
@@ -143,6 +154,8 @@ def generate_weekly_challenge():
         
     except Exception as e:
         print(f"Error generating weekly challenge: {e}")
+        import traceback
+        traceback.print_exc()
         return []
 
 class GTMHandler(BaseHTTPRequestHandler):
