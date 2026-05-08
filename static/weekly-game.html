@@ -147,8 +147,8 @@
 
         .options-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 15px;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 10px;
         }
 
         .option-btn {
@@ -438,10 +438,8 @@
     </div>
 
     <script>
-        // TMDB API Configuration
-        const TMDB_API_KEY = '706c86407a5fbf917664b5e62a30893e';
-        const TMDB_BASE_URL = 'https://api.themoviedb.org/3';
-        const TMDB_IMAGE_BASE_URL = 'https://image.tmdb.org/t/p/w1280';
+        // Backend API Configuration
+        const BACKEND_URL = 'http://localhost:30067';
 
         // Logging utility
         function log(message, type = 'info') {
@@ -461,122 +459,34 @@
         let movieStartTime;
         let movies = [];
 
-        // Fetch random movies from TMDB (using stills instead of backdrops)
-        async function fetchRandomMovies(count = 4) {
-            log(`Fetching ${count} random movies from TMDB`, 'info');
+        // Fetch weekly challenge from backend
+        async function fetchWeeklyChallenge() {
+            log('Fetching weekly challenge from backend', 'info');
             
             try {
-                // Get popular movies with high vote count (quality filter)
-                const response = await fetch(
-                    `${TMDB_BASE_URL}/movie/popular?api_key=${TMDB_API_KEY}&language=en-US&page=1&vote_count.gte=1000`
-                );
+                const response = await fetch(`${BACKEND_URL}/api/weekly-challenge`);
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
                 const data = await response.json();
-                
-                log(`Fetched ${data.results.length} movies from TMDB`, 'info');
-                
-                // Shuffle and pick random movies
-                const shuffled = data.results.sort(() => 0.5 - Math.random());
-                const selected = shuffled.slice(0, count);
-                
-                // Fetch stills for each movie (not backdrops - less likely to have titles)
-                const moviesWithImages = await Promise.all(
-                    selected.map(async (movie) => {
-                        const imagesResponse = await fetch(
-                            `${TMDB_BASE_URL}/movie/${movie.id}/images?api_key=${TMDB_API_KEY}`
-                        );
-                        const imagesData = await imagesResponse.json();
-                        
-                        // Use stills if available, otherwise fallback to backdrop
-                        const stills = imagesData.stills || [];
-                        const backdrops = imagesData.backdrops || [];
-                        
-                        let imagePath;
-                        if (stills.length > 0) {
-                            // Pick random still
-                            imagePath = stills[Math.floor(Math.random() * stills.length)].file_path;
-                            log(`Using still for ${movie.title}`, 'debug');
-                        } else if (backdrops.length > 0) {
-                            // Fallback to backdrop if no stills
-                            imagePath = backdrops[Math.floor(Math.random() * backdrops.length)].file_path;
-                            log(`Using backdrop (fallback) for ${movie.title}`, 'debug');
-                        } else {
-                            // Fallback to poster if nothing else
-                            imagePath = movie.poster_path;
-                            log(`Using poster (fallback) for ${movie.title}`, 'debug');
-                        }
-                        
-                        // Generate wrong options
-                        const wrongOptions = await generateWrongOptions(movie.title, selected);
-                        
-                        return {
-                            id: movie.id,
-                            title: movie.title,
-                            image: `${TMDB_IMAGE_BASE_URL}${imagePath}`,
-                            isMystery: false,
-                            options: shuffleArray([movie.title, ...wrongOptions])
-                        };
-                    })
-                );
-                
-                log(`Processed ${moviesWithImages.length} movies with images`, 'info');
-                return moviesWithImages;
-                
+                log(`Fetched ${data.length} movies from backend`, 'info');
+                return data;
             } catch (error) {
-                log(`Error fetching movies from TMDB: ${error.message}`, 'error');
+                log(`Error fetching weekly challenge: ${error.message}`, 'error');
                 return [];
             }
         }
 
-        // Generate wrong options for a movie
-        async function generateWrongOptions(correctTitle, allMovies) {
-            const allTitles = allMovies.map(m => m.title).filter(t => t !== correctTitle);
-            const shuffled = allTitles.sort(() => 0.5 - Math.random());
-            return shuffled.slice(0, 3);
-        }
-
-        // Shuffle array utility
-        function shuffleArray(array) {
-            return array.sort(() => 0.5 - Math.random());
-        }
-
-        // Initialize game with TMDB data
+        // Initialize game with backend data
         async function initGame() {
-            log('Initializing game with TMDB data', 'info');
-            movies = await fetchRandomMovies(4);
+            log('Initializing game with backend data', 'info');
+            movies = await fetchWeeklyChallenge();
             
             if (movies.length === 0) {
-                log('Failed to fetch movies from TMDB, using fallback data', 'error');
-                // Fallback to mock data
-                movies = [
-                    {
-                        id: 1,
-                        title: "The Matrix",
-                        image: "https://image.tmdb.org/t/p/w1280/f89U3ADr1oiB1s9GkdPOEpXUk5H.jpg",
-                        isMystery: false,
-                        options: shuffleArray(["The Matrix", "Inception", "Blade Runner", "Tron"])
-                    },
-                    {
-                        id: 2,
-                        title: "Inception",
-                        image: "https://image.tmdb.org/t/p/w1280/9gk7admal4zl67YrxIo2AO08qX8.jpg",
-                        isMystery: false,
-                        options: shuffleArray(["Inception", "Interstellar", "The Prestige", "Memento"])
-                    },
-                    {
-                        id: 4,
-                        title: "Interstellar",
-                        image: "https://image.tmdb.org/t/p/w1280/gEU2QniL6C8zEfVfy23rUnLJpsp.jpg",
-                        isMystery: false,
-                        options: shuffleArray(["Interstellar", "Gravity", "The Martian", "Arrival"])
-                    },
-                    {
-                        id: 5,
-                        title: "The Dark Knight",
-                        image: "https://image.tmdb.org/t/p/w1280/qJ2tW6WMUDux911r6m7haRef0WH.jpg",
-                        isMystery: false,
-                        options: shuffleArray(["The Dark Knight", "Batman Begins", "The Dark Knight Rises", "Joker"])
-                    }
-                ];
+                log('Failed to fetch weekly challenge from backend', 'error');
+                alert('Kon weekly challenge niet laden. Start de backend server eerst: python3 backend.py');
+                location.reload();
+                return;
             }
             
             log(`Game initialized with ${movies.length} movies`, 'info');
@@ -589,9 +499,9 @@
             
             // Show loading state
             document.getElementById('loading').style.display = 'block';
-            document.getElementById('loading').textContent = 'Loading movies from TMDB...';
+            document.getElementById('loading').textContent = 'Loading weekly challenge from backend...';
             
-            // Initialize with TMDB data
+            // Initialize with backend data
             await initGame();
             
             loadMovie(0);
