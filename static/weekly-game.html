@@ -13,10 +13,23 @@
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            background: #1a1a2e;
             min-height: 100vh;
             color: #ffffff;
+            position: relative;
         }
+
+        #bgLayer {
+            position: fixed;
+            inset: 0;
+            background-size: cover;
+            background-position: center;
+            filter: blur(20px) brightness(0.3);
+            transition: background-image 1.5s ease;
+            z-index: 0;
+        }
+
+        .header, .container { position: relative; z-index: 1; }
 
         .header {
             background: rgba(0, 0, 0, 0.5);
@@ -78,7 +91,7 @@
 
         .movie-image {
             width: 100%;
-            height: 400px;
+            height: min(350px, 40vh);
             background: #000;
             display: flex;
             align-items: center;
@@ -136,12 +149,12 @@
         }
 
         .options {
-            padding: 30px;
+            padding: 15px 20px;
         }
 
         .options h3 {
-            margin-bottom: 20px;
-            font-size: 1.3rem;
+            margin-bottom: 10px;
+            font-size: 1.1rem;
             color: #ffffff;
         }
 
@@ -156,7 +169,7 @@
                 grid-template-columns: repeat(2, 1fr);
             }
             .movie-image {
-                height: 250px;
+                height: min(200px, 30vh);
             }
             .header h1 {
                 font-size: 1.5rem;
@@ -182,9 +195,9 @@
             background: rgba(255, 255, 255, 0.1);
             border: 2px solid rgba(255, 255, 255, 0.3);
             color: #ffffff;
-            padding: 20px;
+            padding: 12px 15px;
             border-radius: 10px;
-            font-size: 1.1rem;
+            font-size: 1rem;
             cursor: pointer;
             transition: all 0.3s ease;
             text-align: center;
@@ -380,9 +393,10 @@
     </style>
 </head>
 <body>
+    <div id="bgLayer"></div>
     <div class="header">
         <h1>🎬 Weekly GTM Challenge</h1>
-        <div class="subtitle">Raad de 5 films van deze week!</div>
+        <div class="subtitle" id="subtitle">Raad de 5 films van deze week!</div>
     </div>
 
     <div class="container">
@@ -508,6 +522,39 @@
             });
         }
 
+        // Show week number + year
+        (function() {
+            const now = new Date();
+            const startOfYear = new Date(now.getFullYear(), 0, 1);
+            const days = Math.floor((now - startOfYear) / 86400000);
+            const weekNum = Math.ceil((days + startOfYear.getDay() + 1) / 7);
+            document.addEventListener('DOMContentLoaded', () => {
+                document.getElementById('subtitle').textContent = 
+                    `Week ${weekNum}, ${now.getFullYear()} — Raad de 5 films!`;
+            });
+        })();
+
+        // Rotate background from approved films pool
+        let bgImages = [];
+        let bgIndex = 0;
+        async function initBackground() {
+            try {
+                const r = await fetch(`${BACKEND_URL}/api/approve`);
+                const approved = await r.json();
+                if (approved.length > 0) {
+                    bgImages = approved.map(a => a.image_url).sort(() => Math.random() - 0.5);
+                    rotateBg();
+                    setInterval(rotateBg, 8000);
+                }
+            } catch(e) {}
+        }
+        function rotateBg() {
+            if (bgImages.length === 0) return;
+            document.getElementById('bgLayer').style.backgroundImage = `url(${bgImages[bgIndex]})`;
+            bgIndex = (bgIndex + 1) % bgImages.length;
+        }
+        initBackground();
+
         // Fetch weekly challenge from backend
         async function fetchWeeklyChallenge() {
             log('Fetching weekly challenge from backend', 'info');
@@ -544,6 +591,19 @@
         async function startGame() {
             playerName = document.getElementById('playerName').value.trim() || 'Anoniem';
             localStorage.setItem('gtm_player_name', playerName);
+            
+            // Check if already played this week
+            try {
+                const check = await fetch(`${BACKEND_URL}/api/can-play?name=${encodeURIComponent(playerName)}`);
+                const result = await check.json();
+                if (!result.can_play) {
+                    alert(`${playerName} heeft deze week al gespeeld!\nScore: ${result.existing_score} punten (${result.existing_correct}/5 correct)\n\nJe kunt pas volgende week weer spelen.`);
+                    return;
+                }
+            } catch(e) {
+                log('Could not verify play status, continuing anyway', 'info');
+            }
+            
             log(`Starting game as ${playerName}...`, 'info');
             document.getElementById('startScreen').classList.add('hidden');
             document.getElementById('gameScreen').classList.remove('hidden');

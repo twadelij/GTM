@@ -178,7 +178,7 @@ weekly_challenges (
   created_at TEXT
 )
 
--- Blacklist voor afgekeurde stills
+-- Blacklist: permanent gebande films
 blacklist (
   id INTEGER PRIMARY KEY,
   movie_id INTEGER UNIQUE,
@@ -186,21 +186,44 @@ blacklist (
   image_url TEXT,
   created_at TEXT
 )
+
+-- Goedgekeurde films voor de game pool
+approved_films (
+  id INTEGER PRIMARY KEY,
+  movie_id INTEGER UNIQUE,
+  movie_title TEXT,
+  image_url TEXT,
+  tmdb_rating REAL DEFAULT 0,
+  created_at TEXT
+)
+
+-- Afgekeurde stills (film kan terugkomen met andere foto)
+rejected_stills (
+  id INTEGER PRIMARY KEY,
+  movie_id INTEGER NOT NULL,
+  image_url TEXT UNIQUE,
+  created_at TEXT
+)
+
+-- Player scores (1 entry per speler per week)
+scores (
+  id INTEGER PRIMARY KEY,
+  player_name TEXT NOT NULL,
+  week_start TEXT NOT NULL,
+  score INTEGER DEFAULT 0,
+  correct INTEGER DEFAULT 0,
+  total INTEGER DEFAULT 5,
+  avg_time REAL DEFAULT 0,
+  details TEXT (JSON),
+  created_at TEXT,
+  UNIQUE(player_name, week_start)
+)
 ```
 
 ### Toekomstige tabellen (na AD integratie)
 
 ```sql
--- User scores
-user_scores (
-  user_id TEXT,  -- AD username
-  challenge_id INTEGER,
-  total_score INTEGER,
-  time_taken REAL,
-  submitted_at TEXT
-)
-
--- Film ratings
+-- Film ratings (na afloop challenge)
 film_ratings (
   user_id TEXT, film_id INTEGER, rating INTEGER,
   rated_at TEXT
@@ -210,22 +233,32 @@ film_ratings (
 ### Automatisering (huidige implementatie)
 
 **Weekly challenge generator (automatisch bij eerste request van de week):**
-- Backend haalt 60 films op van TMDB (3 pages popular)
+- Als approved pool >= 10: selecteert 5 random uit goedgekeurde films
+- Anders: fallback naar TMDB random (60 films, 3 pages popular)
 - Filtert blacklisted films eruit
-- Selecteert 5 random films
-- Genereert 9 genre-gematchte opties per film
+- Genereert 9 opties per film (foute antwoorden uit TMDB popular)
 - Slaat op in SQLite, geldig voor hele week
+- Auto-regenereert als challenge blacklisted films bevat of approved pool is gegroeid
 
 **Admin kwaliteitscontrole:**
-- Admin scherm op /admin.html
-- Stills bekijken en blacklisten
-- Blacklist persistent in database
-- Geblackliste films worden overgeslagen bij nieuwe challenges
+- Admin scherm op /admin.html met 25 willekeurige TMDB stills
+- TMDB rating zichtbaar per film (kleur-gecodeerd)
+- ✓ Goed: film + still opgeslagen in approved pool
+- ✗ Foto af: alleen deze foto afgekeurd, film kan terugkomen met andere foto
+- Blacklist: permanent ban voor film
+- Goedgekeurde films verschijnen niet meer in admin review
+- Game pool counter toont hoeveel films beschikbaar zijn
+
+**Score systeem:**
+- Score wordt opgeslagen per speler per week (UNIQUE constraint)
+- Dubbel spelen geblokkeerd (1x per week per naam)
+- Leaderboard met medailles op /leaderboard.html
+- Streak counter (weken op rij gespeeld)
 
 **Maintenance:**
 - Challenge wordt automatisch gegenereerd bij eerste bezoek
 - Admin keurt stills goed/af via admin panel
-- Blacklist groeit, kwaliteit verbetert over tijd
+- Approved pool groeit, kwaliteit verbetert over tijd
 
 ---
 
@@ -301,27 +334,39 @@ film_ratings (
 
 ## 🚀 Implementatie Roadmap
 
-### Fase 1: MVP ✅ (voltooid)
+### Fase 1: MVP ✅
 - [x] Backend met weekly challenge generator
 - [x] Frontend met 5-film gameplay (9 opties, 3x3 grid)
 - [x] Admin panel voor kwaliteitscontrole
 - [x] Blacklist functionaliteit
 - [x] End-to-end tests
 
-### Fase 2: Deployment (todo)
-- [ ] Deploy naar CBS server
-- [ ] AD integratie voor login
-- [ ] Leaderboard per gebruiker
+### Fase 2: QC & Scoring ✅
+- [x] Approved films pool (admin keurt goed voor game)
+- [x] Reject-still (foto af, film kan terugkomen)
+- [x] TMDB rating in admin (kleur-gecodeerd)
+- [x] Score persistence (SQLite per speler per week)
+- [x] Leaderboard pagina met week-navigatie
+- [x] Streak counter
+- [x] Dubbel-spelen preventie
+- [x] Responsive design (mobile/tablet)
+- [x] Copy-to-clipboard resultaat
+- [x] Roterende achtergrond uit approved pool
 
-### Fase 3: Community (todo)
+### Fase 3: Deployment (todo)
+- [ ] Deploy naar CBS server
+- [ ] systemd service (file prepared)
+- [ ] Firewall regel poort 30067
+- [ ] AD integratie voor login (vervangt naam-invoer)
+
+### Fase 4: Community (todo)
 - [ ] Film inlever formulier
-- [ ] Approval queue
 - [ ] Mysterie film E logica
 - [ ] Badges en levels
-
-### Fase 4: Social (todo)
-- [ ] Team modus
 - [ ] Seizoen systeem
+
+### Fase 5: Social (todo)
+- [ ] Team modus
 - [ ] Slack/Teams integration
 - [ ] Statistics dashboard
 

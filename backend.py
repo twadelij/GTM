@@ -300,6 +300,18 @@ def get_streak(player_name):
     return streak
 
 
+def has_played_this_week(player_name):
+    """Check if player already submitted a score this week"""
+    week_start = get_current_week()
+    conn = sqlite3.connect(DB_PATH)
+    cursor = conn.cursor()
+    cursor.execute('SELECT score, correct FROM scores WHERE player_name = ? AND week_start = ?',
+                   (player_name, week_start))
+    result = cursor.fetchone()
+    conn.close()
+    return result
+
+
 def fetch_random_stills(count=25):
     """Fetch random movie stills from TMDB for admin review.
     Excludes: blacklisted movies, already-approved movies, rejected stills."""
@@ -571,18 +583,43 @@ class GTMHandler(BaseHTTPRequestHandler):
                 add_rejected_still(data['movie_id'], data['image_url'])
                 self.send_json_response(200, {'status': 'success'})
         
+        elif path == '/api/can-play':
+            params = parse_qs(parsed.query)
+            name = params.get('name', [''])[0]
+            if not name:
+                self.send_json_response(400, {'error': 'name required'})
+            else:
+                existing = has_played_this_week(name)
+                if existing:
+                    self.send_json_response(200, {
+                        'can_play': False,
+                        'existing_score': existing[0],
+                        'existing_correct': existing[1]
+                    })
+                else:
+                    self.send_json_response(200, {'can_play': True})
+        
         elif path == '/api/score':
             if self.command == 'POST':
                 content_length = int(self.headers.get('Content-Length', 0))
                 post_data = self.rfile.read(content_length)
                 data = json.loads(post_data)
-                save_score(
-                    data['player_name'], data['score'], data['correct'],
-                    data.get('total', 5), data.get('avg_time', 0),
-                    data.get('details')
-                )
-                streak = get_streak(data['player_name'])
-                self.send_json_response(200, {'status': 'success', 'streak': streak})
+                player = data['player_name']
+                existing = has_played_this_week(player)
+                if existing:
+                    self.send_json_response(409, {
+                        'status': 'already_played',
+                        'message': f'{player} heeft deze week al gespeeld',
+                        'existing_score': existing[0]
+                    })
+                else:
+                    save_score(
+                        player, data['score'], data['correct'],
+                        data.get('total', 5), data.get('avg_time', 0),
+                        data.get('details')
+                    )
+                    streak = get_streak(player)
+                    self.send_json_response(200, {'status': 'success', 'streak': streak})
         
         elif path == '/api/leaderboard':
             params = parse_qs(parsed.query)

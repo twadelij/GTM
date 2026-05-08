@@ -78,9 +78,16 @@
 
 ## 🚀 In Progress
 
-### Kwaliteitscontrole
-- [ ] Tekst detectie in stills (OCR of AI)
-- [ ] Automatische filtering van stills met ondertitels/watermarks
+### Admin verbeteringen
+- [ ] Tekst detectie in stills (OCR of AI) — subtitle/watermark filtering
+- [ ] Bulk import: TMDB top-rated (rating > 8) auto-approve
+- [ ] Admin statistieken dashboard (hoeveel films/week, reject ratio)
+- [ ] Export/import approved pool (JSON backup)
+- [ ] Min-rating filter slider in admin UI
+- [ ] "Ban hele film" knop direct vanuit review kaartje
+- [ ] Admin: verwijder film uit approved pool
+- [ ] Admin: bekijk rejected stills history
+- [ ] Notificatie als approved pool onder 20 zakt
 
 ---
 
@@ -88,15 +95,25 @@
 
 **Backend:**
 - Python 3 HTTP server (standalone, geen framework nodig)
-- SQLite (weekly challenges + blacklist)
+- SQLite (5 tabellen: weekly_challenges, blacklist, approved_films, rejected_stills, scores)
 - requests (TMDB API calls)
 
 **Frontend:**
-- HTML/CSS/JavaScript (single-page)
-- Geen build tools nodig
+- HTML/CSS/JavaScript (single-page, geen build tools)
+- Pagina's: weekly-game.html, admin.html, leaderboard.html
 
 **Extern:**
-- TMDB API (films, stills, backdrops)
+- TMDB API (films, stills, backdrops, ratings)
+
+**API Endpoints:**
+- `GET /api/weekly-challenge` — Huidige challenge (auto-gen als nodig)
+- `GET /api/random-stills?count=N` — Stills voor admin review
+- `GET/POST /api/approve` — Goedgekeurde films pool
+- `POST /api/reject-still` — Foto afkeuren (niet de film)
+- `GET/POST/DELETE /api/blacklist` — Permanent ban
+- `GET /api/can-play?name=X` — Check of speler al gespeeld heeft
+- `POST /api/score` — Score opslaan (blokkeert dubbel)
+- `GET /api/leaderboard?week=Y` — Wekelijks leaderboard
 
 ---
 
@@ -104,48 +121,49 @@
 
 ### Fase 5: Deployment CBS
 - [ ] Deploy naar CBS server (poort 30067)
-- [ ] start-server.sh als systemd service
+- [ ] systemd service activeren (gtm-game.service voorbereid)
 - [ ] Firewall regel voor poort 30067
 - [ ] Test met collega's
+- [ ] Reverse proxy (nginx) voor HTTPS
 
-### Fase 6: AD Integratie
-- [ ] Login via CBS Active Directory
-- [ ] User scores koppelen aan AD username
-- [ ] Leaderboard per gebruiker
+### Fase 6: Authenticatie
+- [ ] Lokale login (bcrypt wachtwoorden) of AD integratie
+- [ ] Session tokens (JWT of simple cookie)
+- [ ] User profile met history
+- [ ] Admin-only route beveiliging
 
-### Fase 7: Leaderboard en scores
-- [ ] Score opslaan in database per gebruiker
-- [ ] Wekelijks leaderboard
-- [ ] Seizoen leaderboard
-- [ ] Streak counter
+### Fase 7: Seizoen en progression
+- [ ] Seizoen leaderboard (per kwartaal reset)
+- [ ] Badges (Perfect Week, Speed Demon, Streak Master)
+- [ ] Levels (Film Fan → Cinema Master)
 
 ### Fase 8: Community content
 - [ ] Mystery film upload formulier
 - [ ] Approval queue voor mystery films
 - [ ] Rating systeem na afloop challenge
 
-### Fase 9: Polish
+### Fase 9: Polish en social
 - [ ] Slack/Teams notificatie bij nieuwe challenge
-- [ ] Responsive design verbeteren
-- [ ] Performance optimalisatie
+- [ ] Team modus
+- [ ] Statistics dashboard
+- [ ] Performance: image preloading, lazy load
 
 ---
 
 ## 📊 Voortgang
 
-**Fase 1:** 100% ✅
-**Fase 2:** 100% ✅
-**Fase 3:** 100% ✅
-**Fase 4:** 100% ✅
-**Fase 4b:** 100% ✅
-**Fase 4c:** 100% ✅
-**Fase 5:** 0% (0/4) - deployment
-**Fase 6:** 0% (0/3) - AD integratie
-**Fase 7:** 0% (0/4) - leaderboard
-**Fase 8:** 0% (0/3) - community content
-**Fase 9:** 0% (0/3) - polish
+**Fase 1 (Backend MVP):** 100% ✅
+**Fase 2 (Frontend game):** 100% ✅
+**Fase 3 (Admin panel basis):** 100% ✅
+**Fase 4 (Admin QC + Approved pool):** 100% ✅
+**Fase 4b (Scoring + Leaderboard):** 100% ✅
+**Fase 5 (Deployment CBS):** 0% (0/5)
+**Fase 6 (Authenticatie):** 0% (0/4)
+**Fase 7 (Seizoen/progression):** 0% (0/3)
+**Fase 8 (Community content):** 0% (0/3)
+**Fase 9 (Polish/social):** 0% (0/4)
 
-**Totaal:** ~65% (gameplay, admin QC, approved pool, score tracking werkend)
+**Totaal:** ~55% van totale visie (kerngameplay volledig werkend, deployment en social nog open)
 
 ---
 
