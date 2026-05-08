@@ -152,6 +152,7 @@ class GTMHandler(BaseHTTPRequestHandler):
         parsed = urlparse(self.path)
         path = parsed.path
         
+        # API endpoints
         if path == '/api/weekly-challenge':
             # Get current weekly challenge
             challenge = get_weekly_challenge()
@@ -186,9 +187,48 @@ class GTMHandler(BaseHTTPRequestHandler):
                 self.send_response(500)
                 self.end_headers()
         
+        # Serve static files
+        elif path == '/' or path == '/weekly-game.html':
+            self.serve_file('static/weekly-game.html', 'text/html')
+        elif path.startswith('/static/'):
+            file_path = path[1:]  # Remove leading /
+            self.serve_file(file_path, self.guess_type(file_path))
         else:
             self.send_response(404)
             self.end_headers()
+    
+    def serve_file(self, file_path, content_type):
+        """Serve a static file"""
+        try:
+            with open(file_path, 'rb') as f:
+                content = f.read()
+            self.send_response(200)
+            self.send_header('Content-type', content_type)
+            self.end_headers()
+            self.wfile.write(content)
+        except FileNotFoundError:
+            self.send_response(404)
+            self.end_headers()
+        except Exception as e:
+            self.send_response(500)
+            self.end_headers()
+    
+    def guess_type(self, file_path):
+        """Guess content type based on file extension"""
+        if file_path.endswith('.html'):
+            return 'text/html'
+        elif file_path.endswith('.css'):
+            return 'text/css'
+        elif file_path.endswith('.js'):
+            return 'application/javascript'
+        elif file_path.endswith('.jpg') or file_path.endswith('.jpeg'):
+            return 'image/jpeg'
+        elif file_path.endswith('.png'):
+            return 'image/png'
+        elif file_path.endswith('.gif'):
+            return 'image/gif'
+        else:
+            return 'application/octet-stream'
     
     def log_message(self, format, *args):
         """Suppress default logging"""

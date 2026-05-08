@@ -1,11 +1,8 @@
 #!/bin/bash
-# Portable webserver for GTM on port 30067
-PORT=30067
-DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/static"
+# Start GTM backend (serves both API and static files)
+echo "Starting GTM backend on port 30067..."
+echo "Backend serves both API and static files"
+echo "Open http://localhost:30067/weekly-game.html"
 
-echo "Starting GTM webserver on port $PORT..."
-echo "Serving from: $DIR"
-echo "Open http://localhost:$PORT/weekly-game.html"
-
-cd "$DIR"
-python3 -m http.server $PORT
+cd "$(dirname "${BASH_SOURCE[0]}")"
+python3 backend.py
